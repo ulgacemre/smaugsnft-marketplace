@@ -1,0 +1,26 @@
+.social {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    & .item {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        border-radius: 25px;
+
+        text-decoration: none;
+
+        & i {
+            left: 12px;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 50px;
+            border: 1px solid var(--neutral4);
+            cursor: pointer;
+            color: #000;
+        }
+        & span {
+            font-size: 14px;
+        }
+    }
+}

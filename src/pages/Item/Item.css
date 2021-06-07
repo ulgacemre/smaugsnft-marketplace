@@ -1,0 +1,42 @@
+.item-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-content>label {
+    font-size: 20px;
+    padding: 6px;
+}
+
+.item-content>.items {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-content>.items>.item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 6px;
+}
+
+.item-content>.items>.item:last-child {
+    border-bottom: none;
+}
+
+
+.info-list-item .nft-list-item {
+    padding: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.info-list-item .nft-list-item:hover {
+    opacity: 0.4;
+}
+
+
+.item-normal-price {
+    font-size: 21px !important;
+    font-weight: 600 !important;
+}

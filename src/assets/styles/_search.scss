@@ -1,0 +1,103 @@
+.search-page {
+    & .content {
+        padding-top: 64px;
+        padding-bottom: 64px;
+
+        @include media-breakpoint-up(xl) {
+            padding-top: 80px;
+            padding-bottom: 136px;
+        }
+    }
+
+    & .option-panel {        
+        background: var(--neutral8);
+        border: 2px solid var(--neutral6);
+        border-radius: 12px;
+        box-shadow: 0px 64px 64px -48px rgba(31, 47, 70, 0.12);
+        padding: 8px;
+
+        &-item {
+            padding: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--neutral7);
+                border-radius: 8px;
+            }
+        }
+    }
+
+    & .card-item {
+        background: var(--neutral8);
+        box-shadow: 0px 64px 64px -48px rgba(31, 47, 70, 0.12);
+        border-radius: 20px;
+        padding: 12px;
+    }
+}
+
+.search-no-result-page {
+    & .content {        
+        margin-top: 64px;
+
+        & .scrollview-items {
+            padding-bottom: 64px;
+        }
+
+        @include media-breakpoint-up(lg) {
+            margin-top: 112px;
+            & .scrollview-items {
+                padding-bottom: 112px;
+            }
+        }
+        @include media-breakpoint-up(xl) {
+            margin-top: 136px;
+            & .scrollview-items {
+                padding-bottom: 136px;
+            }
+        }
+    }
+
+    & .content-text {
+        margin-top: 32px;
+        margin-bottom: 32px;
+        max-width: 736px;
+        
+        @include media-breakpoint-up(lg) {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+        @include media-breakpoint-up(xl) {
+            padding-top: 96px;
+            padding-bottom: 96px;
+        }
+    }
+    
+    & .search-input-container {
+        max-width: 300px;
+    }
+
+    & .scrollview-items {
+        & .explore-more-item {
+            width: 256px;
+            height: 64px;
+            border: 1px solid var(--neutral6);
+            border-radius: 76px;
+            padding: 10px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            
+
+            & img {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+            }
+
+            &:hover {
+                background: var(--neutral8);
+                box-shadow: 0px 24px 24px -16px rgba(15, 15, 15, 0.2);
+            }
+        }
+    }
+}

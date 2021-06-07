@@ -1,0 +1,177 @@
+
+.dark-theme {
+    color: var(--neutral1);
+    & .card {
+        background-color: var(--neutral7);
+
+        &.card-seller {
+            background-color: var(--neutral8);
+        }
+    }
+
+    & .filter-panel,
+    & .user-balance-card {        
+        background-color: var(--neutral7);
+    }
+    
+    & .button {
+        &.large, &.normal, &.small {            
+            //border-color: var(--neutral3);
+            border-color: var(--neutral4);
+        }
+
+        &.primary {
+            color: var(--neutral1);
+            border-color: var(--primary1); 
+            &:hover:not(.disabled) {   
+                color: var(--neutral1);
+            }
+            
+            & svg path {
+                fill: var(--neutral1);
+            }
+        }
+
+        &.alert {
+            color: var(--neutral1);
+            border-color: var(--primary3);
+
+            &:hover:not(.disabled) {   
+                color: var(--neutral1);
+            }
+        }
+
+        &.white-label {        
+            color: var(--neutral1);    
+            & svg path {
+                fill: var(--neutral1);
+            }    
+            &:hover:not(.disabled) {   
+                color: var(--neutral1);
+                background: var(--neutral4);
+            }            
+        }
+    }
+
+    & .custom-dropdown {
+        background-color: none  !important;
+    }
+
+    & .label {
+        color: var(--neutral1);
+
+        &.black {
+            color: var(--neutral7);
+        }
+    }
+
+    & .switch {
+        & .control.active::after {
+            background-color: var(--neutral1);
+        }
+    }
+
+    & .checkbox {
+        & .control.active svg path {            
+            fill: var(--neutral1)
+        }
+    }
+
+    & .mark-create {
+        background-color: var(--neutral1);
+    }
+
+    & .svg-white {
+        & path {
+            fill: var(--neutral1);
+        }
+    }
+
+    & input.bg-neutral-8 {
+        color: var(--neutral2);
+    }
+    
+    // & .subnav {
+    //     & .tabitem {
+    //         &.active {
+    //             color: var(--neutral1);
+    //             background: var(--neutral6);
+    //         }
+    //     }
+    // }
+
+    // & .rangeslider {
+    //     .rangeslider__handle-tooltip {
+    //         color: var(--neutral1);
+    //         background-color: var(--neutral8);
+    //     }
+    // }
+
+    & .rangeslider-horizontal {
+        .rangeslider__handle {
+            border: 4px solid var(--neutral1);
+        }
+    }
+
+    & .upload-single-page {
+        & .right-panel .preview-panel {
+            border: 1px solid var(--neutral6);
+        }
+    }
+
+    & .modal-backdrop {
+        background-color: var(--neutral7);
+    }
+
+    
+    & .wallet-list {
+        & .wallet-list-item {
+            & .avatar svg path {
+                fill: var(--neutral1);
+            }
+        }
+    }
+
+    & .connect-wallet-page {
+        & .right-panel .qrcode-panel img {
+            border: none;
+        }
+    }
+
+    & .profile-page {        
+        & .userinfo-panel {
+            background-color: var(--neutral7);
+        }
+    }
+
+    & .search-page {
+        & .option-panel {
+            background-color: var(--neutral7);
+            
+            &-item:hover {
+                background: var(--neutral8);
+            }
+        }
+
+        & .card-item {
+            background-color: var(--neutral7);
+        }
+    }
+    & .item-page {
+        & .right-panel .card {
+            background-color: var(--neutral7);
+        }
+    }
+
+    & .user-popup,
+    & .item-popup.popup-dialog { 
+        background-color: var(--neutral7);
+        & .popup-arrow {
+            border-bottom-color: var(--neutral7);
+        }
+    }
+    
+    & .popup-item-card { 
+        background-color: var(--neutral7);
+    }
+}

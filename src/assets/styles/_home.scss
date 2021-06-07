@@ -1,0 +1,166 @@
+section.section {
+    padding-top: 52px;
+    padding-bottom: 82px;
+}
+section.sub-section {
+    margin-top: 42px;
+}
+
+.section-topbar {
+    margin-bottom: 64px;
+}
+
+@include media-breakpoint-up(xl) {
+    section.section {
+        padding-top: 52px;
+        padding-bottom: 82px;
+    }
+
+    section.sub-section {
+        margin-top: 42px;
+    }
+}
+
+@include media-breakpoint-down(lg) {
+    section.section {
+        padding-top: 64px;
+        padding-bottom: 64px;
+    }
+
+    section.sub-section {
+        margin-top: 64px;
+    }
+
+    .section-topbar {
+        margin-bottom: 32px;
+    }
+    
+    .cta-content-text {
+        text-align: center;
+    }
+}
+
+
+.card-seller {
+    min-width: 200px;
+    background-color: var(--neutral8);
+    padding: 24px;
+    transition: 0.5s;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0px 64px 64px -48px rgba(31, 47, 70, 0.12);
+        border-radius: 36px;
+        transition: 0.5s;
+    }
+
+    & .avatar {
+        width: 64px;
+        height: 64px;
+
+        & img {
+            width: 100%;
+            height: 100%;            
+        }
+    }
+
+
+}
+
+
+@include media-breakpoint-up(xl) {
+    .seller-button-prev {
+        position: absolute;
+        left: -72px;
+        top: 103px;
+    }
+
+    .seller-button-next {
+        position: absolute;
+        right: -66px;
+        top: 103px;
+    }
+}
+
+.hotbid-image-container {
+    position: relative;
+    // min-width: 256px;
+    height: 300px;
+
+    & .hotbid-item-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        object-fit: contain;
+    }
+
+    & .hotbid-item-hover {
+        display: none;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+    }
+
+    
+    &:hover {
+        & .hotbid-item-hover {    
+            position: absolute;
+            top: 0px;
+            left: 0px;            
+            display: flex;
+            flex-direction: column;
+            background-color: var(--neutral1);
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+}
+
+.hotbid-content {
+    padding-top: 10px;
+    padding-bottom: 1px;
+}
+
+.stacked-avatar {
+    display: flex;
+    
+    & .stacked-item {        
+
+        &:not(:first-child) {
+            margin-left: -8px;
+        }
+
+        & img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--neutral8);
+            background-color: var(--neutral8);
+        }
+    }
+}
+
+.collection-image-container {
+    min-width: 352px;
+
+    & .collection-img {
+        width: 100%;
+        height: 240px;
+        border-radius: 8px;
+    }
+     
+    & .collection-item-img {
+        flex-grow: 1;
+        height: 75px;
+        border-radius: 8px;
+
+        &:not(:first-child) {
+            margin-left: 8px;
+        }
+    }
+}
+
+@import '_bidinfo.scss';
+@import '_videoplayer.scss';
+@import '_nftbyusers.scss';

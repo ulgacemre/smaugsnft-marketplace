@@ -1,0 +1,128 @@
+.modal-backdrop {
+    background-color: var(--neutral1);
+
+    &.show {
+        opacity: 0.9;
+    }
+}
+
+.modal {
+    & .modal-dialog {        
+        margin-left: auto;
+        margin-right: auto;
+    
+        padding: 16px;
+
+        & .modal-content {
+            background-color: var(--neutral8);
+            box-shadow: 0px 64px 64px -48px rgba(31, 47, 70, 0.12);
+            border-radius: 16px;
+
+            & .modal-body {
+                padding: 24px;
+            }
+        }
+    }
+
+    & .modal-title {
+        margin-bottom: 24px;
+    }
+}
+
+
+.modal-step-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    padding: 12px;
+    color: var(--neutral4);
+    background: var(--neutral6);
+
+    & svg path {
+        fill: var(--neutral4);
+    }
+    
+    &.processing {            
+        padding: 0px;
+        background: var(--neutral8);
+    }
+
+    &.success {
+        background: var(--primary4);
+        color: var(--neutral8);
+        
+        & svg path {
+            fill: var(--neutral8);
+        }
+    }
+
+    &.failed,
+    &.cancelled {
+        color: var(--primary3);
+        background: var(--neutral8);
+        border: 2px solid var(--primary3);
+        padding: 10px;
+        
+        & svg path {
+            fill: var(--primary3);
+        }
+    }
+}
+
+.preview-modal {
+    & .modal-dialog {
+        width: 336px;
+    }
+}
+
+
+.create-item-modal {    
+    & .modal-dialog {
+        max-width: 448px;
+        
+        & .modal-body {
+            padding: 32px !important;
+        }
+    }
+}
+
+
+.popup-dialog {
+    background-color: var(--neutral8);
+    box-shadow: 0px 16px 64px -24px rgba(31, 47, 70, 0.4);
+    border-radius: 24px;
+    padding: 30px 16px 32px 16px;
+    margin-top: 20px;
+    width: calc(100% - 32px);
+    z-index: 100;
+
+    & .popup-arrow {    
+        display: none;
+    }
+
+    @include media-breakpoint-down(md) {  
+        &:not(.navbar-popup) {
+            transform: none !important;
+            left: 0px !important;
+            right: 0px !important;
+            top: 120px !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    
+    @include media-breakpoint-up(lg) {  
+        & .popup-arrow {        
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-bottom: 16px solid var(--neutral8);
+            left: calc(50% - 16px);
+            top: -16px;
+            content: ' ';
+        }
+    }
+}

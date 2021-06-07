@@ -1,0 +1,32 @@
+.footer-content {
+    padding-top: 80px;
+    padding-bottom: 48px;
+}
+
+.footer-section {
+    min-width: 160px;
+    &:not(:first-child) {
+        margin-left: 32px;
+    }
+}
+.footer-subtitle {
+    @extend .text-body-2-bold;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@include media-breakpoint-down(md) {
+    .footer-content {
+        padding-top: 64px;
+        padding-bottom: 48px;
+    }
+    
+    .footer-section {
+        &:not(:first-child) {
+            margin-left: 0px;
+        }
+    }
+}
+

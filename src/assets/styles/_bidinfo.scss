@@ -1,0 +1,27 @@
+.bidinfo-slider {
+    width: 352px;
+}
+
+.bid-container {
+    width: 100%;
+
+    & .section {
+        margin-bottom: 40px;
+
+        &.card {
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0px 64px 64px -48px rgba(31, 47, 70, 0.12);
+        }
+    }
+}
+
+.bid-info {
+    & h1 {
+        margin-bottom: 20px;
+    }
+
+    & .bid-info-item {
+        min-width: 160px;
+    } 
+}

@@ -1,0 +1,117 @@
+.land-nav {
+    height: 104px;
+    padding-top: 48px;
+    padding-bottom: 24px;
+    @include media-breakpoint-up(lg) {  
+        height: 80px;        
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+}
+.navbar-nav {
+    align-items: center;
+}
+.navbar-header {
+    display: flex;
+    height: 40px;
+
+    & .nav-link {
+        @extend .text-button-2;
+        padding: 8px 16px !important;
+        color: var(--neutral4);
+
+        &:hover {
+            color: var(--neutral2);
+        }
+    }
+}
+
+.navbar-header-splitter {
+    height: 40px;
+    margin: 0px 16px;
+    width: 2px;
+    background-color: var(--neutral6);
+}
+
+.brand-title {
+    @extend .text-body-1-bold
+}
+
+.action.nav.navbar-nav {
+    & li {
+        margin: 0 12px;
+    }
+}
+
+.notification {
+    & .button {
+        position: relative;
+
+        & .status{
+            position: absolute;
+            right: 0px;
+            top: 0px;
+
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+
+            &.on {
+                background-color: var(--primary4);
+            }
+        }
+    }
+}
+.navbar-popup {
+    max-width: 160px;
+}
+
+.notification-popup {
+    max-width: 396px;
+}
+
+.user-popup {
+    
+    & .user-balance-card {
+        width: 100%;
+        padding: 8px;
+        background: var(--neutral8);
+        box-shadow: 0px 24px 24px -16px rgba(15, 15, 15, 0.2);
+        border-radius: 16px;
+    }
+
+    @include media-breakpoint-up(lg) {  
+        max-width: 256px;
+    }
+}
+
+.notification-content {
+    height: 400px;
+
+    & .swiper-slide {
+        height: 100px;
+    }
+
+    & .notification-item {
+        cursor: pointer;
+        
+        & .notification-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+        }
+    
+        & .notification-mark {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary1);
+        }   
+        
+        &:hover {
+            background-color: var(--neutral7);
+            border-radius: 16px;
+        }
+    }
+ 
+}

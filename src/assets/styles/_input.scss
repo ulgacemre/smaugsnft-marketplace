@@ -1,0 +1,235 @@
+textarea:focus,
+input:focus {
+    outline: none;
+}
+
+.input,
+.single-input {
+    position: relative;
+
+    .input-label {
+        @extend .text-hairline-2;
+        color: var(--neutral5);
+        margin-bottom: 12px;
+        padding: 0px;
+    }
+
+    input {
+        @extend .text-caption;
+        border: none;
+        border: 2px solid var(--neutral6);
+        height: 48px;
+        background-color: var(--neutral8);
+        color: var(--neutral2);
+
+        &::placeholder {
+            color: var(--neutral4);
+        }
+        &:focus {
+            border: 2px solid var(--primary1);
+            background-color: var(--neutral8);
+            color: var(--neutral2);
+        }
+        &:hover {
+            border: 2px solid var(--neutral4);
+            background-color: var(--neutral8);
+            color: var(--neutral2);
+        }
+    }
+
+    textarea {
+        @extend .text-caption;
+        border: none;
+        border: 2px solid var(--neutral6);
+        min-height: 96px;
+        background-color: var(--neutral8);
+        color: var(--neutral2);
+
+        &::placeholder {
+            color: var(--neutral4);
+        }
+        &:focus {
+            border: 2px solid var(--primary1);
+            background-color: var(--neutral8);
+            color: var(--neutral2);
+        }
+        &:hover {
+            border: 2px solid var(--neutral4);
+            background-color: var(--neutral8);
+            color: var(--neutral2);
+        }
+    }
+
+    & .action {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        right: 8px;
+        top: 8px;
+        border: none;
+        z-index: 10;
+    }
+
+    & .action-button {
+        position: absolute;
+        height: 32px;
+        right: 8px;
+        top: 32px;
+        z-index: 10;
+    }
+
+    & .text-prefix {
+        position: absolute;
+        left: 14px;
+        top: 39px;
+        z-index: 10;
+    }
+
+    &.small {
+        & input {
+            height: 40px;
+        }
+
+        & .action {
+            width: 28px;
+            height: 28px;
+            right: 6px;
+            top: 6px;
+        }
+    }
+}
+
+.input {
+    input,
+    textarea {
+        padding: 12px 16px;
+        border-radius: 12px;
+    }
+}
+
+.single-input {
+    input {
+        padding: 8px 56px 8px 16px;
+        border-radius: 24px;
+    }
+}
+
+.search-box {
+    width: 256px;
+
+    & input {
+        @extend .text-caption-2;
+        padding-left: 16px;
+        border: none;
+        border: 2px solid var(--neutral6);
+        border-radius: 8px;
+        background-color: var(--neutral8);
+        color: var(--neutral2);
+
+        &::placeholder {
+            color: var(--neutral4);
+        }
+
+        &:hover,
+        &:focus {
+            background-color: var(--neutral8);
+            color: var(--neutral2);
+        }
+    }
+    #search-addon {
+        position: absolute;
+        background: var(--neutral8);
+        color: var(--neutral4);
+        right: 12px;
+        top: 6px;
+        padding: 0px !important;
+        cursor: pointer;
+        z-index: 100;
+    }
+}
+
+.file-uploader {
+    width: 100%;
+    background: var(--neutral7);
+    border-radius: 16px;
+    padding-top: 64px;
+    padding-bottom: 64px;
+}
+.switch {
+    & .control {
+        position: relative;
+        width: 48px;
+        height: 24px;
+        background-color: var(--neutral6);
+        border-radius: 24px;
+
+        &::after {
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--primary1);
+            transition: all 0.3s;
+            content: " ";
+        }
+
+        &.active {
+            background-color: var(--primary1);
+
+            &::after {
+                left: unset;
+                right: 4px;
+                background-color: var(--neutral6);
+            }
+        }
+    }
+
+    &.small {
+        & .control {
+            width: 40px;
+            height: 20px;
+            border-radius: 20px;
+
+            &::after {
+                width: 12px;
+                height: 12px;
+            }
+        }
+    }
+}
+
+.checkbox {
+    & .control {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        // background-color: var(--neutral8);
+        border: 2px solid var(--neutral6);
+
+        transition: all 0.2s;
+
+        &.active {
+            border: 2px solid var(--primary1);
+            background-color: var(--primary1);
+
+            & svg {
+                position: absolute;
+                left: -2px;
+                top: -2px;
+
+                & path {
+                    fill: var(--neutral8);
+                }
+            }
+        }
+    }
+}
+
+.search-box-2 {
+    @include media-breakpoint-down(md) {
+        width: 100%;
+    }
+}

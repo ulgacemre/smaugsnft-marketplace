@@ -1,0 +1,92 @@
+.latest-creators {
+    margin-top: 64px; 
+    overflow-x: hidden;
+    position: relative;
+
+    @include media-breakpoint-up(xl) {
+        min-width: 256px;
+        margin-top: 0px;
+        padding-left: 32px;
+        border-left: 2px solid var(--neutral6);
+        overflow:visible;
+        & .creator-user-list-item {
+
+            &:not(:first-child) {
+                border-top: 2px solid var(--neutral6);
+            }
+        }
+    }
+
+    & .creator-user-list-item {
+        width: 256px;
+        padding-left: 4px;
+    }
+    & .swiper-slide {
+        width: 256px;
+    }
+
+    & .avatar {
+        & img {
+            width: 56px;
+            height: 56px;
+        }
+
+        & .c-badge {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--neutral8);
+            background-color: var(--neutral2);
+            border-radius: 50%;
+            text-align: center;
+            left: -4px;
+            top: -4px;
+        }
+    }
+}
+
+.highest-bid {
+    & img {
+        width: 100%;
+        border-radius: 12px;
+    }
+}
+
+.nft-list {
+    margin-left: 32px;
+    @include media-breakpoint-up(xl) {
+        margin-right: 32px;
+    }
+
+    .nft-list-hover {
+        display: none;        
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+    }
+
+    & .nft-list-item {
+        position: relative;
+        width: 160px;
+        height: 148px;
+        border-radius: 12px;
+    
+        & .nft-list-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        &:hover {
+            & .nft-list-hover {                
+                display: flex;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                background-color: var(--neutral1);
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+    
+}

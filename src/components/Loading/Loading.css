@@ -1,0 +1,24 @@
+.loading-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.loading-position-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-position-left {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.loading-position-right {
+    justify-content: end;
+    align-items: flex-end;
+}
+
+.loading-position-top {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
