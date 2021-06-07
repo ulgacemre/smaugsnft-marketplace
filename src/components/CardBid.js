@@ -41,13 +41,13 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
             <div className="hotbid-content">
                 <div className="d-flex justify-content-between align-items-center mb-12">
 
-                    <Link href={`assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${data.id}`}>
+                    <Link href={`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${data.id}`}>
                         <div className="text-body-2-bold neutral-2">{data.itemName}</div>
                     </Link>
 
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-12">
-                    <Link href={`profile/${data.walletAddress}`}>
+                    <Link href={`/profile/${data.walletAddress}`}>
                         <div className="stacked-avatar">
                             <img style={{ width: 30, height: 30, borderRadius: 30 }} src={data.user ? DOWNLOAD_USERS_URL + data.user.imageUrl : DOWNLOAD_USERS_URL + user_info.imageUrl} />
                             <div className="ml-2 text-caption-bold neutral-2">  {data.user ? data.user.displayName : data.itemPrice}</div>
