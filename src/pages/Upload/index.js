@@ -23,13 +23,10 @@ function Upload({ user_info }) {
 
     const renderCondition = () => {
         if (connected) {
-            if (user_info.walletAddress !== '') {
-                if (!user_info.displayName) {
-                    toast("Profilini güncellemen lazım.");
-                    history.push("/profile/edit");
-                } else {
-                    return "/upload/single";
-                }
+            if (!user_info.displayName) {
+                return "/profile/edit";
+            } else {
+                return "/upload/single";
             }
         } else {
             return "/connect";

@@ -14,9 +14,9 @@ function Modal({
     return (
         <BModal show={show} onHide={onClose} className={className}>
             <BModal.Body>
-                <div className="modal-title d-flex justify-content-between align-items-center">
+                <div className={"modal-title d-flex align-items-center " + (title === "Wrong network" ? 'justify-content-center' : 'justify-content-between')}>
                     {title === 'Wrong network' ? (
-                        <div className="d-flex" style={{ flexDirection: "column", alignItems:"center", justifyContent:"center" }}>
+                        <div className="d-flex" style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                             {title == 'Wrong network' ? <i className="fas fa-cogs" style={{ fontSize: 32, marginBottom: 6 }}></i> : null}
                             <div className={"text-body-1-bold"}>{title}</div>
                         </div>

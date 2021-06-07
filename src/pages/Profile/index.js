@@ -151,7 +151,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
         <Layout page="profile">
             {userInfo ? (
                 <>
-                    <section style={{ backgroundColor: "#23262F" }}>
+                    <section>
                         <div className="container-fluid">
                             <img src={coverPhoto} className="background" />
                         </div>

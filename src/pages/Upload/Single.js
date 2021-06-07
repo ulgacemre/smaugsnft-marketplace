@@ -90,6 +90,16 @@ function UploadSingle({ isSingle = true, user_info }) {
     const { mintERC721 } = useContext(ContractsContext);
 
     const history = useHistory();
+    const { connected } = useWeb3();
+
+
+    useEffect(() => {
+        if(connected) {
+           return null; 
+        } else {
+            history.push("/connect");
+        }
+    }, [connected]);
 
 
     const fetchAllCategories = () => {
