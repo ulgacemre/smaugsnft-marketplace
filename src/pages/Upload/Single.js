@@ -444,10 +444,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                                         <Button className="large primary" icon="arrow-right" iconPos="right" onClick={onCreateItem} disabled={disableCreate}>
                                             Create item
                                 </Button>
-                                        <div className="" style={{ padding: '16px 24px' }}>
-                                            <span className="text-button-1 mr-12">Auto saving</span>
-                                            <Icon icon="loading" className="svg-neutral-2" size="sm" />
-                                        </div>
+                                  
                                     </div>
                                     <div className="d-lg-none d-block">
                                         <Button className="large w-100 mb-12" onClick={onPreview}>
