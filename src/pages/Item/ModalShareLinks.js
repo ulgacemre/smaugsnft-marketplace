@@ -35,7 +35,7 @@ function ModalShareLinks({ show, onClose, nft }) {
             <div className="social">
                 <div className="item">
                     <Link
-                        href={`http://twitter.com/share?url=http://localhost:3000/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}&text=The Best Ever collectible &hashtags=#smaugsnft,#nft,#bsc,#digitalasset,@smaugsnft`}
+                        href={`http://twitter.com/share?url=http://157.90.232.140/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}&text=The Best Ever collectible &hashtags=#smaugsnft,#nft,#bsc,#digitalasset,@smaugsnft`}
                         target="_blank"
                     >
                         <i className="fab fa-twitter"></i>
@@ -44,17 +44,17 @@ function ModalShareLinks({ show, onClose, nft }) {
                     <span>Twitter</span>
                 </div>
                 <div className="item">
-                    <Link target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=http://localhost:3000/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}>
+                    <Link target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=http://157.90.232.140/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}>
                         <i className="fab fa-facebook"></i>
                     </Link>
                     <span>Facebook</span>
                 </div>
                 <div className="item">
-                    <Link target="_blank" href={`https://telegram.me/share/?url=http://localhost:3000/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}><i className="fab fa-telegram"></i></Link>
+                    <Link target="_blank" href={`https://telegram.me/share/?url=http://157.90.232.140/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}><i className="fab fa-telegram"></i></Link>
                     <span>Telegram</span>
                 </div>
                 <div className="item">
-                    <i onClick={() => navigator.clipboard.writeText(`http://localhost:3000/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`).then(() => {
+                    <i onClick={() => navigator.clipboard.writeText(`http://157.90.232.140/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`).then(() => {
                         toast.info('NFT token link copied.', {
                             position: "top-right",
                             autoClose: 5000,
