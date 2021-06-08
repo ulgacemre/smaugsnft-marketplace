@@ -1,7 +1,7 @@
 const addresses = {
   // ERC721: process.env.CONTRACT_ADDRESS
-  ERC721: '0xff506c7e01a03bb97e3318f28254cb6ef8fe8621',
-  SMG: '0xb0ce2256be8d9b413f0e031608d137bfc494984e'
+  ERC721: '0xb126662D4070E203f4f4D607a588fcFC089f86dC',
+  SMG: '0xC96a6F3156d5863F6fE36d747c8f987e23DcC837'
 };
 
 export default addresses;

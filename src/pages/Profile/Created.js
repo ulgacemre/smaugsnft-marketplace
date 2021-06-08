@@ -16,7 +16,7 @@ function Created({ walletAddress, className, smaugsDolar }) {
             setCreatedItems(data);
             setCreatedItemsLoading(false);
         }).catch((error) => {
-            console.log("FETCH_ON_SALE_ITEMS_ERROR ===> ", error)
+            //console.log("FETCH_ON_SALE_ITEMS_ERROR ===> ", error)
             setCreatedItems([]);
             setCreatedItemsLoading(false);
         });
@@ -47,17 +47,17 @@ function Created({ walletAddress, className, smaugsDolar }) {
             )
         } else if (!createdItemsLoading && createdItems.length === 0) {
             return (
-                <div className="container content text-center">
-                    <img src={imgHero} className="w-100" />
-                    <div className="content-text mx-auto">
-                        <h2>
-                            Sorry, we couldn’t find any results for this search.
-                </h2>
-                        <div className="text-caption neutral-4 mt-2">
-                            Maybe give one of these a try?
+                <div className="container content text-center mt-4" style={{ display: "flex", flexDirection: "column" }}>
+                <img src={imgHero} className="w-100 mb-5" />
+                <div className="content-text mx-auto">
+                    <h2>
+                        Sorry, we couldn’t find any results for this search.
+            </h2>
+                    <div className="text-caption neutral-4 mt-2">
+                        Maybe give one of these a try?
+            </div>
                 </div>
-                    </div>
-                </div>
+            </div>
             );
         } else {
             return (

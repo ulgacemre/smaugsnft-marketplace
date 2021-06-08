@@ -23,7 +23,7 @@ function ModalBurnToken({ show, onClose, tokenId, nft }) {
                     setHashAddress(res.hash);
                     setDone(false);
                     res.wait(res).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                         if (response.status == 1) {
                             setDone(true);
                             window.location.href = "/";
@@ -35,13 +35,13 @@ function ModalBurnToken({ show, onClose, tokenId, nft }) {
                 setBurning(false);
                 setError(false);
             }).catch(error => {
-                console.log("delete_NEW_NFT_TOKEN_error ===> ", error)
+                //console.log("delete_NEW_NFT_TOKEN_error ===> ", error)
                 setError(true);
                 setBurning(false);
             });
 
         } catch (error) {
-            console.log("ERROR ===> ", error);
+            //console.log("ERROR ===> ", error);
             setError(true);
             setBurning(false);
         }

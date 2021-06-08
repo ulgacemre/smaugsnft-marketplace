@@ -37,7 +37,7 @@ export const createNFT = ({ isSingle, nft_info, imageFile }) => {
           ...nft_info
         }).then(async ({ data }) => {
 
-          console.log("created new token: ", data);
+          //console.log("created new token: ", data);
           
           localStorage.setItem("3295893275832758235", data.id);
 
@@ -45,15 +45,15 @@ export const createNFT = ({ isSingle, nft_info, imageFile }) => {
           dispatch(setNFTCreated(true))
        
         }).catch(function (error) {
-          console.log(error);
+          //console.log(error);
           dispatch({ type: FETCH_ERROR, payload: error.message });
-          console.log("Error****:", error.message);
+          //console.log("Error****:", error.message);
         });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         dispatch({ type: FETCH_ERROR, payload: error.message });
-        console.log("Error****:", error.message);
+        //console.log("Error****:", error.message);
       })
   }
 };

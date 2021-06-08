@@ -49,14 +49,14 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem }) {
                 });
 
             }).catch((error) => {
-                console.log("ERROR ===> ", error);
+                //console.log("ERROR ===> ", error);
                 setSuccess(false);
                 setLoading(false);
                 setError(true);
             });
 
         } catch (error) {
-            console.log("transferFromERC721 ===> ", error);
+            //console.log("transferFromERC721 ===> ", error);
             setSuccess(false);
                 setLoading(false);
                 setError(true);

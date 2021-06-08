@@ -110,8 +110,8 @@ function UploadSingle({ isSingle = true, user_info }) {
                     resolve(data);
                 }).catch(function (error) {
                     reject(error);
-                    console.log("FETCH_CATEGORIES ===> ", error);
-                    console.log("Error****:", error.message);
+                    //console.log("FETCH_CATEGORIES ===> ", error);
+                    //console.log("Error****:", error.message);
                 });
         })
     };
@@ -130,14 +130,14 @@ function UploadSingle({ isSingle = true, user_info }) {
             var img = document.createElement("img");
             img.src = fakePath;
             img.crossOrigin = "anonymous";
-            const model = await nsfwjs.load('http://157.90.232.140/NSFWJS/quant_mid/', { type: "graph" });
+            const model = await nsfwjs.load('https://testnet.smaugs.com/NSFWJS/quant_mid/', { type: "graph" });
             const predictions = await model.classify(img)
 
-            console.log(predictions)
+            //console.log(predictions)
 
             const best = predictions[0];
 
-            console.log(best);
+            //console.log(best);
 
 
             if (best.className == "Porn" || best.className == "Hentai") {
@@ -218,7 +218,7 @@ function UploadSingle({ isSingle = true, user_info }) {
             });
         } else {
             setShowCreateItemModal(true);
-            console.log("CATEGORY_ID ===> ", itemCategory);
+            //console.log("CATEGORY_ID ===> ", itemCategory);
         }
     }
 

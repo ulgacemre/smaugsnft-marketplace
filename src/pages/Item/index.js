@@ -130,14 +130,14 @@ function Item({ type = 'purchase' }) {
                 setCreator(data);
                 setNftLoading(false);
             }).catch(error => {
-                console.log("OWNER_FETCH_ERROR ===> ", error);
+                //console.log("OWNER_FETCH_ERROR ===> ", error);
                 setCreator(null);
                 setNftLoading(false);
             })
 
-            console.log("NFT ===> ", data);
+            //console.log("NFT ===> ", data);
         }).catch((error) => {
-            console.log('NFT FETCH ERROR ===>', error)
+            //console.log('NFT FETCH ERROR ===>', error)
             history.push("/404");
         });
     };

@@ -31,7 +31,7 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem }) {
             fetchNftItem(nft.id);
 
         }).catch((error) => {
-            console.log("ERROR ===> ", error);
+            //console.log("ERROR ===> ", error);
             setSuccess(false);
             setLoading(false);
             setError(true);

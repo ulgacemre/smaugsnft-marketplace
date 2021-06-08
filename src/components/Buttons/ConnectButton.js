@@ -27,7 +27,7 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
 
     const { connected, walletAddress, handleDisconnect, walletSMGBalance } = useWeb3()
 
-    console.log("wallet", useWeb3());
+    //console.log("wallet", useWeb3());
 
     return (
         <>

@@ -56,8 +56,8 @@ function Search() {
             .then(({ data }) => {
                 setCategoriesData(data);
             }).catch(function (error) {
-                console.log("FETCH_CATEGORIES ===> ", error);
-                console.log("Error****:", error.message);
+                //console.log("FETCH_CATEGORIES ===> ", error);
+                //console.log("Error****:", error.message);
             });
     };
 
@@ -71,9 +71,9 @@ function Search() {
         axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
-            console.log("NFTS ===> ", data);
+            //console.log("NFTS ===> ", data);
         }).catch((error) => {
-            console.log("FETCH_NFTS_ERROR ===> ", error);
+            //console.log("FETCH_NFTS_ERROR ===> ", error);
             setAllNfts([]);
             setNftsLoading(false);
         })
@@ -89,7 +89,7 @@ function Search() {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
-                console.log("fetchNftsWithCategory ===> ", error);
+                //console.log("fetchNftsWithCategory ===> ", error);
                 setAllNfts([]);
                 setNftsLoading(false);
             })
@@ -111,7 +111,7 @@ function Search() {
     }
 
     useEffect(() => {
-        console.log(searchKey)
+        //console.log(searchKey)
     }, [searchKey])
 
     const handleChangeMobileCategory = (category) => {
@@ -135,7 +135,7 @@ function Search() {
             }).catch((error) => {
                 setAllNfts([]);
                 setNftsLoading(false);
-                console.log("FILTER_ERROR ===> ", error);
+                //console.log("FILTER_ERROR ===> ", error);
             })
         } else if (title === "Lowest price") {
             axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user" }`).then(({ data }) => {
@@ -144,7 +144,7 @@ function Search() {
             }).catch((error) => {
                 setAllNfts([]);
                 setNftsLoading(false);
-                console.log("FILTER_ERROR ===> ", error);
+                //console.log("FILTER_ERROR ===> ", error);
             })
         } else {
             return null;
@@ -201,7 +201,7 @@ function Search() {
         }).catch(error => {
             setAllNfts([]);
             setNftsLoading(false);
-            console.log("PriceRangeError ===> ", error);
+            //console.log("PriceRangeError ===> ", error);
         });
 
     };

@@ -14,10 +14,10 @@ function HomeSlider() {
         axios.get(`single?filter={"include": {"relation": "user"}}`).then(({ data }) => {
             setNfts(data);
             setLoading(false);
-            console.log("HOME_SLIDER_NFTS ===>", data);
+            //console.log("HOME_SLIDER_NFTS ===>", data);
             getSmaugsApiDolar();
         }).catch(error => {
-            console.log("HOME_SLIDER_FETCH_NFTS ===> ", error);
+            //console.log("HOME_SLIDER_FETCH_NFTS ===> ", error);
             setNfts([]);
             setLoading(false);
         })

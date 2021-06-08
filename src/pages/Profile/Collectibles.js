@@ -15,7 +15,7 @@ function Collectibles({ walletAddress, className, smaugsDolar }) {
             setCollectibles(data);
             setCollectiblesLoading(false);
         }).catch((error) => {
-            console.log("FETCH_ALL_COLLECTIBLES_ERROR ===> ", error);
+            //console.log("FETCH_ALL_COLLECTIBLES_ERROR ===> ", error);
             setCollectibles([]);
             setCollectiblesLoading(false);
         });
@@ -64,7 +64,7 @@ function Collectibles({ walletAddress, className, smaugsDolar }) {
                 <>
                     <div className="row">
                         {collectibles.map((item, idx) => (
-                            <div className="col-xl-5 col-lg-6 col-md-6 col-12 mb-32" key={idx}>
+                            <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-32" key={idx}>
                                 <div className="profile-card-item">
                                     <CardBid smaugsDolar={smaugsDolar} data={item} />
                                 </div>

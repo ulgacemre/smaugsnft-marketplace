@@ -7,7 +7,7 @@ import Popup from '../../components/Popup';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { DOWNLOAD_USERS_URL } from '../../utils/Api';
 
 
 function UserPanel({ username, avatar, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
@@ -57,6 +57,7 @@ function UserPanel({ username, avatar, walletAddress, description = '', url, cre
     return (
         <div className="userinfo-panel">
             <ToastContainer />
+       
             <img className="profile-photo" src={avatar} />
             <div className="description mb-5">
                 <div className="text-body-1-bold mb-1">
@@ -64,7 +65,7 @@ function UserPanel({ username, avatar, walletAddress, description = '', url, cre
                 </div>
                 <div className="text-button-2" style={{ marginBottom: '20px' }}>
                     <span className="mr-2">{shortenWallet(walletAddress)}</span>
-                    <a href="javascript:void(0);" onClick={() => navigator.clipboard.writeText(`http://157.90.232.140/profile/${walletAddress}`).then(() => {
+                    <a href="javascript:void(0);" onClick={() => navigator.clipboard.writeText(`https://testnet.smaugs.com/profile/${walletAddress}`).then(() => {
                         toast.info('Wallet address copied.', {
                             position: "top-right",
                             autoClose: 5000,

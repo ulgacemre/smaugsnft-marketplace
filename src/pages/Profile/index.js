@@ -26,6 +26,10 @@ import DropDown from '../../components/DropDown';
 import Collectibles from './Collectibles';
 import './profile.css';
 
+
+
+        
+
 const filterType = [
     {
         title: 'On Sale'
@@ -61,6 +65,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
     const [userInfoLoading, setUserInfoLoading] = useState(true);
 
 
+    const history = useHistory();
     const { connected, walletAddress } = useWeb3()
 
     const handleChangeTab = (tab) => {
@@ -87,10 +92,10 @@ function Profile({ user_info, getUserSingleNFTs }) {
                 setUserInfo(data);
                 setUserInfoLoading(false);
             }).catch(function (error) {
-                console.log(error);
+                //console.log(error);
                 setUserInfo(null);
                 setUserInfoLoading(false);
-                console.log("Error****:", error.message);
+                //console.log("Error****:", error.message);
             });
     };
     useEffect(() => {
@@ -103,11 +108,20 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
     useEffect(() => {
 
+        
+
 
         if (address !== walletAddress) {
             fetchUserInfo(address);
         } else {
-            setUserInfo(user_info);
+
+           
+            if(user_info.displayName === '') {
+                history.push("/profile/edit");
+            } else {
+                setUserInfo(user_info);
+            }
+            
         }
         setQueryAddress(address);
 
@@ -169,7 +183,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
                                     <UserPanel
                                         username={userInfo.displayName}
                                         walletAddress={userInfo.walletAddress}
-                                        avatar={userInfo.avatar ? userInfo.avatar : DOWNLOAD_USERS_URL + userInfo.imageUrl}
+                                        avatar={DOWNLOAD_USERS_URL + userInfo.imageUrl}
                                         url={userInfo.customUrl}
                                         createdOn={userInfo.createdOn}
                                         twitterUsername={userInfo.twitterUsername}

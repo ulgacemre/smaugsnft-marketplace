@@ -43,7 +43,7 @@ function CategoryNfts() {
                     }).catch((error) => {
                         setNfts([]);
                         setNftsLoading("false");
-                        console.log("fetchCategoryNfts ===> ", error);
+                        //console.log("fetchCategoryNfts ===> ", error);
                     })
                 }
             });

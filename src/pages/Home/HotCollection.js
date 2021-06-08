@@ -41,7 +41,7 @@ function HotCollection({ smaugsDolar }) {
             setRecentlyNfts(data);
             setRecentlyNftsLoading(false);
         }).catch((error) => {
-            console.log("HOT_COLLECTION_RECENTLY_MINTED_NFTS_ERROR ===> ", error);
+            //console.log("HOT_COLLECTION_RECENTLY_MINTED_NFTS_ERROR ===> ", error);
             setRecentlyNfts([]);
             setRecentlyNftsLoading(false);
         });

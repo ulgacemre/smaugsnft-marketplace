@@ -121,16 +121,16 @@ function Footer() {
             <Divider />
             <div className="d-flex justify-content-lg-between justify-content-center pt-32 pb-32">
                 <div className="text-caption-2 neutral-4">
-                    Copyright © 2021 UI8 LLC. All rights reserved
+                    Copyright © 2021 Smaugs NFT. All rights reserved
                 </div>
-                <div className="d-lg-block d-none">
+            {/*     <div className="d-lg-block d-none">
                     <span className="text-caption-2 mr-3">
                         We use cookies for better service.
                     </span>
                     <span className="text-caption-2-bold primary-1 pointer">
                         Accept
                     </span>
-                </div>
+                </div>*/}
             </div>
         </footer>
     );

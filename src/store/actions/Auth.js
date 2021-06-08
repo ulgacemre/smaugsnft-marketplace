@@ -25,9 +25,9 @@ export const signInUser = ({email, password}) => {
         dispatch({type: FETCH_ERROR, payload: data.error});
       }
     }).catch(function (error) {
-      console.log(error);
+      //console.log(error);
       dispatch({type: SIGNIN_ERROR, payload: error.message});
-      console.log("Error****:", error.message);
+      //console.log("Error****:", error.message);
     });
   }
 };

@@ -61,7 +61,7 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
         newStepStatus[2] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
 
-        console.log("SECOND_STEP RUNNING");
+       // console.log("SECOND_STEP RUNNING");
 
         const web3 = new Web3(window.ethereum);
 
@@ -91,7 +91,7 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
         newStepStatus[1] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
         try {
-            await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], "http://116.203.189.226:3000/api/single/" + localStorage.getItem("3295893275832758235"));
+            await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], "https://smaugsapi.smaugs.com:3000/api/single/" + localStorage.getItem("3295893275832758235"));
             let newStepStatus = [...stepStatus];
             newStepStatus[1] = STEP_STATUS.SUCCESS;
             newStepStatus[2] = STEP_STATUS.START;

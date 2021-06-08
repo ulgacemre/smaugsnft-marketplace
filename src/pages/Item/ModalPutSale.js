@@ -25,9 +25,9 @@ function ModalPutSale({ show, onClose, nft, fetchNftItem }) {
             setLoading(false);
             setSuccess(true);
             fetchNftItem(nft.id);
-            console.log("patch_result ===> ", response);
+            //console.log("patch_result ===> ", response);
         }).catch(error => {
-            console.log("PUT_SALE_PATCH_ERROR ===> ", error);
+            //console.log("PUT_SALE_PATCH_ERROR ===> ", error);
             setLoading(false);
             setError(true);
         });

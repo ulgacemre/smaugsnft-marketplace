@@ -48,7 +48,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
             const res = await transfer(address, noComissionPrice);
             return res;
         } catch (error) {
-            console.log("otherSendAddressSMG_error ===> ", error)
+            //console.log("otherSendAddressSMG_error ===> ", error)
         }
     };
 
@@ -72,7 +72,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
                     setHashAddress(res.hash);
                     setDone(false);
                     res.wait(res).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                         if (response.status == 1) {
                             setDone(true);
                         } else {
@@ -88,7 +88,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
                 setTitle("")
                 setSending(false);
             }).catch(error => {
-                console.log("PATCH_NEW_NFT_TOKEN_error ===> ", error)
+                //console.log("PATCH_NEW_NFT_TOKEN_error ===> ", error)
             });
         } catch (error) {
             setBuyingError(true);
@@ -122,7 +122,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
                 setSending(true);
 
                 approveSMG(parseInt(commisionPrice()) * 10 ** 8).then(() => {
-                    console.log("apppppp",approveError);
+                    //console.log("apppppp",approveError);
                     if (approveError == false) 
                         buyNow();
                 })

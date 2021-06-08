@@ -56,7 +56,7 @@ function PopularSellers() {
             setPopularSellers(data);
             setPopularSellersLoading(false);
         }).catch(error => {
-            console.log("FETCH_POPULAR_USERS ===> ", error);
+            //console.log("FETCH_POPULAR_USERS ===> ", error);
             setPopularSellers([]);
             setPopularSellersLoading(false);
         })

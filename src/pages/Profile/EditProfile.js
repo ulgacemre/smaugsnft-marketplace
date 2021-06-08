@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { connect } from "react-redux";
 import { updateUserInfo } from "../../store/actions/User";
 import Loading from '../../components/Loading';
+import { DOWNLOAD_USERS_URL } from '../../utils/Api';
 
 function EditProfile(props) {
     const [name, setName] = useState();
@@ -120,7 +121,7 @@ function EditProfile(props) {
     }
 
     const verifyTwitter = (twitterName) => {
-        console.log(twitterName)
+        //console.log(twitterName)
     }
 
     return (

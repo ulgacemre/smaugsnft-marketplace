@@ -17,7 +17,7 @@ const Provider = ({ children }) => {
     if (!!wallet && !ERC721.signer) {
       setERC721(ERC721.connect(wallet))
 
-      console.log("CONTRACT  ===> ", ERC721.connect(wallet));
+      //console.log("CONTRACT  ===> ", ERC721.connect(wallet));
 
     }
   }, [wallet, setERC721, ERC721])

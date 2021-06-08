@@ -16,7 +16,7 @@ function OnSale({ walletAddress, className, smaugsDolar }) {
             setOnSaleItems(data);
             setOnSaleItemsLoading(false);
         }).catch((error) => {
-            console.log("FETCH_ON_SALE_ITEMS_ERROR ===> ", error)
+            //console.log("FETCH_ON_SALE_ITEMS_ERROR ===> ", error)
             setOnSaleItems([]);
             setOnSaleItemsLoading(false);
         });

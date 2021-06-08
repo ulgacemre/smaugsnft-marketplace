@@ -27,7 +27,7 @@ function ModalReport({ show, onClose, supply, nft_id, walletAddress, connected }
             });
             setSending(false);
         }).catch((error) => {
-            console.log("CREATE_REPORT_ERROR ===> ", error);
+            //console.log("CREATE_REPORT_ERROR ===> ", error);
             toast("Something went error!", {
                 type: "error",
                 autoClose: 5000

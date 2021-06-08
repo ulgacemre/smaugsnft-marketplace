@@ -69,7 +69,7 @@ function Discover({ smaugsDolar }) {
 
     useEffect(() => {
         if (price) {
-            console.log("UPDATED_PRICE ===> ", price);
+            //console.log("UPDATED_PRICE ===> ", price);
         }
     }, [price]);
     // search
@@ -82,19 +82,19 @@ function Discover({ smaugsDolar }) {
                 setCategoriesData(data);
                 setCategoriesLoading(false);
             }).catch(function (error) {
-                console.log("FETCH_CATEGORIES ===> ", error);
+                //console.log("FETCH_CATEGORIES ===> ", error);
                 setCategoriesData([]);
                 setCategoriesLoading(false);
-                console.log("Error****:", error.message);
+                //console.log("Error****:", error.message);
             });
     };
     const firstFetchNfts = () => {
         axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
-            console.log("NFTS ===> ", data);
+            //console.log("NFTS ===> ", data);
         }).catch((error) => {
-            console.log("FETCH_NFTS_ERROR ===> ", error);
+            //console.log("FETCH_NFTS_ERROR ===> ", error);
             setAllNfts([]);
             setNftsLoading(false);
         })
@@ -111,7 +111,7 @@ function Discover({ smaugsDolar }) {
             }).catch((error) => {
                 setAllNfts([]);
                 setNftsLoading(false);
-                console.log("fetchNftsWithCategory ===> ", error);
+                //console.log("fetchNftsWithCategory ===> ", error);
             })
         }
     };
@@ -215,7 +215,7 @@ function Discover({ smaugsDolar }) {
             }).catch((error) => {
                 setAllNfts([]);
                 setNftsLoading(false);
-                console.log("FILTER_ERROR ===> ", error);
+                //console.log("FILTER_ERROR ===> ", error);
             })
         } else if (title === "Lowest price") {
             axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user" }`).then(({ data }) => {
@@ -224,7 +224,7 @@ function Discover({ smaugsDolar }) {
             }).catch((error) => {
                 setAllNfts([]);
                 setNftsLoading(false);
-                console.log("FILTER_ERROR ===> ", error);
+                //console.log("FILTER_ERROR ===> ", error);
             })
         } else {
             firstFetchNfts();
