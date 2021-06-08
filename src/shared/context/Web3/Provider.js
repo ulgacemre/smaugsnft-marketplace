@@ -28,8 +28,8 @@ const Provider = ({ children }) => {
   const approveSMG = async (amount) => {
     const contract = SMG.connect(wallet);
 
-    const res = await contract.approve(walletAddress, amount);
-    return res;
+     await contract.approve(walletAddress, amount);
+
   }
 
   const transferFromSMG = async (from, to, uint) => {

@@ -46,7 +46,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
         try {
 
             const res = await transfer(address, noComissionPrice);
-            console.log("otherSendAddressSMG ===> ", res);
+            return res;
         } catch (error) {
             console.log("otherSendAddressSMG_error ===> ", error)
         }
@@ -54,10 +54,14 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
 
 
     const buyNow = async () => {
-        setBuyingError(false);
+       
         try {
             // data.walletAddress "transferFromSMG" 'to' field.........
-            const res = await transferFromSMG(walletAddress, data.walletAddress, data.salePrice * 10 ** 8);
+
+          
+            const res = await otherSendAddressSMG(data.walletAddress, data.salePrice * 10 ** 8);
+
+            //otherSendAddressSMG("0x8De5021b533ef04C5f2e6875cd473223D42669b9",(commisionPrice() - data.salePrice).toFixed(2) * 10 ** 8);
 
             axios.patch(`single/${data.id}`, {
                 walletAddress: walletAddress,
@@ -94,18 +98,19 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
 
     }
 
+    /*
     const approve = async () => {
         try {
             const response = await approveSMG(parseInt(commisionPrice()) * 10 ** 8);
+
+           
             setApproveError(false);
             return response;
         } catch (error) {
-            setApproveError(true);
-            setSending(false);
-            return error;
+            console.log(error);
         }
     };
-
+*/
 
     const onContinue = async () => {
         setApproveError(false);
@@ -116,8 +121,10 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
 
                 setSending(true);
 
-                approve().then(() => {
-                    if (!approveError) buyNow();
+                approveSMG(parseInt(commisionPrice()) * 10 ** 8).then(() => {
+                    console.log("apppppp",approveError);
+                    if (approveError == false) 
+                        buyNow();
                 })
 
             }
