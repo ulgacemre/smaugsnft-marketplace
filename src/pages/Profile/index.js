@@ -39,13 +39,15 @@ const filterType = [
     {
         title: 'Likes'
     },
-    {
+
+]
+
+{/*    {
         title: 'Following'
     },
     {
         title: 'Followers'
-    }
-]
+    }*/ }
 
 function Profile({ user_info, getUserSingleNFTs }) {
     const [coverPhoto, setCoverPhoto] = useState(imgDefaultBg);

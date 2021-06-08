@@ -130,7 +130,7 @@ function UploadSingle({ isSingle = true, user_info }) {
             var img = document.createElement("img");
             img.src = fakePath;
             img.crossOrigin = "anonymous";
-            const model = await nsfwjs.load('http://localhost:3001/NSFWJS/quant_mid/', { type: "graph" });
+            const model = await nsfwjs.load('http://157.90.232.140/NSFWJS/quant_mid/', { type: "graph" });
             const predictions = await model.classify(img)
 
             console.log(predictions)

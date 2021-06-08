@@ -71,7 +71,7 @@ function Created({ walletAddress, className, smaugsDolar }) {
                             </div>
                         ))}
                     </div>
-                    <Button className="normal mx-auto" icon="loading" iconPos="left">Load More</Button>
+                  
                 </>
             )
         }
