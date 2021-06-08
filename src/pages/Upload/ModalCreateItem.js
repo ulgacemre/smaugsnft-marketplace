@@ -71,17 +71,10 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
             "This is a test msg to be signed.",
             "0xfDCe6A128e22e0a4A98C16F02B3BCbF16f4D8945",
             function (err, sig) {
-                if (sig != null) {
-                    console.log(sig);
-                    let newStepStatus = [...stepStatus];
-                    newStepStatus[2] = STEP_STATUS.SUCCESS;
-                    setStepStatus(newStepStatus);
-                    history.push(`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${localStorage.getItem("3295893275832758235")}`)
-                } else {
-                    let newStepStatus = [...stepStatus];
-                    newStepStatus[2] = STEP_STATUS.FAILED;
-                    setStepStatus(newStepStatus)
-                }
+                let newStepStatus = [...stepStatus];
+                newStepStatus[2] = STEP_STATUS.SUCCESS;
+                setStepStatus(newStepStatus);
+                history.push(`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${localStorage.getItem("3295893275832758235")}`)
                 /*
                  let newStepStatus = [...stepStatus];
         newStepStatus[2] = STEP_STATUS.FAILED;
@@ -98,7 +91,7 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
         newStepStatus[1] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
         try {
-            await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], "http://116.203.189.226:3000/api/single/"+localStorage.getItem("3295893275832758235"));
+            await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], "http://116.203.189.226:3000/api/single/" + localStorage.getItem("3295893275832758235"));
             let newStepStatus = [...stepStatus];
             newStepStatus[1] = STEP_STATUS.SUCCESS;
             newStepStatus[2] = STEP_STATUS.START;
