@@ -32,13 +32,19 @@ function Router() {
                 if (window.web3.currentProvider.chainId === "0x61") {
                     setError("false");
                     setLoading("false");
-                } else {
+                } else if (window.web3.currentProvider.chainId !== "0x61") {
                     setError("true");
+                    setLoading("false");
+                } else {
+                    setError("false");
                     setLoading("false");
                 }
             }, 1200);
 
 
+        } else {
+            setError("false");
+            setLoading("false");
         }
     }, [window.web3]);
 

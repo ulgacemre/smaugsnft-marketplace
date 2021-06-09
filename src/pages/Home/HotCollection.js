@@ -37,7 +37,7 @@ function HotCollection({ smaugsDolar }) {
     const [recentlyNftsLoading, setRecentlyNftsLoading] = useState(true);
 
     const fetchRecentlyNfts = () => {
-        axios.get(`single?filter={"include": {"relation": "user"}}`).then(({ data }) => {
+        axios.get(`single?filter={"where":{"putSale":"true"},"order": "id DESC", "include": "user" }`).then(({ data }) => {
             setRecentlyNfts(data);
             setRecentlyNftsLoading(false);
         }).catch((error) => {

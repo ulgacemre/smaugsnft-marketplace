@@ -133,7 +133,7 @@ function EditProfile(props) {
                     <ToastContainer />
                     <div className="container">
                         <div className="d-flex justify-content-between align-items-center py-4">
-                            <Link href="/profile">
+                            <Link href={"/profile/" + walletAddress}>
                                 <Button className="normal" icon="arrow-left" iconPos="left">
                                     Back to profile
                         </Button>

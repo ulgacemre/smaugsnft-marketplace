@@ -270,7 +270,7 @@ function Item({ type = 'purchase' }) {
                 return (
                     <>
                         <InfoListItem
-                            avatar={DOWNLOAD_USERS_URL + nft.user.imageUrl}
+                            avatar={DOWNLOAD_USERS_URL + creator.imageUrl}
                             info={"Creator"}
                             name={creator.displayName}
                             isVerified={false}

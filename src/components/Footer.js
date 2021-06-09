@@ -82,7 +82,12 @@ function Footer() {
                                 Search
                             </Link>
                         </div>
-                        <div>Support</div>
+                        <div>
+                            <Link href="https://t.me/smaugsnftsupport" target="_blank" style={{ color: "#777E90" }}>
+                                Support
+                            </Link>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -123,7 +128,7 @@ function Footer() {
                 <div className="text-caption-2 neutral-4">
                     Copyright © 2021 Smaugs NFT. All rights reserved
                 </div>
-            {/*     <div className="d-lg-block d-none">
+                {/*     <div className="d-lg-block d-none">
                     <span className="text-caption-2 mr-3">
                         We use cookies for better service.
                     </span>

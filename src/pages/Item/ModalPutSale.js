@@ -44,12 +44,12 @@ function ModalPutSale({ show, onClose, nft, fetchNftItem }) {
                 <div>
                     <h2 className="text-center mb-32">Success!</h2>
                     <div className="text-center text-body-2-bold mb-32">
-                        You successfully putted on sale this token
+                        You successfully put on sale this token
                     </div>
                 </div>
             ) : <>
                 <div className="text-body-2 neutral-4 mb-32">
-                    Do you really want to remove your item from sale? You can put it on sale anytime
+                    Do you really want to put on sale?
             </div>
                 {error ? <div className="purchase-caution p-4 mb-3 d-flex">
                     <Icon icon="circle-info" className="svg-primary-3 mr-3" size="lg" />

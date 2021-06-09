@@ -25,10 +25,13 @@ import imgHero from '../../assets/images/search/no-result-bg.png'
 import DropDown from '../../components/DropDown';
 import Collectibles from './Collectibles';
 import './profile.css';
+import SearchNoResult from '../Search/SearchNoResult';
 
 
 
-        
+
+
+
 
 const filterType = [
     {
@@ -92,10 +95,8 @@ function Profile({ user_info, getUserSingleNFTs }) {
                 setUserInfo(data);
                 setUserInfoLoading(false);
             }).catch(function (error) {
-                //console.log(error);
                 setUserInfo(null);
                 setUserInfoLoading(false);
-                //console.log("Error****:", error.message);
             });
     };
     useEffect(() => {
@@ -107,24 +108,18 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
 
     useEffect(() => {
-
-        
-
-
         if (address !== walletAddress) {
             fetchUserInfo(address);
         } else {
-
-           
-            if(user_info.displayName === '') {
-                history.push("/profile/edit");
-            } else {
-                setUserInfo(user_info);
+            if (user_info.walletAddress !== '') {
+                if (user_info.displayName === '') {
+                    history.push("/profile/edit");
+                } else {
+                    setUserInfo(user_info);
+                }
             }
-            
         }
         setQueryAddress(address);
-
     }, [user_info, address]);
 
 
@@ -165,69 +160,86 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
     return (
         <Layout page="profile">
-            {userInfo ? (
-                <>
-                    <section>
-                        <div className="container-fluid">
-                            <img src={coverPhoto} className="background" />
-                        </div>
-                        <div className="container">
-                            <div className="content" style={{ justifyContent: "left" }}>
-                                <div className="left-panel">
-                                    {connected && queryAddress === myAddress ? <div className="d-flex d-lg-none justify-content-between mt-32 mb-4">
-                                        <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
-                                        <Link href="/profile/edit">
-                                            <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
-                                        </Link>
-                                    </div> : <div className="d-flex d-lg-none justify-content-between mt-32 mb-4"></div>}
-                                    <UserPanel
-                                        username={userInfo.displayName}
-                                        walletAddress={userInfo.walletAddress}
-                                        avatar={DOWNLOAD_USERS_URL + userInfo.imageUrl}
-                                        url={userInfo.customUrl}
-                                        createdOn={userInfo.createdOn}
-                                        twitterUsername={userInfo.twitterUsername}
-                                        facebookUsername={userInfo.facebookUsername}
-                                        instagramUsername={userInfo.instagramUsername}
-                                        website={userInfo.website}
-                                        bio={userInfo.bio}
-                                    />
+            {!userInfo && !userInfoLoading ? (
+                <div className="container content text-center">
+                    <img src={imgHero} className="w-100" />
+
+                    <div className="content-text mx-auto">
+                        <h2>
+                            Sorry, we couldn’t find any results for this search.
+                                </h2>
+                        <div className="text-caption neutral-4 mt-2">
+                            Maybe give one of these a try?
                                 </div>
-                                <div className="right-panel">
-                                    {connected && queryAddress === myAddress ? <div className="d-lg-flex d-none justify-content-end mt-32">
-                                        <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
-                                        <Link href="/profile/edit">
-                                            <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
-                                        </Link>
-                                    </div> : <div className="d-lg-flex d-none justify-content-end mt-32"></div>}
-                                    <div className="user-collection-panel">
-                                        <ScrollView className="d-none d-lg-block w-100">
-                                            <SubNav allItems={false} tabs={filterType} className="scroll-subnav" onChange={handleChangeTab} />
-                                        </ScrollView>
-                                        <div className="d-lg-none">
-                                            <DropDown
-                                                allItems={false}
-                                                values={filterType}
-                                                value={currentTab}
-                                                onChange={(val) => setCurrentTab(val)}
+                    </div>
+                </div>
+            ) : (
+                <>
+                    {userInfo ? (
+                        <>
+                            <section>
+                                <div className="container-fluid">
+                                    <img src={coverPhoto} className="background" />
+                                </div>
+                                <div className="container">
+                                    <div className="content" style={{ justifyContent: "left" }}>
+                                        <div className="left-panel">
+                                            {connected && queryAddress === myAddress ? <div className="d-flex d-lg-none justify-content-between mt-32 mb-4">
+                                                <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
+                                                <Link href="/profile/edit">
+                                                    <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
+                                                </Link>
+                                            </div> : <div className="d-flex d-lg-none justify-content-between mt-32 mb-4"></div>}
+                                            <UserPanel
+                                                username={userInfo.displayName}
+                                                walletAddress={userInfo.walletAddress}
+                                                avatar={DOWNLOAD_USERS_URL + userInfo.imageUrl}
+                                                url={userInfo.customUrl}
+                                                createdOn={userInfo.createdOn}
+                                                twitterUsername={userInfo.twitterUsername}
+                                                facebookUsername={userInfo.facebookUsername}
+                                                instagramUsername={userInfo.instagramUsername}
+                                                website={userInfo.website}
+                                                bio={userInfo.bio}
                                             />
                                         </div>
+                                        <div className="right-panel">
+                                            {connected && queryAddress === myAddress ? <div className="d-lg-flex d-none justify-content-end mt-32">
+                                                <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
+                                                <Link href="/profile/edit">
+                                                    <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
+                                                </Link>
+                                            </div> : <div className="d-lg-flex d-none justify-content-end mt-32"></div>}
+                                            <div className="user-collection-panel">
+                                                <ScrollView className="d-none d-lg-block w-100">
+                                                    <SubNav allItems={false} tabs={filterType} className="scroll-subnav" onChange={handleChangeTab} />
+                                                </ScrollView>
+                                                <div className="d-lg-none">
+                                                    <DropDown
+                                                        allItems={false}
+                                                        values={filterType}
+                                                        value={currentTab}
+                                                        onChange={(val) => setCurrentTab(val)}
+                                                    />
+                                                </div>
 
-                                        {renderContent()}
+                                                {renderContent()}
 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
+                            </section>
 
+                        </>
+                    ) : <Loading
+                        position={"center"}
+                        loading={userInfo ? false : true}
+                        color={"black"}
+                        size={40}
+                    />}
                 </>
-            ) : <Loading
-                position={"center"}
-                loading={userInfo ? false : true}
-                color={"black"}
-                size={40}
-            />}
+            )}
         </Layout>
     );
 }

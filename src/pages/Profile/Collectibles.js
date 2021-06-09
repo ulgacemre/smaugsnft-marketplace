@@ -61,7 +61,7 @@ function Collectibles({ walletAddress, className, smaugsDolar }) {
             );
         } else {
             return (
-                <>
+                <div className="container-fluid">
                     <div className="row">
                         {collectibles.map((item, idx) => (
                             <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-32" key={idx}>
@@ -72,7 +72,7 @@ function Collectibles({ walletAddress, className, smaugsDolar }) {
                         ))}
                     </div>
                  
-                </>
+                </div>
             )
         }
     };

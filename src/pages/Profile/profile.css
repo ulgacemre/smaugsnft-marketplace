@@ -3,6 +3,7 @@
     box-shadow: 0px 64px 64px -48px rgb(31 47 70 / 12%);
     border-radius: 20px;
     padding: 12px;
+    width: 250px;
 }
 
 .profile-card-item {

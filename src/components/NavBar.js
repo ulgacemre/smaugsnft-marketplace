@@ -10,7 +10,7 @@ import Icon from './Icon'
 import Popup from "./Popup"
 import Divider from "./Divider"
 import useWeb3 from "../shared/hooks/useWeb3"
-
+import { Link as ScrollLink } from 'react-scroll';
 
 const NavBar = function (props) {
 
@@ -18,7 +18,7 @@ const NavBar = function (props) {
     const elementButton = useRef(null);
 
 
-    const { connected } = useWeb3();
+    const { connected, headerDiscoverRef } = useWeb3();
 
 
 
@@ -32,10 +32,22 @@ const NavBar = function (props) {
                     <div className="d-xl-block d-none navbar-header-splitter"></div>
                     <Nav className="d-xl-flex d-none nav navbar-nav" as="ul">
                         <Nav.Item as="li">
-                            <Nav.Link href="/" >Discover</Nav.Link>
+                            <Nav.Link
+                            >
+                                <ScrollLink
+                                    activeClass="active"
+                                    to="discover-main"
+                                    spy={true}
+                                    smooth={true}
+                                    offset={0}
+                                    duration={2000}
+                                >
+                                    Discover
+                                </ScrollLink>
+                            </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li">
-                            <Nav.Link href="#">How it works</Nav.Link>
+                            <Nav.Link href="https://www.notion.so/Smaugs-NFT-Marketplace-Guide-2c13dcb7bc8b4506ad8b989b7558b8f0" target="_blank">How it works</Nav.Link>
                         </Nav.Item>
                     </Nav>
                 </div>

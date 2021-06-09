@@ -6,6 +6,7 @@ import abis from '../../abis/'
 import Web3Modal from 'web3modal'
 import Context from './Context'
 import addresses from '../../addresses'
+import { useRef } from 'react'
 
 const Web3 = require('web3')
 
@@ -18,6 +19,8 @@ const Provider = ({ children }) => {
   const [walletSMGBalance, setSMGWalletBalance] = useState(undefined)
   const [connecting, setConnecting] = useState(true)
   const [SMG, setSMG] = useState(new Contract(addresses.SMG, abis.SMG));
+
+
 
   const [networkError, setNetworkError] = useState({
     loading: true,
@@ -185,7 +188,7 @@ const Provider = ({ children }) => {
         transferFromSMG,
         transfer,
         connecting,
-        networkError
+        networkError,
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import Icon from '../Icon'
 import { shortenWallet } from '../../helper/utils'
 import useWeb3 from '../../shared/hooks/useWeb3'
 import { connect } from "react-redux";
+import { toast, ToastContainer } from 'react-toastify';
 
 //import bnbImg from '../../assets/images/bnb.png'
 import coinLogo from '../../assets/images/coin-logo.png'
@@ -31,6 +32,7 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
 
     return (
         <>
+            <ToastContainer />
             {connected ? (
                 <div
                     className={"button-connected pointer " + className} style={style}
@@ -58,7 +60,18 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
                                 <span className="text-caption-bold neutral-4 mr-2">
                                     {shortenWallet(walletAddress)}
                                 </span>
-                                <Icon icon="coins-fill" className="svg-primary-1" size="xs" />
+                                <Icon onClick={() => navigator.clipboard.writeText(`https://testnet.smaugs.com/profile/${walletAddress}`).then(() => {
+                                    toast.info('Wallet address copied.', {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                    });
+
+                                })} style={{ cursor: "pointer" }} icon="coins-fill" className="svg-primary-1" size="xs" />
                             </div>
                             <div className="user-balance-card mb-4">
                                 <div className="d-flex align-items-center">

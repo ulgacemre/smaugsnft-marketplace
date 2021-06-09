@@ -59,7 +59,7 @@ function PreviewModalContent({ data, clearAll }) {
     )
 }
 
-function UploadSingle({ isSingle = true, user_info }) {
+function UploadMultiple({ isSingle = true, user_info }) {
     const [uploadImage, setUploadImage] = useState(placeholder);
     const [uploadImageFile, setUploadImageFile] = useState(null);
     const [collections, setCollections] = useState(dataCollections);
@@ -565,4 +565,4 @@ const mapStateToProps = ({ user }) => {
     const { user_info } = user;
     return { user_info }
 };
-export default connect(mapStateToProps)(UploadSingle);
+export default connect(mapStateToProps)(UploadMultiple);

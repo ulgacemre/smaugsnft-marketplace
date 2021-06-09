@@ -14,6 +14,7 @@ import DropDown from '../../components/DropDown';
 import SubNav from '../../components/SubNav';
 import PriceSlider from '../../components/Slider/PriceSlider';
 
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import Divider from '../../components/Divider';
@@ -65,6 +66,8 @@ function Discover({ smaugsDolar }) {
     // search datas
 
     const [searchCategory, setSearchCategory] = useState(-1);
+
+    
 
 
     useEffect(() => {
@@ -226,13 +229,22 @@ function Discover({ smaugsDolar }) {
                 setNftsLoading(false);
                 //console.log("FILTER_ERROR ===> ", error);
             })
+        } else if (title === "Not for sale") {
+            axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user" }`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+            }).catch((error) => {
+                setAllNfts([]);
+                setNftsLoading(false);
+                //console.log("FILTER_ERROR ===> ", error);
+            })
         } else {
             firstFetchNfts();
         }
     };
 
     return (
-        <>
+        <div id="discover-main">
             <div className="section-topbar d-flex justify-content-between align-items-center">
                 <h3>
                     Discover
@@ -305,8 +317,7 @@ function Discover({ smaugsDolar }) {
                     {renderSliderContent()}
                 </div>
             </div>
-
-        </>
+        </div>
     );
 }
 

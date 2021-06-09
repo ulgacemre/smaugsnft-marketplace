@@ -20,7 +20,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
                         <div className="hotbid-item-hover">
                             <div className="d-flex justify-content-between p-2 w-100">
                                 <div>
-                                    <Label className="green" fill>Purchasing !</Label>
+                                    {/* <Label className="green" fill>Purchasing !</Label> */}
                                 </div>
                                 <Button className="size-32 rounded-circle bg-neutral-8 border-0"
                                     onClick={() => setHeart(!heart)}

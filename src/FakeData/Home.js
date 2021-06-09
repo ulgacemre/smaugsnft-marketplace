@@ -328,7 +328,10 @@ export const dataFilterPrice = [
 
 export const dataFilterLike = [
     {
-        title: "Choose filter",
+        title: "All items",
+    },
+    {
+        title: "Not for sale"
     },
     {
         title: "Highest price"

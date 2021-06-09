@@ -23,7 +23,6 @@ function FileUploader({onDrop}) {
         getRootProps, 
         getInputProps
     } = useDropzone({
-        accept: 'image/*', 
         multiple: false,
         onDrop: (files) => {
             if( onDrop ) onDrop(files)
@@ -46,7 +45,7 @@ function FileUploader({onDrop}) {
             <div className="text-center">
                 <Icon icon="file-upload" />
                 <div className="text-caption-2 neutral-4 mt-2">
-                    PNG, GIF, WEBP, MP4 or MP3. Max 1Gb.
+                    PNG, GIF, JPG, MP4 or JPEG. Max 30 Mb.
                 </div>
             </div>
         </div>
