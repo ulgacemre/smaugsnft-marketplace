@@ -11,9 +11,7 @@ export const getUserInfo = ({ walletAddress }) => {
       .then(({ data }) => {
         dispatch({ type: USER_DATA, payload: data });
       }).catch(function (error) {
-        console.log(error);
         dispatch({ type: FETCH_ERROR, payload: error.message });
-        console.log("Error****:", error.message);
       });
   }
 };
@@ -33,12 +31,9 @@ const updateUserProfile = (dispatch, { walletAddress, displayName, customUrl, bi
           instagramUsername
         })
           .then(({ data }) => {
-            console.log("updated userInfo: ", data);
             dispatch({ type: USER_DATA, payload: data });
           }).catch(function (error) {
-            console.log(error);
             dispatch({ type: FETCH_ERROR, payload: error.message });
-            console.log("Error****:", error.message);
           });
       } else {
         axios.post(`Users`, {
@@ -53,18 +48,13 @@ const updateUserProfile = (dispatch, { walletAddress, displayName, customUrl, bi
           instagramUsername
         })
           .then(({ data }) => {
-            console.log("created new user: ", data);
             dispatch({ type: USER_DATA, payload: data });
           }).catch(function (error) {
-            console.log(error);
             dispatch({ type: FETCH_ERROR, payload: error.message });
-            console.log("Error****:", error.message);
           });
       }
     }).catch(function (error) {
-      console.log(error);
       dispatch({ type: FETCH_ERROR, payload: error.message });
-      console.log("Error****:", error.message);
     });
 }
 
@@ -85,9 +75,7 @@ export const updateUserInfo = ({ walletAddress, displayName, customUrl, bio, ava
           updateUserProfile(dispatch, { walletAddress, displayName, customUrl, bio, imageUrl, website })
         })
         .catch((error) => {
-          console.log(error);
           dispatch({ type: FETCH_ERROR, payload: error.message });
-          console.log("Error****:", error.message);
         })
 
     } else {

@@ -8,9 +8,10 @@ import Popup from '../../components/Popup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DOWNLOAD_USERS_URL } from '../../utils/Api';
+import blueCheckmark from '../../assets/images/blue-checkmark.webp';
 
 
-function UserPanel({ username, avatar, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
+function UserPanel({ username, avatar, verified, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
     const moreButton = useRef(null);
     const memberSince = useMemo(() => {
         let date = new Date(createdOn);
@@ -57,9 +58,19 @@ function UserPanel({ username, avatar, walletAddress, description = '', url, cre
     return (
         <div className="userinfo-panel">
             <ToastContainer />
-       
-            <img className="profile-photo" src={avatar} />
-            <div className="description mb-5">
+
+            <div>
+                <img className="profile-photo" src={avatar} />
+                {verified ? <div style={{ display: "flex", width: 100 + '%', height: 50, marginTop: -60, justifyContent: "center" }}>
+                    <img
+                        src={blueCheckmark}
+                        width={30}
+                        height={30}
+                        style={{ marginRight: -95 }}
+                    />
+                </div> : null}
+            </div>
+            <div className="d-block description mb-5">
                 <div className="text-body-1-bold mb-1">
                     {username}
                 </div>

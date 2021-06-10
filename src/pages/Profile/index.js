@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import Layout from '../../components/Layout'
 import UserPanel from './UserPanel'
@@ -9,7 +9,7 @@ import Link from '../../components/Link';
 import UserCollections from './UserCollections';
 import Followers from './Followers';
 import ScrollView from '../../components/ScrollView';
-import axios, { DOWNLOAD_USERS_URL } from '../../utils/Api'
+import axios, { DOWNLOAD_COVERS_URL, DOWNLOAD_USERS_URL } from '../../utils/Api'
 import axiosOther from 'axios';
 
 import { connect } from "react-redux";
@@ -26,6 +26,7 @@ import DropDown from '../../components/DropDown';
 import Collectibles from './Collectibles';
 import './profile.css';
 import SearchNoResult from '../Search/SearchNoResult';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
@@ -66,6 +67,10 @@ function Profile({ user_info, getUserSingleNFTs }) {
     const [userInfo, setUserInfo] = useState(null);
     const [myAddress, setMyAddress] = useState("");
     const [userInfoLoading, setUserInfoLoading] = useState(true);
+
+    const profileInput = useRef(null);
+    const [coverPhotoChanged, setCoverPhotoChanged] = useState(null);
+    const [coverPhotoChanging, setCoverPhotoChanging] = useState(false);
 
 
     const history = useHistory();
@@ -123,6 +128,64 @@ function Profile({ user_info, getUserSingleNFTs }) {
     }, [user_info, address]);
 
 
+    const handleCoverPhoto = (event) => {
+        const files = event.target.files;
+
+        const file = files[0];
+        if (file) {
+            if (file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg') {
+                var fakePath = URL.createObjectURL(file);
+                var image = new Image();
+                image.src = fakePath;
+                image.onload = function () {
+                    if (this.width < 1200) {
+                        toast.error("The maximum width of the cover photo must be no more than 1200 pixels!");
+                        profileInput.current.value = null;
+                    } else if (this.height < 275) {
+                        toast.error("The maximum height of the cover photo must be no more than 275 pixels!");
+                        profileInput.current.value = null;
+                    } else {
+                        setCoverPhotoChanging(true);
+                        const formData = new FormData();
+                        // Update the formData object 
+                        formData.append(
+                            "file",
+                            file,
+                            file.name
+                        );
+
+                        axios.post(`Containers/covers/upload`, formData)
+                            .then(({ data }) => {
+                                const imageUrl = data.result.files.file[0].name;
+                                axios.patch(`Users/${walletAddress}`, { coverUrl: imageUrl })
+                                    .then(() => {
+                                        toast.success("Your cover photo has been successfully changed.");
+                                        setCoverPhotoChanging(false);
+                                        setCoverPhotoChanged(imageUrl);
+                                        profileInput.current.value = null;
+                                    }).catch(function () {
+                                        toast.error("Something went error, please try again!");
+                                        setCoverPhotoChanging(false);
+                                        setCoverPhotoChanged(null);
+                                        profileInput.current.value = null;
+                                    });
+                            })
+                            .catch((error) => {
+                                toast.error("Something went error, please try again!");
+                                profileInput.current.value = null;
+                            })
+
+                        profileInput.current.value = null;
+                    }
+
+                }
+            } else {
+                toast.error("Cover photo must be jpg, png or jpeg extension!");
+            }
+        }
+
+    };
+
 
     const renderContent = () => {
         switch (currentTab.title) {
@@ -160,6 +223,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
     return (
         <Layout page="profile">
+            <ToastContainer />
             {!userInfo && !userInfoLoading ? (
                 <div className="container content text-center">
                     <img src={imgHero} className="w-100" />
@@ -179,15 +243,18 @@ function Profile({ user_info, getUserSingleNFTs }) {
                         <>
                             <section>
                                 <div className="container-fluid">
-                                    <img src={coverPhoto} className="background" />
+                                    <img src={coverPhotoChanged ? DOWNLOAD_COVERS_URL + coverPhotoChanged : DOWNLOAD_COVERS_URL + userInfo.coverUrl} className="background" />
                                 </div>
                                 <div className="container">
                                     <div className="content" style={{ justifyContent: "left" }}>
                                         <div className="left-panel">
                                             {connected && queryAddress === myAddress ? <div className="d-flex d-lg-none justify-content-between mt-32 mb-4">
-                                                <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
+                                                <Button disabled={coverPhotoChanging ? true : false} onClick={() => !coverPhotoChanging ? profileInput.current.click() : null} className="normal primary" icon="image" iconsize="xs">
+                                                    {coverPhotoChanging ? 'Changing...' : 'Edit cover photo'}
+                                                </Button>
+                                                <input type="file" ref={profileInput} className="d-none" onChange={handleCoverPhoto} />
                                                 <Link href="/profile/edit">
-                                                    <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
+                                                    <Button className="normal primary ml-3" icon="edit" iconsize="xs">Edit profile</Button>
                                                 </Link>
                                             </div> : <div className="d-flex d-lg-none justify-content-between mt-32 mb-4"></div>}
                                             <UserPanel
@@ -201,13 +268,17 @@ function Profile({ user_info, getUserSingleNFTs }) {
                                                 instagramUsername={userInfo.instagramUsername}
                                                 website={userInfo.website}
                                                 bio={userInfo.bio}
+                                                verified={userInfo.verified}
                                             />
                                         </div>
-                                        <div className="right-panel">
+                                        <div className="w-100 right-panel">
                                             {connected && queryAddress === myAddress ? <div className="d-lg-flex d-none justify-content-end mt-32">
-                                                <Button className="normal white-label" icon="image" iconsize="xs">Edit cover photo</Button>
+                                                <Button disabled={coverPhotoChanging ? true : false} onClick={() => !coverPhotoChanging ? profileInput.current.click() : null} className="normal primary" icon="image" iconsize="xs">
+                                                    {coverPhotoChanging ? 'Changing...' : 'Edit cover photo'}
+                                                </Button>
+                                                <input type="file" ref={profileInput} className="d-none" onChange={handleCoverPhoto} />
                                                 <Link href="/profile/edit">
-                                                    <Button className="normal white-label ml-3" icon="edit" iconsize="xs">Edit profile</Button>
+                                                    <Button className="normal primary ml-3" icon="edit" iconsize="xs">Edit profile</Button>
                                                 </Link>
                                             </div> : <div className="d-lg-flex d-none justify-content-end mt-32"></div>}
                                             <div className="user-collection-panel">
