@@ -5,7 +5,7 @@ import Icon from '../../components/Icon';
 
 import axios from '../../utils/Api';
 
-function ModalRemoveSale({ show, onClose, nft, fetchNftItem }) {
+function ModalRemoveSale({ show, onClose, nft, fetchNftItem, multiple }) {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -20,7 +20,7 @@ function ModalRemoveSale({ show, onClose, nft, fetchNftItem }) {
     }
 
     const onRemove = () => {
-        axios.patch(`single/${nft.id}`, {
+        axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
             putSale: false
         }).then((response) => {
             setLoading(false);

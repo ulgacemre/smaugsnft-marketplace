@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Home from "../pages/Home/index";
 import Upload from "../pages/Upload";
 import UploadSingle from "../pages/Upload/Single";
+import UploadMultiple from "../pages/Upload/Multiple";
 import ConnectWallet from "../pages/ConnectWallet";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/Profile/EditProfile";
@@ -78,11 +79,10 @@ function Router() {
                                 <Route exact path="/upload/single" render={(props) => (
                                     <UploadSingle {...props} isSingle={true} />
                                 )} />
-                                {/*
-<Route exact path="/upload/multiple" render={(props) => (
-    <UploadSingle {...props} isSingle={false} />
-)} />
-*/}
+
+                                <Route exact path="/upload/multiple" render={(props) => (
+                                    <UploadMultiple {...props} isSingle={false} />
+                                )} />
                                 <Route exact path="/upload" component={Upload} />
 
                                 <Route exact path="/search" component={Search} />
@@ -93,7 +93,10 @@ function Router() {
                                 <Route exact path="/activity" component={Activity} />
                                 <Route exact path="/test" component={Test} />
                                 <Route exact path="/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/:nft_id" render={(props) => (
-                                    <Item {...props} type="purchase" />
+                                    <Item {...props} multiple={false} type="purchase" />
+                                )} />
+                                <Route exact path="/assets/0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f/:nft_id" render={(props) => (
+                                    <Item {...props} multiple={true} type="purchase" />
                                 )} />
                                 <Route exact path="/item/accept" render={(props) => (
                                     <Item {...props} type="accept" />
@@ -101,7 +104,6 @@ function Router() {
                                 <Route exact path="/item/putonsale" render={(props) => (
                                     <Item {...props} type="putonsale" />
                                 )} />
-                                <Redirect path="/assets" to="/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/:nft_id" />
                                 <Route exact component={SearchNoResult} />
                             </Switch>
                         </Fragment>

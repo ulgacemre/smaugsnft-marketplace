@@ -33,6 +33,18 @@ function Upload({ user_info }) {
         }
     };
 
+    const renderConditionMultiple = () => {
+        if (connected) {
+            if (!user_info.displayName) {
+                return "/profile/edit";
+            } else {
+                return "/upload/multiple";
+            }
+        } else {
+            return "/connect";
+        }
+    };
+
     return (
         <Layout page="upload">
             <ToastContainer />
@@ -73,7 +85,9 @@ function Upload({ user_info }) {
                         </div>
                         <div className="card-upload-type ml-32">
                             <img src={imgMultiple} className="mb-4" />
-                            <Button className="primary normal m-auto">Create Multiple</Button>
+                            <Link href={renderConditionMultiple()}>
+                                <Button className="primary normal m-auto">Create Multiple</Button>
+                            </Link>
                         </div>
                     </div>
                     <div className="d-block d-lg-none">
@@ -95,7 +109,9 @@ function Upload({ user_info }) {
                                 <div className="text-body-2-bold">Create Multiple</div>
                             </div>
                             <div className="d-flex align-items-center size-40 pointer">
-                                <Icon icon="chevron-right" iconsize="sm" />
+                                <Link href={renderConditionMultiple()}>
+                                    <Icon icon="chevron-right" iconsize="sm" />
+                                </Link>
                             </div>
                         </div>
                         <Divider className="mt-32" />

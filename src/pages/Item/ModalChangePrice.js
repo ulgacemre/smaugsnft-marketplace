@@ -7,7 +7,7 @@ import Modal from '../../components/Modal'
 import useWeb3 from '../../shared/hooks/useWeb3';
 import axios from '../../utils/Api';
 
-function ModalChangePrice({ show, onClose, nft, fetchNftItem }) {
+function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
 
     const [price, setPrice] = useState('');
     const [loading, setLoading] = useState('');
@@ -21,7 +21,7 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem }) {
     }, [nft]);
 
     const onContinue = async () => {
-        axios.patch(`single/${nft.id}`, {
+        axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
             salePrice: parseInt(price),
         }).then(() => {
             setSuccess(true);

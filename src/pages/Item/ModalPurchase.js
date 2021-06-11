@@ -14,7 +14,7 @@ const STATUS = {
     SUCCESS: "success",
 }
 
-function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
+function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, multiple }) {
     // approver states end
     const { walletSMGBalance, walletAddress, approveSMG, transferFromSMG, transfer } = useWeb3();
     // buying
@@ -63,7 +63,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem }) {
 
             //otherSendAddressSMG("0x8De5021b533ef04C5f2e6875cd473223D42669b9",(commisionPrice() - data.salePrice).toFixed(2) * 10 ** 8);
 
-            axios.patch(`single/${data.id}`, {
+            axios.patch(`${multiple ? 'multiple' : 'single'}/${data.id}`, {
                 walletAddress: walletAddress,
                 putSale: false 
             }).then(({ data }) => {

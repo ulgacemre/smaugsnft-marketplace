@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import Icon from '../Icon';
 
 const activeStyle = {
@@ -14,18 +14,18 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-  
-function FileUploader({onDrop}) {
+
+function FileUploader({ onDrop, multiple = false }) {
     const {
         isDragActive,
         isDragAccept,
         isDragReject,
-        getRootProps, 
+        getRootProps,
         getInputProps
     } = useDropzone({
-        multiple: false,
+        multiple: multiple,
         onDrop: (files) => {
-            if( onDrop ) onDrop(files)
+            if (onDrop) onDrop(files)
         }
     });
 
@@ -40,7 +40,7 @@ function FileUploader({onDrop}) {
     ]);
 
     return (
-        <div className="file-uploader" {...getRootProps({style})}>
+        <div className="file-uploader" {...getRootProps({ style })}>
             <input {...getInputProps()} />
             <div className="text-center">
                 <Icon icon="file-upload" />

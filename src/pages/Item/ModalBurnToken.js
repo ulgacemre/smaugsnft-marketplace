@@ -5,47 +5,118 @@ import Modal from '../../components/Modal'
 import Context from '../../shared/context/Contracts/Context';
 import axios from '../../utils/Api';
 import Icon from '../../components/Icon';
+import Divider from '../../components/Divider';
+import { toast } from 'react-toastify';
 
-function ModalBurnToken({ show, onClose, tokenId, nft }) {
+function ModalBurnToken({ show, onClose, tokenId, nft, multiple, fetchNftItem }) {
 
-    const { burnERC721 } = useContext(Context);
+    const { multipleFunctions, burnERC721 } = useContext(Context);
     const [hashAddress, setHashAddress] = useState('');
+    const [burnQuantity, setBurnQuantity] = useState('');
     const [done, setDone] = useState(false);
     const [burning, setBurning] = useState(false);
     const [error, setError] = useState(false);
 
+    useEffect(() => {
+        if (nft) {
+            setBurnQuantity(nft.supply);
+        }
+    }, [nft]);
+
     const onContinue = async () => {
-        try {
-            setBurning(true);
-            const res = await burnERC721(tokenId);
-            axios.delete(`single/${nft.id}`).then(() => {
-                if (res) {
-                    setHashAddress(res.hash);
-                    setDone(false);
-                    res.wait(res).then((response) => {
-                        //console.log(response);
-                        if (response.status == 1) {
-                            setDone(true);
-                            window.location.href = "/";
-                        } else {
-                            setDone(false);
-                        }
-                    })
+        if (multiple) {
+            if (burnQuantity > nft.supply) {
+                toast.error("The amount of supply you want to burn cannot be greater than your token.");
+            } else {
+                try {
+                    setBurning(true);
+                    const res = await multipleFunctions.multipleBurnERC1155(nft.user.walletAddress, tokenId, parseInt(burnQuantity));
+
+                    if (parseInt(burnQuantity) === parseInt(nft.supply)) {
+                        axios.delete(`multiple/${nft.id}`).then(() => {
+                            if (res) {
+                                setHashAddress(res.hash);
+                                setDone(false);
+                                res.wait(res).then((response) => {
+                                    //console.log(response);
+                                    if (response.status == 1) {
+                                        setDone(true);
+                                        window.location.href = "/";
+                                    } else {
+                                        setDone(false);
+                                    }
+                                })
+                            }
+                            setBurning(false);
+                            setError(false);
+                        }).catch(error => {
+                            setError(true);
+                            setBurning(false);
+                        });
+                    } else {
+                        axios.patch(`multiple/${nft.id}`, {
+                            supply: parseInt(nft.supply) - parseInt(burnQuantity)
+                        }).then(() => {
+                            if (res) {
+                                setHashAddress(res.hash);
+                                setDone(false);
+                                res.wait(res).then((response) => {
+                                    //console.log(response);
+                                    if (response.status == 1) {
+                                        setDone(true);
+                                        fetchNftItem(nft.id);
+                                    } else {
+                                        setDone(false);
+                                    }
+                                })
+                            }
+                            setBurning(false);
+                            setError(false);
+                        }).catch(error => {
+                            setError(true);
+                            setBurning(false);
+                        });
+                    }
+
+                } catch (error) {
+                    setError(true);
+                    setBurning(false);
                 }
-                setBurning(false);
-                setError(false);
-            }).catch(error => {
-                //console.log("delete_NEW_NFT_TOKEN_error ===> ", error)
+            }
+        } else {
+            try {
+                setBurning(true);
+                const res = await burnERC721(tokenId);
+                axios.delete(`single/${nft.id}`).then(() => {
+                    if (res) {
+                        setHashAddress(res.hash);
+                        setDone(false);
+                        res.wait(res).then((response) => {
+                            //console.log(response);
+                            if (response.status == 1) {
+                                setDone(true);
+                                window.location.href = "/";
+                            } else {
+                                setDone(false);
+                            }
+                        })
+                    }
+                    setBurning(false);
+                    setError(false);
+                }).catch(error => {
+                    //console.log("delete_NEW_NFT_TOKEN_error ===> ", error)
+                    setError(true);
+                    setBurning(false);
+                });
+
+            } catch (error) {
+                //console.log("ERROR ===> ", error);
                 setError(true);
                 setBurning(false);
-            });
-
-        } catch (error) {
-            //console.log("ERROR ===> ", error);
-            setError(true);
-            setBurning(false);
+            }
         }
     }
+
 
     return (
         <Modal
@@ -104,6 +175,13 @@ function ModalBurnToken({ show, onClose, tokenId, nft }) {
                                 Something went error, please try again..
         </div>
                         </div>
+                    </div> : null}
+                    {multiple ? <div className="mb-32">
+                        <div className="text-body-1-bold mb-3">
+                            Amount of supply to be burned :
+                </div>
+                        <input type="number" value={burnQuantity} onChange={({ target }) => setBurnQuantity(target.value)} placeholder="Type token price" className="no-border w-100 bg-neutral-8 mb-12"></input>
+                        <Divider />
                     </div> : null}
                     <div>
                         <Button disabled={burning ? 'disabled' : null} className="large alert w-100 mb-2" onClick={onContinue}>

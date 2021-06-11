@@ -28,6 +28,7 @@ import axios from '../../utils/Api';
 import PreviewCard from './PreviewCard';
 import { ContractsContext } from '../../shared/context/Contracts';
 import Loading from '../../components/Loading';
+import { CLIENT_URL } from '../../constants/config';
 function Collection({ color, create = false, title, className = '', display, ...props }) {
     return (
         <div className={"collection-item " + className + ` d-${display}`} {...props}>
@@ -43,10 +44,11 @@ function Collection({ color, create = false, title, className = '', display, ...
     )
 }
 
-function PreviewModalContent({ data, clearAll }) {
+function PreviewModalContent({ data, clearAll, detectingPhoto }) {
     return (
         <>
             <PreviewCard
+                detectingPhoto={detectingPhoto}
                 data={data}
                 hover={false}
             />
@@ -75,6 +77,7 @@ function UploadSingle({ isSingle = true, user_info }) {
     const [disableCreate, setDisableCreate] = useState(true);
 
     const [categoriesData, setCategoriesData] = useState([]);
+    const [detectingPhoto, setDetectingPhoto] = useState(false);
 
     const [itemCategory, setItemCategory] = useState('');
 
@@ -124,7 +127,7 @@ function UploadSingle({ isSingle = true, user_info }) {
     }, []);
 
     const detect = async (file) => {
-
+        setDetectingPhoto(true);
 
         if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === "image/png" || file.type === 'video/mp4') {
             if (file.size <= 3000000) {
@@ -133,7 +136,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                 var img = document.createElement("img");
                 img.src = fakePath;
                 img.crossOrigin = "anonymous";
-                const model = await nsfwjs.load('https://testnet.smaugs.com/NSFWJS/quant_mid/', { type: "graph" });
+                const model = await nsfwjs.load(`${CLIENT_URL}NSFWJS/quant_mid/`, { type: "graph" });
                 const predictions = await model.classify(img)
 
                 //console.log(predictions)
@@ -144,7 +147,7 @@ function UploadSingle({ isSingle = true, user_info }) {
 
 
                 if (best.className == "Porn" || best.className == "Hentai") {
-
+                    setDetectingPhoto(false);
                     toast.error('The file is not accepted by the artificial intelligence system.!', {
                         position: "top-right",
                         autoClose: 7000,
@@ -155,9 +158,9 @@ function UploadSingle({ isSingle = true, user_info }) {
                         progress: undefined,
                     });
                     setUploadImageFile(null);
-                    setUploadImage(placeholder);
-                } else {
 
+                } else {
+                    setDetectingPhoto(false);
 
                     toast.success('The file is accepted by the artificial intelligence system.!', {
                         position: "top-right",
@@ -169,10 +172,10 @@ function UploadSingle({ isSingle = true, user_info }) {
                         progress: undefined,
                     });
                     setUploadImageFile(file);
-                    setUploadImage(placeholder);
 
                 }
             } else {
+                setDetectingPhoto(false);
                 toast.error('Max 30 MB!', {
                     position: "top-right",
                     autoClose: 7000,
@@ -187,6 +190,7 @@ function UploadSingle({ isSingle = true, user_info }) {
             }
 
         } else {
+            setDetectingPhoto(false);
             toast.error('Only jpeg,jpg,gif,png and mp4!', {
                 position: "top-right",
                 autoClose: 7000,
@@ -492,6 +496,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                                         Preview
                             </div>
                                     <PreviewModalContent
+                                        detectingPhoto={detectingPhoto}
                                         data={{
                                             title: itemName,
                                             itemPrice: itemPrice,
@@ -518,6 +523,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                             className="preview-modal"
                         >
                             <PreviewModalContent
+                                detectingPhoto={detectingPhoto}
                                 data={{
                                     title: itemName,
                                     itemPrice: itemPrice,

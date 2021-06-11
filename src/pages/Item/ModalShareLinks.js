@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import axios from '../../utils/Api';
 import Link from '../../components/Link';
+import { CLIENT_URL } from '../../constants/config';
 
 function ModalShareLinks({ show, onClose, nft }) {
 
@@ -35,7 +36,7 @@ function ModalShareLinks({ show, onClose, nft }) {
             <div className="social">
                 <div className="item">
                     <Link
-                        href={`http://twitter.com/share?url=https://testnet.smaugs.com/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}&text=The Best Ever collectible &hashtags=#smaugsnft,#nft,#bsc,#digitalasset,@smaugsnft`}
+                        href={`http://twitter.com/share?url=${CLIENT_URL}assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}&text=The Best Ever collectible &hashtags=#smaugsnft,#nft,#bsc,#digitalasset,@smaugsnft`}
                         target="_blank"
                     >
                         <i className="fab fa-twitter"></i>
@@ -44,17 +45,17 @@ function ModalShareLinks({ show, onClose, nft }) {
                     <span>Twitter</span>
                 </div>
                 <div className="item">
-                    <Link target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=https://testnet.smaugs.com/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}>
+                    <Link target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${CLIENT_URL}assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}>
                         <i className="fab fa-facebook"></i>
                     </Link>
                     <span>Facebook</span>
                 </div>
                 <div className="item">
-                    <Link target="_blank" href={`https://telegram.me/share/?url=https://testnet.smaugs.com/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}><i className="fab fa-telegram"></i></Link>
+                    <Link target="_blank" href={`https://telegram.me/share/?url=${CLIENT_URL}assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`}><i className="fab fa-telegram"></i></Link>
                     <span>Telegram</span>
                 </div>
                 <div className="item">
-                    <i onClick={() => navigator.clipboard.writeText(`https://testnet.smaugs.com/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`).then(() => {
+                    <i onClick={() => navigator.clipboard.writeText(`${CLIENT_URL}assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${nft.id}`).then(() => {
                         toast.info('NFT token link copied.', {
                             position: "top-right",
                             autoClose: 5000,

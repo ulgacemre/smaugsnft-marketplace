@@ -8,9 +8,9 @@ import Context from '../../shared/context/Contracts/Context';
 import useWeb3 from '../../shared/hooks/useWeb3';
 import axios from '../../utils/Api';
 
-function ModalTransferToken({ show, onClose, nft, fetchNftItem }) {
+function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
 
-    const { transferFromERC721 } = useContext(Context);
+    const { multipleFunctions, transferFromERC721 } = useContext(Context);
 
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState('');
@@ -19,47 +19,99 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem }) {
     const [success, setSuccess] = useState(false);
     const [hashAddress, setHashAddress] = useState('');
 
-    const {walletAddress} = useWeb3();
+    const [transferQuantity, setTransferQuantity] = useState('');
+
+    useEffect(() => {
+        if (nft) {
+            setTransferQuantity(nft.supply);
+        }
+    }, [nft]);
+
+    const { walletAddress } = useWeb3();
 
     const onContinue = async () => {
-        try {
-            setLoading(true);
-            const res = await transferFromERC721(walletAddress, address, nft.id);
+        if (multiple) {
 
+            try {
+                setLoading(true);
+                const res = await multipleFunctions.multipleTransferFromERC1155(walletAddress, address, nft.id, parseInt(transferQuantity));
 
-            setHashAddress(res.hash);
+                setHashAddress(res.hash);
 
-            axios.patch(`single/${nft.id}`, {
-                walletAddress: address,
-            }).then(() => {
-                setSuccess(true);
-                setLoading(false);
-                setError(false);
+                axios.patch(`multiple/${nft.id}`, {
+                    walletAddress: address,
+                }).then(() => {
+                    setSuccess(true);
+                    setLoading(false);
+                    setError(false);
 
-                res.wait(res).then((response) => {
-                    if (response.status == 1) {
-                        setDone(true);
+                    res.wait(res).then((response) => {
+                        if (response.status == 1) {
+                            setDone(true);
 
-                        fetchNftItem(nft.id);
+                            fetchNftItem(nft.id);
 
-                    } else {
-                        setDone(false);
-                        setError(true);
-                    }
+                        } else {
+                            setDone(false);
+                            setError(true);
+                        }
+                    });
+
+                }).catch((error) => {
+                    //console.log("ERROR ===> ", error);
+                    setSuccess(false);
+                    setLoading(false);
+                    setError(true);
+                    console.log("error**", error);
                 });
 
-            }).catch((error) => {
-                //console.log("ERROR ===> ", error);
+            } catch (error) {
+                //console.log("transferFromERC721 ===> ", error);
                 setSuccess(false);
                 setLoading(false);
                 setError(true);
-            });
+                console.log("error**", error);
+            }
+        } else {
+            try {
+                setLoading(true);
+                const res = await transferFromERC721(walletAddress, address, nft.id);
 
-        } catch (error) {
-            //console.log("transferFromERC721 ===> ", error);
-            setSuccess(false);
+
+                setHashAddress(res.hash);
+
+                axios.patch(`single/${nft.id}`, {
+                    walletAddress: address,
+                }).then(() => {
+                    setSuccess(true);
+                    setLoading(false);
+                    setError(false);
+
+                    res.wait(res).then((response) => {
+                        if (response.status == 1) {
+                            setDone(true);
+
+                            fetchNftItem(nft.id);
+
+                        } else {
+                            setDone(false);
+                            setError(true);
+                        }
+                    });
+
+                }).catch((error) => {
+                    //console.log("ERROR ===> ", error);
+                    setSuccess(false);
+                    setLoading(false);
+                    setError(true);
+                });
+
+            } catch (error) {
+                //console.log("transferFromERC721 ===> ", error);
+                setSuccess(false);
                 setLoading(false);
                 setError(true);
+            }
         }
     }
 
@@ -126,6 +178,13 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem }) {
                         <input type="text" value={address} onChange={({ target }) => setAddress(target.value)} placeholder="Paste address" className="no-border w-100 bg-neutral-8 mb-12"></input>
                         <Divider />
                     </div>
+                    {multiple ? <div className="mb-32">
+                        <div className="text-body-1-bold mb-3">
+                            Transfer supply quantity :
+                </div>
+                        <input type="number" value={transferQuantity} onChange={({ target }) => setTransferQuantity(target.value)} placeholder="Transfer supply quantity" className="no-border w-100 bg-neutral-8 mb-12"></input>
+                        <Divider />
+                    </div> : null}
                     <div>
                         <Button className="large primary w-100 mb-2" disabled={loading ? 'disabled' : null} onClick={onContinue}>
                             {loading ? 'Sending...' : 'Send'}

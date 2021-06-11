@@ -4,16 +4,17 @@ import Label from '../../components/Label';
 import Button from '../../components/Buttons/Button';
 import Divider from '../../components/Divider';
 import { DOWNLOAD_USERS_URL } from '../../utils/Api';
+import Loading from '../../components/Loading';
 
 
 
-const PreviewCard = function ({ data, hover = true }) {
+const PreviewCard = function ({ data, hover = true, detectingPhoto }) {
     const [heart, setHeart] = useState(false);
 
     return (
-        <>
+        <div>
             <div className="hotbid-image-container">
-                <img src={data.image} className="hotbid-item-img" />
+                <img src={data.image} style={detectingPhoto ? { opacity: 0.5 } : null} className="hotbid-item-img" />
                 {hover &&
                     <div className="hotbid-item-hover">
                         <div className="d-flex justify-content-between p-2 w-100">
@@ -54,7 +55,7 @@ const PreviewCard = function ({ data, hover = true }) {
 
 
             </div>
-        </>
+        </div>
     );
 }
 

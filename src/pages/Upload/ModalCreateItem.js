@@ -6,9 +6,11 @@ import { createNFT, setNFTCreated } from '../../store/actions/NFTS'
 import useWeb3 from '../../shared/hooks/useWeb3'
 import Web3 from 'web3';
 import { useHistory } from 'react-router';
+import { useContext } from 'react';
+import Context from '../../shared/context/Contracts/Context';
+import { API_URL } from '../../constants/config';
 
-function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCreated, uploadInfo, currentNFT, createNFT }) {
-    const [routerTokenId, setRouterTokenId] = useState('');
+function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, uploadInfo, createNFTMultiple, isSingle, createNFT }) {
     const history = useHistory();
     const [stepStatus, setStepStatus] = useState([
         STEP_STATUS.START,
@@ -17,6 +19,9 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
     ]);
 
     const { walletAddress } = useWeb3()
+
+    const { multipleFunctions } = useContext(Context);
+
 
     useEffect(() => {
         if (isCreated) {
@@ -33,23 +38,49 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
 
         setCreated(false);
 
-        createNFT({
-            isSingle,
-            nft_info: {
-                itemName: uploadInfo.itemName,
-                description: uploadInfo.itemDescription,
-                salePrice: uploadInfo.itemPrice,
-                royalties: uploadInfo.itemRoyalties,
-                size: uploadInfo.itemSize,
-                property: uploadInfo.itemProperty,
-                putSale: uploadInfo.putOnSale,
-                property: uploadInfo.itemProperty,
-                walletAddress: walletAddress,
-                creatorId: walletAddress,
-                categoryId: uploadInfo.itemCategory
-            },
-            imageFile: uploadInfo.uploadImageFile
-        });
+        if (isSingle) {
+            createNFT({
+                nft_info: {
+                    itemName: uploadInfo.itemName,
+                    description: uploadInfo.itemDescription,
+                    salePrice: uploadInfo.itemPrice,
+                    royalties: uploadInfo.itemRoyalties,
+                    size: uploadInfo.itemSize,
+                    property: uploadInfo.itemProperty,
+                    putSale: uploadInfo.putOnSale,
+                    walletAddress: walletAddress,
+                    creatorId: walletAddress,
+                    categoryId: uploadInfo.itemCategory
+                },
+                imageFile: uploadInfo.uploadImageFile
+            });
+        } else {
+            createNFTMultiple({
+                nft_info: {
+                    itemName: uploadInfo.itemName,
+                    description: uploadInfo.itemDescription,
+                    salePrice: uploadInfo.itemPrice,
+                    royalties: uploadInfo.itemRoyalties,
+                    size: uploadInfo.itemSize,
+                    putSale: uploadInfo.putOnSale,
+                    property: "",
+                    walletAddress: walletAddress,
+                    creatorId: walletAddress,
+                    categoryId: uploadInfo.itemCategory,
+                    supply: uploadInfo.itemSupply
+                },
+                imageFile: uploadInfo.uploadImageFile
+            }).then((response) => {
+                if (response.success) {
+                    setCreated(true);
+                    localStorage.setItem("3295893275832758235", response.success.id);
+                } else {
+                    let newStepStatus = [...stepStatus];
+                    newStepStatus[0] = STEP_STATUS.FAILED;
+                    setStepStatus(newStepStatus);
+                }
+            });
+        }
 
         newStepStatus[0] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
@@ -60,29 +91,17 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
         newStepStatus[1] = STEP_STATUS.SUCCESS;
         newStepStatus[2] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
-
-       // console.log("SECOND_STEP RUNNING");
-
+        // console.log("SECOND_STEP RUNNING");
         const web3 = new Web3(window.ethereum);
-
-
-
-        web3.eth.personal.sign(
-            "This is a test msg to be signed.",
-            "0xfDCe6A128e22e0a4A98C16F02B3BCbF16f4D8945",
-            function (err, sig) {
+        web3.eth.personal.sign(isSingle ? 'I agree to create single NFT token.' : 'I agree to create multiple NFT token.', walletAddress)
+            .then(() => {
                 let newStepStatus = [...stepStatus];
                 newStepStatus[2] = STEP_STATUS.SUCCESS;
                 setStepStatus(newStepStatus);
-                history.push(`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${localStorage.getItem("3295893275832758235")}`)
-                /*
-                 let newStepStatus = [...stepStatus];
-        newStepStatus[2] = STEP_STATUS.FAILED;
-        setStepStatus(newStepStatus);
-                */
+                window.location.href = `/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${localStorage.getItem("3295893275832758235")}`;
+            }).catch(error => {
+                console.log("error**", error);
             });
-
-
     }
 
     const onClickMintStep = async () => {
@@ -91,7 +110,11 @@ function ModalCreateItem({ show, onClose, isSingle, mintERC721, isCreated, setCr
         newStepStatus[1] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
         try {
-            await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], "https://smaugsapi.smaugs.com:3000/api/single/" + localStorage.getItem("3295893275832758235"));
+            if (isSingle) {
+                await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], `${API_URL}multiple/${localStorage.getItem("3295893275832758235")}`);
+            } else {
+                await multipleFunctions.multipleMintERC1155(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], uploadInfo.itemSupply, `${API_URL}multiple/${localStorage.getItem("3295893275832758235")}`);
+            }
             let newStepStatus = [...stepStatus];
             newStepStatus[1] = STEP_STATUS.SUCCESS;
             newStepStatus[2] = STEP_STATUS.START;
@@ -159,3 +182,10 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalCreateItem);
+
+
+
+
+
+
+

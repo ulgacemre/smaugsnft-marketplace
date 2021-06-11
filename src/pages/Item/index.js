@@ -90,7 +90,7 @@ const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSa
 // type: purchase, accept, putonsale
 //
 
-function Item({ type = 'purchase' }) {
+function Item({ type = 'purchase', multiple }) {
     const [heart, setHeart] = useState(true)
     const [modalPurchaseShow, setModalPurchaseShow] = useState(false)
     const [modalBidShow, setModalBidShow] = useState(false)
@@ -123,7 +123,7 @@ function Item({ type = 'purchase' }) {
     const { nft_id } = useParams();
 
     const fetchNftItem = (id) => {
-        axios.get(`/single/${id}?filter={"include":["category","user"]}`).then(({ data }) => {
+        axios.get(`${multiple ? 'multiple' : 'single'}/${id}?filter={"include":["category","user"]}`).then(({ data }) => {
             setNft(data);
 
             axios.get(`Users/${data.creatorId}`).then(({ data }) => {
@@ -140,7 +140,7 @@ function Item({ type = 'purchase' }) {
             //console.log('NFT FETCH ERROR ===>', error)
             history.push("/404");
         });
-    };
+    }; multiple={multiple}
 
     const getSmaugsApiDolar = async () => {
         const { data } = await axiosOther.get("https://api.coingecko.com/api/v3/simple/price?ids=smaugs-nft&vs_currencies=usd");
@@ -533,17 +533,17 @@ function Item({ type = 'purchase' }) {
                     </div>
                 </div>
 
-                <ModalPurchase fetchNftItem={fetchNftItem} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
-                <ModalChangePrice fetchNftItem={fetchNftItem} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
-                <ModalShareLinks nft={nft} show={modalShareLinks} onClose={() => setModalShareLinks(false)} />
-                <ModalBid show={modalBidShow} onClose={() => setModalBidShow(false)} />
-                <ModalPutSale nft={nft} fetchNftItem={fetchNftItem} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />
-                <ModalAccept show={modalAcceptShow} onClose={() => setModalAcceptShow(false)} />
-                <ModalSale show={modalSaleShow} onClose={() => setModalSaleShow(false)} />
-                <ModalTransferToken nft={nft} fetchNftItem={fetchNftItem} show={modalTransferTokenShow} onClose={() => setModalTransferTokenShow(false)} />
-                <ModalRemoveSale fetchNftItem={fetchNftItem} nft={nft} show={modalRemoveSaleShow} onClose={() => setModalRemoveSaleShow(false)} />
-                <ModalBurnToken nft={nft} tokenId={nft.id} show={modalBurnTokenShow} onClose={() => setModalBurnTokenShow(false)} />
-                <ModalReport connected={connected} walletAddress={walletAddress} nft_id={nft_id} supply={nft.supply} show={modalReportShow} onClose={() => setModalReportShow(false)} />
+                <ModalPurchase multiple={multiple} fetchNftItem={fetchNftItem} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
+                <ModalChangePrice multiple={multiple} fetchNftItem={fetchNftItem} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
+                <ModalShareLinks multiple={multiple} nft={nft} show={modalShareLinks} onClose={() => setModalShareLinks(false)} />
+                <ModalBid multiple={multiple} show={modalBidShow} onClose={() => setModalBidShow(false)} />
+                <ModalPutSale multiple={multiple} nft={nft} fetchNftItem={fetchNftItem} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />
+                <ModalAccept multiple={multiple} show={modalAcceptShow} onClose={() => setModalAcceptShow(false)} />
+                <ModalSale multiple={multiple} show={modalSaleShow} onClose={() => setModalSaleShow(false)} />
+                <ModalTransferToken multiple={multiple} nft={nft} fetchNftItem={fetchNftItem} show={modalTransferTokenShow} onClose={() => setModalTransferTokenShow(false)} />
+                <ModalRemoveSale multiple={multiple} fetchNftItem={fetchNftItem} nft={nft} show={modalRemoveSaleShow} onClose={() => setModalRemoveSaleShow(false)} />
+                <ModalBurnToken fetchNftItem={fetchNftItem} multiple={multiple} nft={nft} tokenId={nft.id} show={modalBurnTokenShow} onClose={() => setModalBurnTokenShow(false)} />
+                <ModalReport multiple={multiple} connected={connected} walletAddress={walletAddress} nft_id={nft_id} supply={nft.supply} show={modalReportShow} onClose={() => setModalReportShow(false)} />
             </div>
                 : renderLoading()}
         </Layout>

@@ -13,6 +13,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import * as nsfwjs from 'nsfwjs'
 import { useHistory } from 'react-router-dom';
 
+import Web3 from 'web3';
+
 import { dataRoyalties, dataCollections, dataCurrency } from '../../FakeData/Upload'
 
 
@@ -28,6 +30,7 @@ import axios from '../../utils/Api';
 import PreviewCard from './PreviewCard';
 import { ContractsContext } from '../../shared/context/Contracts';
 import Loading from '../../components/Loading';
+import { CLIENT_URL } from '../../constants/config';
 function Collection({ color, create = false, title, className = '', display, ...props }) {
     return (
         <div className={"collection-item " + className + ` d-${display}`} {...props}>
@@ -43,10 +46,11 @@ function Collection({ color, create = false, title, className = '', display, ...
     )
 }
 
-function PreviewModalContent({ data, clearAll }) {
+function PreviewModalContent({ data, clearAll, detectingPhoto }) {
     return (
         <>
             <PreviewCard
+                detectingPhoto={detectingPhoto}
                 data={data}
                 hover={false}
             />
@@ -59,7 +63,7 @@ function PreviewModalContent({ data, clearAll }) {
     )
 }
 
-function UploadMultiple({ isSingle = true, user_info }) {
+function UploadMultiple({ isSingle = false, user_info }) {
     const [uploadImage, setUploadImage] = useState(placeholder);
     const [uploadImageFile, setUploadImageFile] = useState(null);
     const [collections, setCollections] = useState(dataCollections);
@@ -73,6 +77,8 @@ function UploadMultiple({ isSingle = true, user_info }) {
     const [instantSalePrice, setInstantSalePrice] = useState(false);
     const [unlockPurchase, setUnlockPurchase] = useState(false);
     const [disableCreate, setDisableCreate] = useState(true);
+    const [itemSupply, setItemSupply] = useState('');
+    const [detectingPhoto, setDetectingPhoto] = useState(false);
 
     const [categoriesData, setCategoriesData] = useState([]);
 
@@ -85,6 +91,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
     const [isShowPreviewModal, setShowPreviewModal] = useState(false);
     const [isShowCreateItemModal, setShowCreateItemModal] = useState(false);
     const [loadingPage, setLoadingPage] = useState(true);
+    const [itemSupplyError, setItemSupplyError] = useState(false);
 
     const { connecting, walletAddress } = useWeb3();
     const { mintERC721 } = useContext(ContractsContext);
@@ -124,7 +131,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
     }, []);
 
     const detect = async (file) => {
-
+        setDetectingPhoto(true);
 
         if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === "image/png" || file.type === 'video/mp4') {
             if (file.size <= 3000000) {
@@ -133,7 +140,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
                 var img = document.createElement("img");
                 img.src = fakePath;
                 img.crossOrigin = "anonymous";
-                const model = await nsfwjs.load('https://testnet.smaugs.com/NSFWJS/quant_mid/', { type: "graph" });
+                const model = await nsfwjs.load(`${CLIENT_URL}NSFWJS/quant_mid/`, { type: "graph" });
                 const predictions = await model.classify(img)
 
                 //console.log(predictions)
@@ -144,7 +151,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
 
 
                 if (best.className == "Porn" || best.className == "Hentai") {
-
+                    setDetectingPhoto(false);
                     toast.error('The file is not accepted by the artificial intelligence system.!', {
                         position: "top-right",
                         autoClose: 7000,
@@ -155,9 +162,9 @@ function UploadMultiple({ isSingle = true, user_info }) {
                         progress: undefined,
                     });
                     setUploadImageFile(null);
-                    setUploadImage(placeholder);
-                } else {
 
+                } else {
+                    setDetectingPhoto(false);
 
                     toast.success('The file is accepted by the artificial intelligence system.!', {
                         position: "top-right",
@@ -169,10 +176,11 @@ function UploadMultiple({ isSingle = true, user_info }) {
                         progress: undefined,
                     });
                     setUploadImageFile(file);
-                    setUploadImage(placeholder);
+
 
                 }
             } else {
+                setDetectingPhoto(false);
                 toast.error('Max 30 MB!', {
                     position: "top-right",
                     autoClose: 7000,
@@ -183,10 +191,11 @@ function UploadMultiple({ isSingle = true, user_info }) {
                     progress: undefined,
                 });
                 setUploadImageFile(null);
-                setUploadImage(placeholder);
+
             }
 
         } else {
+            setDetectingPhoto(false);
             toast.error('Only jpeg,jpg,gif,png and mp4!', {
                 position: "top-right",
                 autoClose: 7000,
@@ -201,13 +210,15 @@ function UploadMultiple({ isSingle = true, user_info }) {
         }
     }
 
+
+
     useEffect(() => {
-        if (uploadImageFile === null || itemName === '' || itemRoyalties === '' || itemDescription === '' || itemCategory === '') {
+        if (uploadImageFile === null || itemName === '' || itemRoyalties === '' || itemDescription === '' || itemCategory === '' || itemSupply === '' || itemSupplyError === true) {
             setDisableCreate(true)
         } else {
             setDisableCreate(false)
         }
-    }, [uploadImageFile, itemName, itemDescription, itemRoyalties, itemCategory])
+    }, [uploadImageFile, itemName, itemDescription, itemRoyalties, itemCategory, itemSupply, itemSupplyError])
 
     const clearAll = () => {
         setItemName('');
@@ -224,7 +235,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
     };
 
     const onCreateItem = () => {
-        if (!itemName || uploadImageFile === null || !itemRoyalties || !itemDescription || !itemCategory) {
+        if (!itemName || uploadImageFile === null || !itemRoyalties || !itemDescription || !itemCategory || !itemSupply) {
             toast.warn('Please do not leave any blank spaces!', {
                 position: "top-right",
                 autoClose: 5000,
@@ -244,9 +255,18 @@ function UploadMultiple({ isSingle = true, user_info }) {
                 draggable: true,
                 progress: undefined,
             });
+        } else if (itemSupplyError) {
+            toast.warn('The supply field must be numbers only!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         } else {
             setShowCreateItemModal(true);
-            //console.log("CATEGORY_ID ===> ", itemCategory);
         }
     }
 
@@ -255,6 +275,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
             setItemName(itemName.slice(0, 26));
         }
     }, [itemName]);
+
     /*
     
     useEffect(() => {
@@ -266,6 +287,33 @@ function UploadMultiple({ isSingle = true, user_info }) {
     }, [connecting, walletAddress, user_info]);
     
     */
+
+    const createNFTMultiple = ({ nft_info, imageFile }) => {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append(
+                "file",
+                imageFile,
+                imageFile.name
+            );
+
+            axios.post(`Containers/nfts/upload`, formData)
+                .then(({ data }) => {
+                    const imageUrl = data.result.files.file[0].name;
+                    axios.post(`multiple`, {
+                        imageUrl: imageUrl,
+                        ...nft_info
+                    }).then(async ({ data }) => {
+                        resolve({ success: data });
+                    }).catch(function (error) {
+                        reject({ err: error.message });
+                    });
+                })
+                .catch((error) => {
+                    reject({ err: error.message });
+                })
+        })
+    };
 
     const activePutOnSale = (val) => {
         setPutOnSale(val);
@@ -362,10 +410,18 @@ function UploadMultiple({ isSingle = true, user_info }) {
                                         <div className="col-12 col-lg-4">
                                             <Input
                                                 style={{ padding: 0 }}
-                                                label="Propertie"
-                                                placeholder='e. g. Propertie'
-                                                value={itemProperty}
-                                                onChange={(val) => setItemProperty(val)}
+                                                label="Supply"
+                                                borderRed={itemSupplyError ? true : false}
+                                                placeholder='Supply e.g. (1,2,3)'
+                                                value={itemSupply}
+                                                onChange={(val) => {
+                                                    if (!isNaN(val)) {
+                                                        setItemSupplyError(false);
+                                                        setItemSupply(val);
+                                                    } else {
+                                                        setItemSupplyError(true);
+                                                    }
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -483,6 +539,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
                                         <Button className="large primary w-100" icon="arrow-right" iconPos="right" onClick={onCreateItem} disabled={disableCreate} >
                                             Create item
                                 </Button>
+
                                     </div>
                                 </div>
                             </div>
@@ -492,6 +549,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
                                         Preview
                             </div>
                                     <PreviewModalContent
+                                        detectingPhoto={detectingPhoto}
                                         data={{
                                             title: itemName,
                                             itemPrice: itemPrice,
@@ -518,6 +576,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
                             className="preview-modal"
                         >
                             <PreviewModalContent
+                                detectingPhoto={detectingPhoto}
                                 data={{
                                     title: itemName,
                                     itemPrice: itemPrice,
@@ -536,6 +595,7 @@ function UploadMultiple({ isSingle = true, user_info }) {
                         </Modal>
 
                         <ModalCreateItem
+                            createNFTMultiple={createNFTMultiple}
                             show={isShowCreateItemModal}
                             mintERC721={mintERC721}
                             onClose={() => setShowCreateItemModal(false)}
@@ -551,7 +611,8 @@ function UploadMultiple({ isSingle = true, user_info }) {
                                 putOnSale,
                                 instantSalePrice,
                                 unlockPurchase,
-                                itemCategory
+                                itemCategory,
+                                itemSupply
                             }}
                         />
                     </section>

@@ -21,6 +21,7 @@ import { toggleTheme } from '../../store/actions/Setting';
 
 import defaultAvatar from '../../assets/images/avatar/default.png';
 import { DOWNLOAD_USERS_URL } from '../../utils/Api';
+import { CLIENT_URL } from '../../constants/config';
 
 const ConnectButton = function ({ className, user_info, theme, toggleTheme, style }) {
     const [popupShow, setPopupShow] = useState(false)
@@ -60,7 +61,7 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
                                 <span className="text-caption-bold neutral-4 mr-2">
                                     {shortenWallet(walletAddress)}
                                 </span>
-                                <Icon onClick={() => navigator.clipboard.writeText(`https://testnet.smaugs.com/profile/${walletAddress}`).then(() => {
+                                <Icon onClick={() => navigator.clipboard.writeText(`${CLIENT_URL}profile/${walletAddress}`).then(() => {
                                     toast.info('Wallet address copied.', {
                                         position: "top-right",
                                         autoClose: 5000,

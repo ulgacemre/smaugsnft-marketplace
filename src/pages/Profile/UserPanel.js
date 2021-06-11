@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DOWNLOAD_USERS_URL } from '../../utils/Api';
 import blueCheckmark from '../../assets/images/blue-checkmark.webp';
+import { CLIENT_URL } from '../../constants/config';
 
 
 function UserPanel({ username, avatar, verified, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
@@ -76,7 +77,7 @@ function UserPanel({ username, avatar, verified, walletAddress, description = ''
                 </div>
                 <div className="text-button-2" style={{ marginBottom: '20px' }}>
                     <span className="mr-2">{shortenWallet(walletAddress)}</span>
-                    <a href="javascript:void(0);" onClick={() => navigator.clipboard.writeText(`https://testnet.smaugs.com/profile/${walletAddress}`).then(() => {
+                    <a href="javascript:void(0);" onClick={() => navigator.clipboard.writeText(`${CLIENT_URL}profile/${walletAddress}`).then(() => {
                         toast.info('Wallet address copied.', {
                             position: "top-right",
                             autoClose: 5000,

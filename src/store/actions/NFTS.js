@@ -18,9 +18,9 @@ export const setNFTCreated = (status) => {
   }
 }
 
-export const createNFT = ({ isSingle, nft_info, imageFile }) => {
+export const createNFT = ({ nft_info, imageFile }) => {
   return (dispatch) => {
-    const postUrl = isSingle ? 'single' : 'multiple'
+
     const formData = new FormData();
     // Update the formData object 
     formData.append(
@@ -32,7 +32,7 @@ export const createNFT = ({ isSingle, nft_info, imageFile }) => {
     axios.post(`Containers/nfts/upload`, formData)
       .then(({ data }) => {
         const imageUrl = data.result.files.file[0].name;
-        axios.post(`${postUrl}`, {
+        axios.post(`single`, {
           imageUrl: imageUrl,
           ...nft_info
         }).then(async ({ data }) => {

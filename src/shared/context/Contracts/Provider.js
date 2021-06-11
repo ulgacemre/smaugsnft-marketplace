@@ -11,6 +11,9 @@ const Provider = ({ children }) => {
   const [ERC721, setERC721] = useState(
     new Contract(addresses.ERC721, abis.ERC721)
   )
+  const [ERC1155, setERC1155] = useState(
+    new Contract(addresses.ERC1155, abis.ERC1155)
+  )
   const { wallet, walletAddress } = useWeb3()
 
   useEffect(() => {
@@ -21,6 +24,11 @@ const Provider = ({ children }) => {
 
     }
   }, [wallet, setERC721, ERC721])
+  useEffect(() => {
+    if (!!wallet && !ERC1155.signer) {
+      setERC1155(ERC1155.connect(wallet))
+    }
+  }, [wallet, setERC1155, ERC1155])
 
 
   const ERC721ForUser = useCallback(
@@ -76,6 +84,42 @@ const Provider = ({ children }) => {
     return res;
   }
 
+
+
+
+  const multipleMintERC1155 = async (tokenId, fees, supply, tokenURI) => {
+    if (!walletAddress || !ERC1155.signer) return;
+    const res = await ERC1155.mint(tokenId, fees, supply, tokenURI);
+    return res;
+  }
+
+  const multipleApproveERC1155 = async (tokenId) => {
+    if (!walletAddress || !ERC1155.signer) return;
+
+    await ERC1155.approve(walletAddress, tokenId);
+  }
+
+  const multipleTransferFromERC1155 = async (from, to, tokenId, quantity) => {
+    const contract = ERC1155.connect(wallet);
+    const res = await contract.safeTransferFrom(from, to, tokenId, quantity);
+    return res;
+  }
+
+  const multipleBurnERC1155 = async (ownerId, tokenId, quantity) => {
+    if (!walletAddress || !ERC1155.signer) return;
+
+    const res = await ERC1155.burn(ownerId, tokenId, quantity);
+    return res;
+  }
+
+  const multipleFunctions = {
+    multipleMintERC1155: multipleMintERC1155,
+    multipleApproveERC1155: multipleApproveERC1155,
+    multipleTransferFromERC1155: multipleTransferFromERC1155,
+    multipleBurnERC1155: multipleBurnERC1155,
+  }
+
+
   return (
     <Context.Provider
       value={{
@@ -85,11 +129,12 @@ const Provider = ({ children }) => {
         mintERC721,
         approveERC721,
         burnERC721,
-        transferFromERC721
+        transferFromERC721,
+        multipleFunctions
       }}
     >
-      {children}
-    </Context.Provider>
+      { children}
+    </Context.Provider >
   )
 }
 
