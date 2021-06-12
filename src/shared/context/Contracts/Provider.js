@@ -99,9 +99,9 @@ const Provider = ({ children }) => {
     await ERC1155.approve(walletAddress, tokenId);
   }
 
-  const multipleTransferFromERC1155 = async (from, to, tokenId, quantity) => {
+  const multipleTransferFromERC1155 = async (from, to, tokenId, quantity, other) => {
     const contract = ERC1155.connect(wallet);
-    const res = await contract.safeTransferFrom(from, to, tokenId, quantity);
+    const res = await contract.safeTransferFrom(from, to, tokenId, quantity, other);
     return res;
   }
 

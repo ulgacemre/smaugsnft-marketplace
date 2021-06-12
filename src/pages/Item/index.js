@@ -140,7 +140,7 @@ function Item({ type = 'purchase', multiple }) {
             //console.log('NFT FETCH ERROR ===>', error)
             history.push("/404");
         });
-    }; multiple={multiple}
+    };
 
     const getSmaugsApiDolar = async () => {
         const { data } = await axiosOther.get("https://api.coingecko.com/api/v3/simple/price?ids=smaugs-nft&vs_currencies=usd");
