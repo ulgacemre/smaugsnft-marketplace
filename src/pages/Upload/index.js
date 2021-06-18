@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../../components/Layout'
 import Button from '../../components/Buttons/Button'
 import Divider from '../../components/Divider'
@@ -18,7 +18,7 @@ import { useHistory } from 'react-router';
 
 function Upload({ user_info }) {
 
-    const { connected } = useWeb3();
+    const { connected, walletAddress } = useWeb3();
     const history = useHistory();
 
     const renderCondition = () => {
@@ -32,7 +32,15 @@ function Upload({ user_info }) {
             return "/connect";
         }
     };
-
+    useEffect(() => {
+        if (walletAddress) {
+            if (walletAddress !== '0xfDCe6A128e22e0a4A98C16F02B3BCbF16f4D8945') {
+                history.push("/404");
+            }
+        } else {
+            history.push("/404");
+        }
+    }, [walletAddress]);
     const renderConditionMultiple = () => {
         if (connected) {
             if (!user_info.displayName) {

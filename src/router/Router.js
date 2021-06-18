@@ -30,10 +30,10 @@ function Router() {
 
 
             setTimeout(() => {
-                if (window.web3.currentProvider.chainId === "0x61") {
+                if (window.web3.currentProvider.networkVersion === "56") {
                     setError("false");
                     setLoading("false");
-                } else if (window.web3.currentProvider.chainId !== "0x61") {
+                } else if (window.web3.currentProvider.networkVersion !== "56") {
                     setError("true");
                     setLoading("false");
                 } else {
@@ -64,8 +64,8 @@ function Router() {
                         closeBtn={false}
                         title="Wrong network"
                     >
-                        <p>
-                            Please change your network to Binance Smart Chain Testnet
+                        <p className="text-center">
+                            Please change your network to Binance Smart Chain Mainnet
             </p>
                     </Modal>
                 ) : (
@@ -92,7 +92,7 @@ function Router() {
                                 <Route exact path="/profile/:address" component={Profile} />
                                 <Route exact path="/activity" component={Activity} />
                                 <Route exact path="/test" component={Test} />
-                                <Route exact path="/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/:nft_id" render={(props) => (
+                                <Route exact path="/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/:nft_id" render={(props) => (
                                     <Item {...props} multiple={false} type="purchase" />
                                 )} />
                                 <Route exact path="/assets/0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f/:nft_id" render={(props) => (

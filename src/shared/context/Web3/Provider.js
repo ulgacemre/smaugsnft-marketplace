@@ -84,7 +84,7 @@ const Provider = ({ children }) => {
 
 
 
-      if (provider.networkVersion === "97") {
+      if (provider.networkVersion === "56") {
 
         setNetworkError({
           loading: false,

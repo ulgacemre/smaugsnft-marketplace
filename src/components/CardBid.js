@@ -11,11 +11,13 @@ import { connect } from "react-redux";
 const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
     const [heart, setHeart] = useState(false);
 
+    const convertedImageRegex = (/[.]/.exec(data.imageUrl)) ? /[^.]+$/.exec(data.imageUrl) : undefined;
+    const convertedImageType = convertedImageRegex[0];
     return (
         <>
             <div className="hotbid-image-container">
-                <Link href={`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${data.id}`}>
-                    <img src={DOWNLOAD_NFTS_URL + data.imageUrl} className="hotbid-item-img" />
+                <Link href={`/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${data.id}`}>
+                    {convertedImageType === 'mp4' ? <video width={100 + '%'} height={100 + '%'} autoPlay muted> <source src={DOWNLOAD_NFTS_URL + data.imageUrl} type="video/mp4"></source> </video> : <img src={DOWNLOAD_NFTS_URL + data.imageUrl} className="hotbid-item-img" />}
                     {hover &&
                         <div className="hotbid-item-hover">
                             <div className="d-flex justify-content-between p-2 w-100">
@@ -41,7 +43,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
             <div className="hotbid-content">
                 <div className="d-flex justify-content-between align-items-center mb-12">
 
-                    <Link href={`/assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${data.id}`}>
+                    <Link href={`/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${data.id}`}>
                         <div className="text-body-2-bold neutral-2">{data.itemName}</div>
                     </Link>
 
@@ -58,7 +60,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
 
                 <div className="d-flex justify-content-between align-items-center mb-12">
 
-                    <Label className="green">{data.putSale ? `${data.salePrice} SMG` : 'Not for sale'} </Label>
+                    <Label className="green">{data.putSale ? `${data.salePrice} SMG` : 'Sold'} </Label>
                     {data.putSale ? <Label className="black neutral-2">
                         {(data.salePrice * smaugsDolar).toFixed(2)} $
                     </Label> : null}

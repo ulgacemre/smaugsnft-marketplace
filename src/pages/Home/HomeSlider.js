@@ -12,10 +12,15 @@ function HomeSlider() {
     const [smaugsDolarLoading, setSmaugsDolarLoading] = useState('');
     const fetchNfts = () => {
         axios.get(`single?filter={"include": {"relation": "user"}}`).then(({ data }) => {
-            setNfts(data);
-            setLoading(false);
-            //console.log("HOME_SLIDER_NFTS ===>", data);
-            getSmaugsApiDolar();
+            if (data.length > 0) {
+                setNfts(data);
+                setLoading(false);
+                //console.log("HOME_SLIDER_NFTS ===>", data);
+                getSmaugsApiDolar();
+            } else {
+                setNfts([]);
+                setLoading(false);
+            }
         }).catch(error => {
             //console.log("HOME_SLIDER_FETCH_NFTS ===> ", error);
             setNfts([]);
@@ -38,16 +43,25 @@ function HomeSlider() {
     useEffect(() => {
         fetchNfts();
     }, []);
-    return (
-        <section className="sub-section d-flex align-items-center justify-content-lg-between justify-content-center flex-column flex-lg-row">
-            {loading ? <Loading loading={loading && smaugsDolarLoading} color="black" position="center" size={40} /> : (
+    const renderContent = () => {
+        if (loading) {
+            return <Loading loading={loading && smaugsDolarLoading} color="black" position="center" size={40} />;
+        } else if (nfts.length === 0 && loading === false) {
+            return <h5 className="text-center">Not found!</h5>
+        } else {
+            return (
                 <>
                     <div className="video-player-container">
                         <img src={DOWNLOAD_NFTS_URL + nfts[0].imageUrl} style={{ objectFit: "contain", maxHeight: 700, borderRadius: 30, }} className="w-100" />
                     </div>
                     <BidInfoSlider smaugsDolarConverted={convertedSmaugsDolar} item={nfts[0]} />
                 </>
-            )}
+            )
+        }
+    };
+    return (
+        <section className="sub-section d-flex align-items-center justify-content-lg-between justify-content-center flex-column flex-lg-row">
+            {renderContent()}
         </section>
     )
 }

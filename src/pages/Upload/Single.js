@@ -44,12 +44,13 @@ function Collection({ color, create = false, title, className = '', display, ...
     )
 }
 
-function PreviewModalContent({ data, clearAll, detectingPhoto }) {
+function PreviewModalContent({ data, clearAll, detectingPhoto, uploadFileTypeMp4 }) {
     return (
         <>
             <PreviewCard
                 detectingPhoto={detectingPhoto}
                 data={data}
+                uploadFileTypeMp4={uploadFileTypeMp4}
                 hover={false}
             />
             <div className="d-flex align-items-center mt-4 pointer"
@@ -81,6 +82,8 @@ function UploadSingle({ isSingle = true, user_info }) {
 
     const [itemCategory, setItemCategory] = useState('');
 
+    const [uploadFileTypeMp4, setUploadFileTypeMp4] = useState(false);
+
 
 
     const [itemCurrency, setItemCurrency] = useState('');
@@ -104,7 +107,17 @@ function UploadSingle({ isSingle = true, user_info }) {
         }
     }, [connected]);
 
-
+    /*
+     useEffect(() => {
+         if (walletAddress) {
+             if (walletAddress !== '0xB9a32da7F33731FfDa8e7ecCB91325eee8A524AC') {
+                 history.push("/404");
+             }
+         } else {
+             history.push("/404");
+         }
+     }, [walletAddress]);
+    */
     const fetchAllCategories = () => {
         return new Promise((resolve, reject) => {
             axios.get(`Categories`)
@@ -127,53 +140,64 @@ function UploadSingle({ isSingle = true, user_info }) {
     }, []);
 
     const detect = async (file) => {
+        console.log("file => ", file);
         setDetectingPhoto(true);
 
         if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === "image/png" || file.type === 'video/mp4') {
-            if (file.size <= 3000000) {
-                setUploadImage(URL.createObjectURL(file))
-                const fakePath = URL.createObjectURL(file);
-                var img = document.createElement("img");
-                img.src = fakePath;
-                img.crossOrigin = "anonymous";
-                const model = await nsfwjs.load(`${CLIENT_URL}NSFWJS/quant_mid/`, { type: "graph" });
-                const predictions = await model.classify(img)
+            if (file.size <= 30000000) {
 
-                //console.log(predictions)
+                if (file.type === 'video/mp4') {
 
-                const best = predictions[0];
-
-                //console.log(best);
-
-
-                if (best.className == "Porn" || best.className == "Hentai") {
-                    setDetectingPhoto(false);
-                    toast.error('The file is not accepted by the artificial intelligence system.!', {
-                        position: "top-right",
-                        autoClose: 7000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setUploadImageFile(null);
-
-                } else {
-                    setDetectingPhoto(false);
-
-                    toast.success('The file is accepted by the artificial intelligence system.!', {
-                        position: "top-right",
-                        autoClose: 7000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                    setUploadFileTypeMp4(true);
                     setUploadImageFile(file);
 
+                } else {
+                    setUploadFileTypeMp4(false);
+                    setUploadImage(URL.createObjectURL(file))
+                    const fakePath = URL.createObjectURL(file);
+                    var img = document.createElement("img");
+                    img.src = fakePath;
+                    img.crossOrigin = "anonymous";
+                    const model = await nsfwjs.load(`${CLIENT_URL}NSFWJS/quant_mid/`, { type: "graph" });
+                    const predictions = await model.classify(img)
+
+                    //console.log(predictions)
+
+                    const best = predictions[0];
+
+                    //console.log(best);
+
+
+                    if (best.className == "Porn" || best.className == "Hentai") {
+                        setDetectingPhoto(false);
+                        toast.error('The file is not accepted by the artificial intelligence system.!', {
+                            position: "top-right",
+                            autoClose: 7000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        setUploadImageFile(null);
+
+                    } else {
+                        setDetectingPhoto(false);
+
+                        toast.success('The file is accepted by the artificial intelligence system.!', {
+                            position: "top-right",
+                            autoClose: 7000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        setUploadImageFile(file);
+
+                    }
                 }
+
             } else {
                 setDetectingPhoto(false);
                 toast.error('Max 30 MB!', {
@@ -497,6 +521,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                             </div>
                                     <PreviewModalContent
                                         detectingPhoto={detectingPhoto}
+                                        uploadFileTypeMp4={uploadFileTypeMp4}
                                         data={{
                                             title: itemName,
                                             itemPrice: itemPrice,
@@ -524,6 +549,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                         >
                             <PreviewModalContent
                                 detectingPhoto={detectingPhoto}
+                                uploadFileTypeMp4={uploadFileTypeMp4}
                                 data={{
                                     title: itemName,
                                     itemPrice: itemPrice,

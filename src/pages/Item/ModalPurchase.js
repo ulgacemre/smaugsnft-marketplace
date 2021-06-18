@@ -54,18 +54,18 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
 
 
     const buyNow = async () => {
-       
+
         try {
             // data.walletAddress "transferFromSMG" 'to' field.........
 
-          
+
             const res = await otherSendAddressSMG(data.walletAddress, data.salePrice * 10 ** 8);
 
             //otherSendAddressSMG("0x8De5021b533ef04C5f2e6875cd473223D42669b9",(commisionPrice() - data.salePrice).toFixed(2) * 10 ** 8);
 
             axios.patch(`${multiple ? 'multiple' : 'single'}/${data.id}`, {
                 walletAddress: walletAddress,
-                putSale: false 
+                putSale: false
             }).then(({ data }) => {
 
                 if (res) {
@@ -121,9 +121,9 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
 
                 setSending(true);
 
-                approveSMG(parseInt(commisionPrice()) * 10 ** 8).then(() => {
+                approveSMG(parseInt(data.salePrice) * 10 ** 8).then(() => {
                     //console.log("apppppp",approveError);
-                    if (approveError == false) 
+                    if (approveError == false)
                         buyNow();
                 })
 
@@ -151,7 +151,7 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
                     </div>
                     <div className="purchase-info mb-32">
                         <div className="d-flex justify-content-between">
-                            <div className="text-body-2-bold">{commisionPrice()}</div>
+                            <div className="text-body-2-bold">{data.salePrice}</div>
                             <div className="text-body-2-bold">SMG</div>
                         </div>
                         <Divider className="mt-12" />
@@ -161,15 +161,15 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
                         </div>
                         <div className="d-flex justify-content-between mt-12">
                             <div className="text-body-2">Service fee</div>
-                            <div className="text-body-2-bold">{(commisionPrice() - data.salePrice).toFixed(2)} SMG</div>
+                            <div className="text-body-2-bold">0 SMG</div>
                         </div>
                         <div className="d-flex justify-content-between mt-12">
                             <div className="text-body-2">You will pay</div>
-                            <div className="text-body-2-bold">{commisionPrice()} SMG</div>
+                            <div className="text-body-2-bold">{data.salePrice} SMG</div>
                         </div>
                     </div>
-                    {parseInt(walletSMGBalance) >= parseInt(commisionPrice()) ? <CheckBox
-                        title={`I accept the commission amount of ${(commisionPrice() - data.salePrice).toFixed(2)} SMG.`}
+                    {parseInt(walletSMGBalance) >= parseInt(data.salePrice) ? <CheckBox
+                        title={`I accept the amount of ${data.salePrice} SMG.`}
                         className="mb-12"
                         required={mustApproverStatus}
                         value={approverStatus}
@@ -206,8 +206,8 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
                             <img src={imgProcessing} className="size-20 processing" style={{ marginRight: '20px' }} /> Approving and purchasing now...
                 </Button> : <Button
                             className="large primary w-100 mb-2"
-                            onClick={() => parseInt(walletSMGBalance) >= parseInt(commisionPrice()) ? onContinue() : null}
-                            style={parseInt(walletSMGBalance) >= parseInt(commisionPrice()) ? { cursor: "pointer" } : { cursor: "not-allowed" }}
+                            onClick={() => parseInt(walletSMGBalance) >= parseInt(data.salePrice) ? onContinue() : null}
+                            style={parseInt(walletSMGBalance) >= parseInt(data.salePrice) ? { cursor: "pointer" } : { cursor: "not-allowed" }}
                         >
                             Approve and purchase
                 </Button>}

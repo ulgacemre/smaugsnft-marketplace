@@ -124,6 +124,16 @@ function UploadMultiple({ isSingle = false, user_info }) {
     };
 
     useEffect(() => {
+        if (walletAddress) {
+            if (walletAddress !== '0xB9a32da7F33731FfDa8e7ecCB91325eee8A524AC') {
+                history.push("/404");
+            }
+        } else {
+            history.push("/404");
+        }
+    }, [walletAddress]);
+
+    useEffect(() => {
         fetchAllCategories().then((response) => {
             setItemCategory(response[0].id);
             setItemRoyalities("0%");

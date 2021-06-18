@@ -61,8 +61,8 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
             </div>
 
             <div className="section">
-                <Link href={`assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${item.id}`}><Button className="normal w-100 primary mb-2" >Buy Now</Button></Link>
-                <Link href={`assets/0xff506c7e01a03bb97e3318f28254cb6ef8fe8621/${item.id}`}><Button className="normal w-100 " >View item</Button></Link>
+                <Link href={`assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${item.id}`}><Button className="normal w-100 primary mb-2" >Buy Now</Button></Link>
+                <Link href={`assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${item.id}`}><Button className="normal w-100 " >View item</Button></Link>
             </div>
         </div>
     );

@@ -21,7 +21,7 @@ import poster from '../../assets/images/home/poster.png'
 import avatar03 from '../../assets/images/avatar/avatar03.png'
 import { dataLabels, dataInfo } from '../../FakeData/Item'
 import './Item.css';
-
+import { connect } from "react-redux";
 import axios, { DOWNLOAD_NFTS_URL, DOWNLOAD_USERS_URL } from '../../utils/Api';
 import Loading from '../../components/Loading';
 import axiosOther from 'axios';
@@ -42,9 +42,6 @@ const infoTabs = [
     {
         title: 'History'
     },
-    {
-        title: 'Bids'
-    }
 ]
 
 
@@ -90,7 +87,7 @@ const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSa
 // type: purchase, accept, putonsale
 //
 
-function Item({ type = 'purchase', multiple }) {
+function Item({ type = 'purchase', multiple, user_info }) {
     const [heart, setHeart] = useState(true)
     const [modalPurchaseShow, setModalPurchaseShow] = useState(false)
     const [modalBidShow, setModalBidShow] = useState(false)
@@ -117,8 +114,17 @@ function Item({ type = 'purchase', multiple }) {
     const [creator, setCreator] = useState(null);
     //nft item end
 
+    const [videoType, setVideoType] = useState('');
+
     const { walletAddress, connected } = useWeb3();
     const history = useHistory();
+
+    useEffect(() => {
+        if (nft) {
+            const convertedImageRegex = (/[.]/.exec(nft && nft.imageUrl)) ? /[^.]+$/.exec(nft && nft.imageUrl) : undefined;
+            setVideoType(convertedImageRegex[0]);
+        }
+    }, [nft]);
     // params
     const { nft_id } = useParams();
 
@@ -221,11 +227,6 @@ function Item({ type = 'purchase', multiple }) {
             <div className="item-content mb-3">
                 <label><b>Properties</b></label>
                 <div className="items">
-
-
-
-
-
                     <div className="item">
                         <span className="title">Category:</span>
                         <span>     <Link href={`/collection/${slugify(nft && nft.category.title).toLowerCase()}`}><Label className={"black"} fill >  {nft && nft.category.title}  </Label></Link></span>
@@ -245,7 +246,7 @@ function Item({ type = 'purchase', multiple }) {
                 <div className="items">
                     <div className="item">
                         <span className="title">Contract address:</span>
-                        <span>0x3E31...31dc</span>
+                        <span>0x99334...5bAC</span>
                     </div>
                     <div className="item">
                         <span className="title">Token ID:</span>
@@ -286,9 +287,34 @@ function Item({ type = 'purchase', multiple }) {
                     </>
                 )
             case 2:
-                return "history";
+                return <h6 className="text-center py-3">Not available!</h6>;
             case 3:
                 return "bids";
+        }
+    };
+
+    const renderPurchaseButton = () => {
+        if (connected) {
+            if (user_info && user_info.displayName) {
+                if (walletAddress !== nft.walletAddress) {
+                    return (
+                        <div className="d-flex justify-content-between mt-32 mb-32"><Button
+                            disabled={nft.salePrice === 0 ? 'disabled' : null}
+                            className="large primary w-100 mr-2"
+                            style={nft.salePrice === 0 ? { cursor: "not-allowed" } : null}
+                            onClick={purchaseModalActive}
+                        >
+                            Purchase now
+                                </Button></div>
+                    )
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
         }
     };
 
@@ -341,10 +367,10 @@ function Item({ type = 'purchase', multiple }) {
             <div className="ml-3" style={{ display: "flex", flexDirection: "column", }}>
                 <div className="item-normal-price" style={{ display: "flex", flexDirection: "row", marginTop: "auto", marginBottom: "auto" }}>
                     <span className="mr-12">
-                        {nft.salePrice === 0 ? 'Not for sale' : `${nft.salePrice} SMG`}
+                        {nft.putSale === false ? 'Sold' : `${nft.salePrice} SMG`}
                     </span>
                     <span className="neutral-4 mr-2">
-                        {nft.salePrice !== 0 ? `$ ${renderSmaugsDolar(nft.salePrice)}` : null}
+                        {nft.putSale !== false ? `$ ${renderSmaugsDolar(nft.salePrice)}` : null}
                     </span>
                 </div>
             </div>
@@ -380,6 +406,7 @@ function Item({ type = 'purchase', multiple }) {
                         circle
                         onClick={() => setHeart(!heart)}
                     />
+                    {/*
                     <Button
                         childRef={moreButton}
                         className="large"
@@ -387,6 +414,7 @@ function Item({ type = 'purchase', multiple }) {
                         onClick={() => setPopupShow(true)}
                         circle
                     />
+                    */}
 
                     <Popup
                         className="item-popup"
@@ -410,7 +438,7 @@ function Item({ type = 'purchase', multiple }) {
                 </div>
                 <div className="item-image">
 
-                    <img src={`${DOWNLOAD_NFTS_URL}${nft && nft.imageUrl}`} className="w-100 h-100" style={{ objectFit: "contain" }} />
+                    {videoType === 'mp4' ? <video width={100 + '%'} height={100 + '%'} autoPlay controls> <source src={DOWNLOAD_NFTS_URL + nft.imageUrl} type="video/mp4"></source> </video> : <img src={`${DOWNLOAD_NFTS_URL}${nft && nft.imageUrl}`} className="w-100 h-100" style={{ objectFit: "contain" }} />}
                     <div className="item-image-info d-flex" >
 
 
@@ -426,9 +454,9 @@ function Item({ type = 'purchase', multiple }) {
                             circle
                             onClick={() => setHeart(!heart)}
                         />
-                        <Button className="large" icon="more"
+                        {/*<Button className="large" icon="more"
                             onClick={() => setPopupCardShow(!popupCardShow)}
-                            circle />
+                    circle />*/}
                     </div>
 
                     {popupCardShow &&
@@ -451,8 +479,8 @@ function Item({ type = 'purchase', multiple }) {
                 <div className="right-panel d-flex flex-column">
                     <h3 className="mb-2"> {nft && nft.itemName} </h3>
                     <div className="d-flex align-items-center" style={{ marginBottom: '15px' }}>
-                        <Label className="green mr-2" font="text-button-1">{nft && nft.salePrice === 0 ? 'Not for sale' : `${nft.salePrice} SMG`}</Label>
-                        {nft.salePrice !== 0 ? <Label className="gray mr-2" font="text-button-1">$ {renderSmaugsDolar(nft.salePrice)}</Label> : null}
+                        <Label className="green mr-2" font="text-button-1">{nft && nft.putSale === false ? 'Sold' : `${nft.salePrice} SMG`}</Label>
+                        {nft.putSale !== false ? <Label className="gray mr-2" font="text-button-1">$ {renderSmaugsDolar(nft.salePrice)}</Label> : null}
                         <div className="text-button-1 neutral-4">
                             {nft.supply} Supply
                         </div>
@@ -481,15 +509,7 @@ function Item({ type = 'purchase', multiple }) {
                         {type === "purchase" &&
                             <>
                                 <HighestBidInfo avatar={avatar03} username="Kohaku Tora" value={1.46} price="$2,764.89" />
-                                {walletAddress === nft.walletAddress ? null
-                                    : <div className="d-flex justify-content-between mt-32 mb-32"><Button
-                                        disabled={nft.salePrice === 0 ? 'disabled' : null}
-                                        className="large primary w-100 mr-2"
-                                        style={nft.salePrice === 0 ? { cursor: "not-allowed" } : null}
-                                        onClick={purchaseModalActive}
-                                    >
-                                        Purchase now
-                                </Button></div>}
+                                {renderPurchaseButton()}
 
                                 <div className="neutral-4">
                                     <span className="text-caption-bold neutral-2 mr-12">Service fee</span>
@@ -549,5 +569,9 @@ function Item({ type = 'purchase', multiple }) {
         </Layout>
     );
 }
+const mapStateToProps = ({ user }) => {
+    const { user_info } = user;
+    return { user_info }
+};
 
-export default Item;
+export default connect(mapStateToProps)(Item);
