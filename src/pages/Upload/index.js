@@ -32,6 +32,7 @@ function Upload({ user_info }) {
             return "/connect";
         }
     };
+    /*
     useEffect(() => {
         if (walletAddress) {
             if (walletAddress !== '0xfDCe6A128e22e0a4A98C16F02B3BCbF16f4D8945') {
@@ -41,6 +42,7 @@ function Upload({ user_info }) {
             history.push("/404");
         }
     }, [walletAddress]);
+    */
     const renderConditionMultiple = () => {
         if (connected) {
             if (!user_info.displayName) {

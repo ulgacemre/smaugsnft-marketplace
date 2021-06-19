@@ -30,10 +30,10 @@ function Router() {
 
 
             setTimeout(() => {
-                if (window.web3.currentProvider.networkVersion === "56") {
+                if (window.web3.currentProvider.networkVersion === "97") {
                     setError("false");
                     setLoading("false");
-                } else if (window.web3.currentProvider.networkVersion !== "56") {
+                } else if (window.web3.currentProvider.networkVersion !== "97") {
                     setError("true");
                     setLoading("false");
                 } else {
@@ -65,7 +65,7 @@ function Router() {
                         title="Wrong network"
                     >
                         <p className="text-center">
-                            Please change your network to Binance Smart Chain Mainnet
+                            Please change your network to Binance Smart Chain Testnet
             </p>
                     </Modal>
                 ) : (
