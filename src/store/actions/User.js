@@ -5,6 +5,7 @@ import {
 import axios from '../../utils/Api'
 
 
+
 export const getUserInfo = ({ walletAddress }) => {
   return (dispatch) => {
     axios.get(`Users/${walletAddress}`)

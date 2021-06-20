@@ -16,6 +16,8 @@ const Provider = ({ children }) => {
   )
   const { wallet, walletAddress } = useWeb3()
 
+  const [userInfoLoading, setUserInfoLoading] = useState(true);
+
   useEffect(() => {
     if (!!wallet && !ERC721.signer) {
       setERC721(ERC721.connect(wallet))
@@ -131,7 +133,9 @@ const Provider = ({ children }) => {
         approveERC721,
         burnERC721,
         transferFromERC721,
-        multipleFunctions
+        multipleFunctions,
+        userInfoLoading, 
+        setUserInfoLoading
       }}
     >
       { children}

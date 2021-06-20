@@ -98,6 +98,8 @@ function UploadSingle({ isSingle = true, user_info }) {
     const history = useHistory();
     const { connected } = useWeb3();
 
+    const [pageLoading, setPageLoading] = useState(false);
+
 
     useEffect(() => {
         if (connected) {
@@ -106,6 +108,18 @@ function UploadSingle({ isSingle = true, user_info }) {
             history.push("/connect");
         }
     }, [connected]);
+
+
+    useEffect(() => {
+        setPageLoading(true);
+        axios.get(`Users/${walletAddress}`)
+            .then(({ data }) => {
+                setPageLoading(false);
+            }).catch(function (error) {
+                setPageLoading(false);
+                history.push('/profile/edit');
+            });
+    }, [user_info, walletAddress]);
 
     /*
      useEffect(() => {
@@ -272,6 +286,8 @@ function UploadSingle({ isSingle = true, user_info }) {
                 draggable: true,
                 progress: undefined,
             });
+        } else if (parseInt(itemPrice) < 100) {
+            toast.warn('Max 100 SMG!');
         } else {
             setShowCreateItemModal(true);
             //console.log("CATEGORY_ID ===> ", itemCategory);
@@ -303,7 +319,7 @@ function UploadSingle({ isSingle = true, user_info }) {
 
     return (
         <Layout page="upload-single">
-            {connecting ? <div className="p-5">
+            {pageLoading ? <div className="p-5">
                 <Loading
                     size={50}
                     position="center"

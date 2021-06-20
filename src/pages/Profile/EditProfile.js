@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { connect } from "react-redux";
 import { updateUserInfo } from "../../store/actions/User";
 import Loading from '../../components/Loading';
-import { DOWNLOAD_USERS_URL } from '../../utils/Api';
+import axios, { DOWNLOAD_USERS_URL } from '../../utils/Api';
 
 function EditProfile(props) {
     const [name, setName] = useState();
@@ -41,9 +41,13 @@ function EditProfile(props) {
 
     useEffect(() => {
         if (connected) {
-            if (!props.user_info.displayName) {
-                toast.error('Please fill your display name field!')
-            }
+            axios.get(`Users/${walletAddress}`)
+                .then(({ data }) => {
+                }).catch(function (error) {
+                    setUserLoading(false);
+                    toast.error('Please fill your display name field!');
+                });
+
             if (props.user_info) {
                 setName(props.user_info.displayName)
                 setCustomUrl(props.user_info.customUrl)
@@ -59,10 +63,11 @@ function EditProfile(props) {
                     setUserLoading(false);
                 }, 1800);
             }
+
         } else {
             history.push("/");
         }
-    }, [props.user_info, connected])
+    }, [props.user_info, connected, walletAddress])
 
     const onChangeAvatar = (event) => {
         createImage(event.target.files[0]);

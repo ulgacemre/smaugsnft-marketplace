@@ -89,7 +89,7 @@ function Router() {
 
                                 <Route exact path="/search" component={Search} />
                                 <Route exact path="/collection/:categoryId" component={CategoryNfts} />
-                                <Route exact path="/connect" component={ConnectWallet} />
+                                {/*<Route exact path="/connect" component={ConnectWallet} /> */}
                                 <Route exact path="/profile/edit" component={EditProfile} />
                                 <Route exact path="/profile/:address" component={Profile} />
                                 <Route exact path="/activity" component={Activity} />
