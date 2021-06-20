@@ -51,7 +51,15 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
             //console.log("otherSendAddressSMG_error ===> ", error)
         }
     };
-
+    const createNFTMultiple = (data) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`multiple`, data).then(async ({ data }) => {
+                resolve({ success: data });
+            }).catch(function (error) {
+                reject({ err: error.message });
+            });
+        })
+    };
 
     const buyNow = async () => {
 
@@ -63,33 +71,125 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
 
             //otherSendAddressSMG("0x8De5021b533ef04C5f2e6875cd473223D42669b9",(commisionPrice() - data.salePrice).toFixed(2) * 10 ** 8);
 
-            axios.patch(`${multiple ? 'multiple' : 'single'}/${data.id}`, {
-                walletAddress: walletAddress,
-                putSale: false
-            }).then(({ data }) => {
+            if (multiple) {
+                // multiple
 
-                if (res) {
-                    setHashAddress(res.hash);
-                    setDone(false);
-                    res.wait(res).then((response) => {
-                        //console.log(response);
-                        if (response.status == 1) {
-                            setDone(true);
-                        } else {
+                if (data.supply === 1) {
+
+                    axios.patch(`multiple/${data.id}`, {
+                        supply: parseInt(data.supply) - 1,
+                        walletAddress: walletAddress
+                    }).then(() => {
+                        if (res) {
+                            setHashAddress(res.hash);
                             setDone(false);
+                            res.wait(res).then((response) => {
+                                //console.log(response);
+                                if (response.status == 1) {
+                                    setDone(true);
+                                } else {
+                                    setDone(false);
+                                }
+                            })
                         }
-                    })
+                        fetchNftItem(data.id);
+                        setBuyingError(false);
+                        setStepStatus(STATUS.SUCCESS)
+                        setTitle("")
+                        setSending(false);
+                    }).catch((error) => {
+                        console.log("update_error => ", error);
+                    });
+
+                } else {
+                    axios.patch(`multiple/${data.id}`, {
+                        supply: parseInt(data.supply) - 1,
+                        tokenId: data.id
+                    }).then(() => {
+
+                        axios.get(`multiple?filter={"where": {"walletAddress": "${walletAddress}", "tokenId": ${data.tokenId}},"include":["category"]}`).then((res) => {
+
+                            if (res.data.length > 0) {
+                                axios.patch(`multiple/${res.data[0].id}`, {
+                                    supply: parseInt(res.data[0].supply) + 1,
+                                    tokenId: res.data[0].tokenId
+                                }).then(() => { }).catch(error => {
+                                    console.log("error => ", error);
+                                });
+                            } else {
+                                var model = {
+                                    categoryId: data.categoryId,
+                                    createdOn: data.createdOn,
+                                    creatorId: data.creatorId,
+                                    description: data.description,
+                                    imageUrl: data.imageUrl,
+                                    itemName: data.itemName,
+                                    property: data.property,
+                                    putSale: false,
+                                    royalties: data.royalties,
+                                    salePrice: data.salePrice,
+                                    size: data.size,
+                                    supply: 1,
+                                    walletAddress: walletAddress,
+                                    tokenId: data.id,
+                                };
+
+                                createNFTMultiple(model).then((response) => {
+                                    console.log("create_multiple_token => ", response);
+                                })
+                            }
+
+                            //console.log("NFT ===> ", data);
+                        }).catch((error) => {
+                            //console.log('NFT FETCH ERROR ===>', error)
+
+                        });
+
+
+
+
+
+                    }).catch((error) => {
+                        console.log("update_error => ", error);
+                    });
                 }
 
-                fetchNftItem(data.id);
 
-                setBuyingError(false);
-                setStepStatus(STATUS.SUCCESS)
-                setTitle("")
-                setSending(false);
-            }).catch(error => {
-                //console.log("PATCH_NEW_NFT_TOKEN_error ===> ", error)
-            });
+            } else {
+                axios.patch(`single/${data.id}`, {
+                    walletAddress: walletAddress,
+                    putSale: false
+                }).then(({ data }) => {
+
+                    if (res) {
+                        setHashAddress(res.hash);
+                        setDone(false);
+                        res.wait(res).then((response) => {
+                            //console.log(response);
+                            if (response.status == 1) {
+                                axios.post('activities', {
+                                    action: `Bought 1 edition by ${walletAddress}`,
+                                    walletAddress: walletAddress,
+                                    nft721Id: data.id
+                                }).then(() => {
+                                    setDone(true);
+                                }).catch((error) => {
+                                    console.log("error => ", error);
+                                });
+                            } else {
+                                setDone(false);
+                            }
+                        })
+                    }
+                    fetchNftItem(data.id);
+                    setBuyingError(false);
+                    setStepStatus(STATUS.SUCCESS)
+                    setTitle("")
+                    setSending(false);
+                }).catch(error => {
+                    //console.log("PATCH_NEW_NFT_TOKEN_error ===> ", error)
+                });
+            }
         } catch (error) {
             setBuyingError(true);
             setSending(false);

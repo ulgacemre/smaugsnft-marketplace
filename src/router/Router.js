@@ -19,6 +19,7 @@ import Modal from '../components/Modal';
 import CategoryNfts from '../pages/CategoryNfts';
 
 import Web3 from 'web3';
+import MultipleSoon from '../pages/Upload/MultipleSoon';
 
 function Router() {
 
@@ -30,10 +31,10 @@ function Router() {
 
 
             setTimeout(() => {
-                if (window.web3.currentProvider.networkVersion === "97") {
+                if (window.web3.currentProvider.networkVersion === "56") {
                     setError("false");
                     setLoading("false");
-                } else if (window.web3.currentProvider.networkVersion !== "97") {
+                } else if (window.web3.currentProvider.networkVersion !== "56") {
                     setError("true");
                     setLoading("false");
                 } else {
@@ -80,9 +81,10 @@ function Router() {
                                     <UploadSingle {...props} isSingle={true} />
                                 )} />
 
-                                <Route exact path="/upload/multiple" render={(props) => (
+                                {/*<Route exact path="/upload/multiple" render={(props) => (
                                     <UploadMultiple {...props} isSingle={false} />
-                                )} />
+                                )} />*/}
+                                <Route exact path="/upload/multiple" component={MultipleSoon} />
                                 <Route exact path="/upload" component={Upload} />
 
                                 <Route exact path="/search" component={Search} />
@@ -94,6 +96,9 @@ function Router() {
                                 <Route exact path="/test" component={Test} />
                                 <Route exact path="/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/:nft_id" render={(props) => (
                                     <Item {...props} multiple={false} type="purchase" />
+                                )} />
+                                <Route exact path="/assets/0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f/:nft_id/:ownerId" render={(props) => (
+                                    <Item {...props} multiple={true} type="purchase" />
                                 )} />
                                 <Route exact path="/assets/0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f/:nft_id" render={(props) => (
                                     <Item {...props} multiple={true} type="purchase" />

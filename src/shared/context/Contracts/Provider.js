@@ -27,6 +27,7 @@ const Provider = ({ children }) => {
   useEffect(() => {
     if (!!wallet && !ERC1155.signer) {
       setERC1155(ERC1155.connect(wallet))
+      console.log("erc1155 => ", ERC1155.connect(wallet));
     }
   }, [wallet, setERC1155, ERC1155])
 

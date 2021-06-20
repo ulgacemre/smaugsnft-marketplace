@@ -123,6 +123,7 @@ function UploadMultiple({ isSingle = false, user_info }) {
         })
     };
 
+    /*
     useEffect(() => {
         if (walletAddress) {
             if (walletAddress !== '0xB9a32da7F33731FfDa8e7ecCB91325eee8A524AC') {
@@ -132,6 +133,7 @@ function UploadMultiple({ isSingle = false, user_info }) {
             history.push("/404");
         }
     }, [walletAddress]);
+     */
 
     useEffect(() => {
         fetchAllCategories().then((response) => {
@@ -314,6 +316,7 @@ function UploadMultiple({ isSingle = false, user_info }) {
                         imageUrl: imageUrl,
                         ...nft_info
                     }).then(async ({ data }) => {
+
                         resolve({ success: data });
                     }).catch(function (error) {
                         reject({ err: error.message });

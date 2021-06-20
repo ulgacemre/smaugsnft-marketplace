@@ -47,6 +47,12 @@ const filterType = [
     {
         title: 'Likes'
     },
+    {
+        title: 'Following'
+    },
+    {
+        title: 'Followers'
+    },
 
 ]
 
@@ -66,7 +72,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
     const [userInfo, setUserInfo] = useState(null);
     const [myAddress, setMyAddress] = useState("");
-    const [userInfoLoading, setUserInfoLoading] = useState(true);
+    const [userInfoLoading, setUserInfoLoading] = useState(false);
 
     const profileInput = useRef(null);
     const [coverPhotoChanged, setCoverPhotoChanged] = useState(null);
@@ -74,11 +80,15 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
 
     const history = useHistory();
-    const { connected, walletAddress } = useWeb3()
+    const { connected, walletAddress } = useWeb3();
+
+    const [isFollowing, setIsFollowing] = useState(null);
 
     const handleChangeTab = (tab) => {
         setCurrentTab(tab)
     }
+
+
 
 
     let { address } = useParams();
@@ -95,11 +105,26 @@ function Profile({ user_info, getUserSingleNFTs }) {
     }, [address]);
 
     const fetchUserInfo = (address) => {
-        axios.get(`Users/${address}`)
-            .then(({ data }) => {
+        setUserInfoLoading(true);
+        axios.get(`Users/${address}?filter={"include":  {"relation": "follower","scope": {  "fields":["displayName"], "type": "count" }}}`)
+            .then(async ({ data }) => {
+
+                const res = await data.follower.find(item => item.walletAddress === walletAddress);
+
+                if(res) {
+                    setIsFollowing(true);
+                } else {
+                    setIsFollowing(false);
+                }
+
+                console.log("res => ", res);
+                console.log("data => ", data);
+
+
                 setUserInfo(data);
                 setUserInfoLoading(false);
             }).catch(function (error) {
+                console.log("error => ", error);
                 setUserInfo(null);
                 setUserInfoLoading(false);
             });
@@ -113,6 +138,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
 
     useEffect(() => {
+        setQueryAddress(address);
         if (address !== walletAddress) {
             fetchUserInfo(address);
         } else {
@@ -124,7 +150,8 @@ function Profile({ user_info, getUserSingleNFTs }) {
                 }
             }
         }
-        setQueryAddress(address);
+        
+
     }, [user_info, address]);
 
 
@@ -211,9 +238,9 @@ function Profile({ user_info, getUserSingleNFTs }) {
                     </div>
                 );
             case "Following":
-                return <UserCollections smaugsDolar={smaugsDolar} className="mt-5" />;
+                return <UserCollections address={userInfo.walletAddress} smaugsDolar={smaugsDolar} className="mt-5" />;
             case "Followers":
-                return <Followers smaugsDolar={smaugsDolar} className="mt-5" />;
+                return <Followers address={userInfo.walletAddress} smaugsDolar={smaugsDolar} className="mt-5" />;
 
             default:
                 return <OnSale smaugsDolar={smaugsDolar} className="mt-5" walletAddress={queryAddress} />;
@@ -258,6 +285,8 @@ function Profile({ user_info, getUserSingleNFTs }) {
                                                 </Link>
                                             </div> : <div className="d-flex d-lg-none justify-content-between mt-32 mb-4"></div>}
                                             <UserPanel
+                                                isFollowing={isFollowing}
+                                                setIsFollowing={setIsFollowing}
                                                 username={userInfo.displayName}
                                                 walletAddress={userInfo.walletAddress}
                                                 avatar={DOWNLOAD_USERS_URL + userInfo.imageUrl}

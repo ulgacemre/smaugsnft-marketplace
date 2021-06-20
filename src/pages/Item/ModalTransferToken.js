@@ -41,7 +41,7 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
                 if (parseInt(transferQuantity) === parseInt(nft.supply)) {
                     axios.patch(`multiple/${nft.id}`, {
                         walletAddress: address,
-                    }).then(({data}) => {
+                    }).then(({ data }) => {
                         setSuccess(true);
                         setLoading(false);
                         setError(false);
@@ -70,7 +70,7 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
                 } else {
                     axios.patch(`multiple/${nft.id}`, {
                         supply: parseInt(nft.supply) - parseInt(transferQuantity)
-                    }).then(({data}) => {
+                    }).then(({ data }) => {
                         console.log("senden supply düştük son durum =>", data);
                         // TRANSFER EDİLEN KULLANICIYA EKLEME YAPILACAK //
                         const newPayload = {
@@ -145,10 +145,16 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
 
                     res.wait(res).then((response) => {
                         if (response.status == 1) {
-                            setDone(true);
-
-                            fetchNftItem(nft.id);
-
+                            axios.post('activities', {
+                                action: `Transfer 1 edition by ${walletAddress}`,
+                                walletAddress: walletAddress,
+                                nft721Id: nft.id
+                            }).then(() => {
+                                setDone(true);
+                                fetchNftItem(nft.id);
+                            }).catch((error) => {
+                                console.log("error => ", error);
+                            });
                         } else {
                             setDone(false);
                             setError(true);
@@ -224,9 +230,6 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
                     </div>
                         </div>
                     </div> : null}
-                    <div className="text-body-2 neutral-4 mb-32">
-                        Transfer token
-                    </div>
                     <div className="mb-32">
                         <div className="text-body-1-bold mb-3">
                             Receiver address

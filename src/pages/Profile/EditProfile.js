@@ -41,6 +41,9 @@ function EditProfile(props) {
 
     useEffect(() => {
         if (connected) {
+            if (!props.user_info.displayName) {
+                toast.error('Please fill your display name field!')
+            }
             if (props.user_info) {
                 setName(props.user_info.displayName)
                 setCustomUrl(props.user_info.customUrl)

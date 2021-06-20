@@ -88,7 +88,7 @@ const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSa
 //
 
 function Item({ type = 'purchase', multiple, user_info }) {
-    const [heart, setHeart] = useState(true)
+    const [heart, setHeart] = useState(false)
     const [modalPurchaseShow, setModalPurchaseShow] = useState(false)
     const [modalBidShow, setModalBidShow] = useState(false)
     const [modalAcceptShow, setModalAcceptShow] = useState(false)
@@ -104,6 +104,8 @@ function Item({ type = 'purchase', multiple, user_info }) {
     const [popupShow, setPopupShow] = useState(false)
     const [popupArrowLeft, setPopupArrowLeft] = useState(0)
     const [smaugsDolar, setSmaugsDolar] = useState(null);
+
+    const [activities, setActivities] = useState([]);
 
     const moreButton = useRef(null);
 
@@ -126,15 +128,75 @@ function Item({ type = 'purchase', multiple, user_info }) {
         }
     }, [nft]);
     // params
-    const { nft_id } = useParams();
+    const { nft_id, ownerId } = useParams();
 
-    const fetchNftItem = (id) => {
-        axios.get(`${multiple ? 'multiple' : 'single'}/${id}?filter={"include":["category","user"]}`).then(({ data }) => {
-            setNft(data);
+    const fetchNftItemMultiple = (id, ownerId) => {
+        axios.get(`multiple?filter={"where":{"or":[{"walletAddress":"${ownerId}"},{"tokenId":"${id}"}]},"include":["category"]}`).then((res) => {
 
-            axios.get(`Users/${data.creatorId}`).then(({ data }) => {
-                setCreator(data);
-                setNftLoading(false);
+            res.data.forEach(item => {
+                if (item.walletAddress === ownerId) {
+                    axios.get(`Users/${item.creatorId}`).then((creator) => {
+                        setCreator(creator.data);
+                        axios.get(`Users/${item.walletAddress}`).then((owner) => {
+                            const payload = {
+                                ...item,
+                                user: owner.data
+                            };
+                            setNft(payload);
+                            setNftLoading(false);
+                        }).catch(error => {
+                            //console.log("OWNER_FETCH_ERROR ===> ", error);
+                            setCreator(null);
+                            setNftLoading(false);
+                        })
+                    }).catch(error => {
+                        //console.log("OWNER_FETCH_ERROR ===> ", error);
+                        setCreator(null);
+                        setNftLoading(false);
+                    })
+                }
+            });
+
+            //console.log("NFT ===> ", data);
+        }).catch((error) => {
+            //console.log('NFT FETCH ERROR ===>', error)
+            history.push("/404");
+        });
+    };
+
+    const fetchNftItemSingle = (id) => {
+        axios.get(`single/${id}?filter={"include":["category"]}`).then((res) => {
+
+            axios.get(`Users/${res.data.creatorId}`).then((creator) => {
+                setCreator(creator.data);
+                axios.get(`Users/${res.data.walletAddress}`).then((owner) => {
+                    axios.get(`activities?filter={"where":{"nft721Id":${res.data.id}}, "order": "id DESC"}`).then((response) => {
+
+                        axios.get(`NFTUsers?filter={"where": {"walletAddress": "${walletAddress}", "nft721Id": ${nft_id}}}`).then((response) => {
+                            if (response.data.length > 0) {
+                                setHeart(true);
+                            } else {
+                                setHeart(false);
+                            }
+                            const payload = {
+                                ...res.data,
+                                user: owner.data
+                            };
+                            setNft(payload);
+                            setActivities(response.data);
+                            setNftLoading(false);
+                        }).catch(error => {
+                            console.log("error =>", error);
+                        });
+
+                    }).catch(error => {
+                        setActivities([]);
+                    })
+                }).catch(error => {
+                    //console.log("OWNER_FETCH_ERROR ===> ", error);
+                    setCreator(null);
+                    setNftLoading(false);
+                })
             }).catch(error => {
                 //console.log("OWNER_FETCH_ERROR ===> ", error);
                 setCreator(null);
@@ -156,11 +218,20 @@ function Item({ type = 'purchase', multiple, user_info }) {
     };
 
     useEffect(() => {
-        if (nft_id) {
-            fetchNftItem(nft_id);
+        if (nft_id && ownerId) {
+            fetchNftItemMultiple(nft_id, ownerId);
             getSmaugsApiDolar();
         }
-    }, [nft_id]);
+    }, [nft_id, ownerId]);
+
+
+    useEffect(() => {
+        if (nft_id && !ownerId) {
+            fetchNftItemSingle(nft_id);
+            getSmaugsApiDolar();
+        }
+    }, [nft_id, ownerId]);
+
 
 
     useEffect(() => {
@@ -261,6 +332,25 @@ function Item({ type = 'purchase', multiple, user_info }) {
         </div>;
     };
 
+    const renderHistoryTab = () => {
+        return (
+            activities.length > 0 ? (
+                <div className="item-content mb-3">
+                    <label><b>Actions</b></label>
+                    <div className="items">
+                        {activities.map((item, idx) => {
+                            return (
+                                <div key={idx} className="item" style={{ flexDirection: "column" }}>
+                                    <span>{item.action.slice(0, 45) + '...'}</span>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            ) : <h6 className="text-center">Not found!</h6>
+        )
+    };
+
     // renderTabsEnd
 
     const renderContent = () => {
@@ -287,7 +377,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                     </>
                 )
             case 2:
-                return <h6 className="text-center py-3">Not available!</h6>;
+                return renderHistoryTab();
             case 3:
                 return "bids";
         }
@@ -361,6 +451,46 @@ function Item({ type = 'purchase', multiple, user_info }) {
             }, 30);
         }
     }
+    const setLike = () => {
+        if (!heart) {
+            axios.post('NFTLikes', {
+                walletAddress: walletAddress,
+                nft721Id: nft.id,
+                likes: 1
+            }).then((response) => {
+                axios.post('NFTUsers', {
+                    nft721Id: nft.id,
+                    nftlikesId: response.data.id,
+                    walletAddress: walletAddress
+                }).then((responseNext) => {
+                    console.log("responseNext => ", responseNext.data);
+                    setHeart(true);
+                }).catch(error => {
+                    console.log("error => ", error);
+                });
+            }).catch(error => {
+                console.log("error => ", error);
+            });
+        } else {
+
+            axios.get(`NFTUsers?filter={"where": {"walletAddress": "${walletAddress}", "nft721Id": ${nft_id}}}`).then((response) => {
+                if (response.data.length > 0) {
+                    axios.delete(`NFTLikes/${response.data[0].nftlikesId}`).then((likeData) => {
+
+                        axios.delete(`NFTUsers/${response.data[0].id}`).then((res) => {
+                            setHeart(false);
+                        });
+
+                    }).catch(error => {
+                        console.log("unlike_delete_error => ", error);
+                    })
+                }
+            }).catch(error => {
+                console.log("error =>", error);
+            });
+
+        }
+    };
     const HighestBidInfo = () => (
         <div className="d-flex">
             <img src={DOWNLOAD_USERS_URL + nft.user.imageUrl} className="size-48 rounded-circle" />
@@ -404,9 +534,9 @@ function Item({ type = 'purchase', multiple, user_info }) {
                         className="large mb-3 svg-primary-3"
                         icon={heart ? "heart-fill" : "heart"}
                         circle
-                        onClick={() => setHeart(!heart)}
+                        onClick={() => setLike()}
                     />
-                    {/*
+
                     <Button
                         childRef={moreButton}
                         className="large"
@@ -414,7 +544,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                         onClick={() => setPopupShow(true)}
                         circle
                     />
-                    */}
+
 
                     <Popup
                         className="item-popup"
@@ -452,11 +582,11 @@ function Item({ type = 'purchase', multiple, user_info }) {
                             className="large mr-4 svg-primary-3"
                             icon={heart ? "heart-fill" : "heart"}
                             circle
-                            onClick={() => setHeart(!heart)}
+                            onClick={() => setLike()}
                         />
-                        {/*<Button className="large" icon="more"
+                        <Button className="large" icon="more"
                             onClick={() => setPopupCardShow(!popupCardShow)}
-                    circle />*/}
+                            circle />
                     </div>
 
                     {popupCardShow &&
@@ -553,16 +683,16 @@ function Item({ type = 'purchase', multiple, user_info }) {
                     </div>
                 </div>
 
-                <ModalPurchase multiple={multiple} fetchNftItem={fetchNftItem} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
-                <ModalChangePrice multiple={multiple} fetchNftItem={fetchNftItem} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
+                <ModalPurchase multiple={multiple} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
+                <ModalChangePrice multiple={multiple} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
                 <ModalShareLinks multiple={multiple} nft={nft} show={modalShareLinks} onClose={() => setModalShareLinks(false)} />
                 <ModalBid multiple={multiple} show={modalBidShow} onClose={() => setModalBidShow(false)} />
-                <ModalPutSale multiple={multiple} nft={nft} fetchNftItem={fetchNftItem} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />
+                <ModalPutSale multiple={multiple} nft={nft} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />
                 <ModalAccept multiple={multiple} show={modalAcceptShow} onClose={() => setModalAcceptShow(false)} />
                 <ModalSale multiple={multiple} show={modalSaleShow} onClose={() => setModalSaleShow(false)} />
-                <ModalTransferToken multiple={multiple} nft={nft} fetchNftItem={fetchNftItem} show={modalTransferTokenShow} onClose={() => setModalTransferTokenShow(false)} />
-                <ModalRemoveSale multiple={multiple} fetchNftItem={fetchNftItem} nft={nft} show={modalRemoveSaleShow} onClose={() => setModalRemoveSaleShow(false)} />
-                <ModalBurnToken fetchNftItem={fetchNftItem} multiple={multiple} nft={nft} tokenId={nft.id} show={modalBurnTokenShow} onClose={() => setModalBurnTokenShow(false)} />
+                <ModalTransferToken multiple={multiple} nft={nft} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} show={modalTransferTokenShow} onClose={() => setModalTransferTokenShow(false)} />
+                <ModalRemoveSale multiple={multiple} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} nft={nft} show={modalRemoveSaleShow} onClose={() => setModalRemoveSaleShow(false)} />
+                <ModalBurnToken fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} multiple={multiple} nft={nft} tokenId={nft.id} show={modalBurnTokenShow} onClose={() => setModalBurnTokenShow(false)} />
                 <ModalReport multiple={multiple} connected={connected} walletAddress={walletAddress} nft_id={nft_id} supply={nft.supply} show={modalReportShow} onClose={() => setModalReportShow(false)} />
             </div>
                 : renderLoading()}

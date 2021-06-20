@@ -43,10 +43,7 @@ const ConnectWallet = function (props) {
 
     const dataList = [
         { title: 'MetaMask', color: 'bg-primary-3' },
-        { title: 'Formatic', color: 'bg-primary-2' },
-        { title: 'Coinbase Wallet', color: 'bg-primary-1' },
-        { title: 'MyEtherWallet', color: 'bg-primary-4' },
-        { title: 'Wallet Connect', color: 'bg-primary-3' }
+        { title: 'Wallet Connect', color: 'bg-primary-2' }
     ];
 
     const handleSelectWallet = (idx) => {

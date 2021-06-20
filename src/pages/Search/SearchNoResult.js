@@ -55,6 +55,7 @@ function SearchNoResult() {
                     </div>
                     <ScrollView className="scrollview-items">
                         <div className="text-left d-flex w-100">
+                           {/*
                             {categories.map((category, idx) => (
                                 <Link href={"/collection/" + slugify(category.title).toLowerCase()}>
                                     <div className={"explore-more-item " + (idx === 0 ? "" : "ml-32")} style={{ cursor: "pointer", color: "white" }}>
@@ -69,6 +70,7 @@ function SearchNoResult() {
                                     </div>
                                 </Link>
                             ))}
+                           */}
                         </div>
                     </ScrollView>
                 </div>

@@ -27,7 +27,14 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
     const [popupShow, setPopupShow] = useState(false)
     const elementButton = useRef(null);
 
-    const { connected, walletAddress, handleDisconnect, walletSMGBalance } = useWeb3()
+    const { connected, walletAddress, handleDisconnect, walletSMGBalance, handleConnect } = useWeb3();
+
+    const setConnect = () => {
+        localStorage.clear();
+        setTimeout(() => {
+            handleConnect();
+        }, 500);
+    };
 
     //console.log("wallet", useWeb3());
 
@@ -130,11 +137,9 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
                         </div>
                     </Popup>
                 </div>
-            ) : <Link href="/connect" style={style} className={[className, " d-none d-lg-block"]}>
-                <Button className="normal" >
-                    Connect Wallet
-            </Button>
-            </Link>}
+            ) : <Button onClick={setConnect} className={[className, " d-none d-lg-block normal"]} >
+                Connect Wallet
+            </Button>}
         </>
     );
 }
