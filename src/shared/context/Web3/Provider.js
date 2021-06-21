@@ -75,7 +75,7 @@ const Provider = ({ children }) => {
 
 
     const handleConnect = useCallback(async () => {
-        const provider = await web3Modal?.connect();
+        const provider = await web3Modal.connect();
 
 
 
@@ -112,14 +112,14 @@ const Provider = ({ children }) => {
 
 
                 localStorage.setItem("wallet_connect", true);
-                
+
 
                 provider.on('accountsChanged', (newAccounts) => {
                     if (Array.isArray(newAccounts) && newAccounts.length) {
                         setWalletAddress(newAccounts[0])
                     }
                 })
-            } 
+            }
         }
     }, [setWalletAddress, setWallet, web3Modal, setConnected])
 
