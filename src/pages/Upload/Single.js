@@ -84,6 +84,8 @@ function UploadSingle({ isSingle = true, user_info }) {
 
     const [uploadFileTypeMp4, setUploadFileTypeMp4] = useState(false);
 
+    const [fakePathVideo, setFakePathVideo] = useState("");
+
 
 
     const [itemCurrency, setItemCurrency] = useState('');
@@ -164,6 +166,11 @@ function UploadSingle({ isSingle = true, user_info }) {
 
                     setUploadFileTypeMp4(true);
                     setUploadImageFile(file);
+
+
+                    setUploadImage(fakePathVideo);
+
+
 
                 } else {
                     setUploadFileTypeMp4(false);
@@ -352,7 +359,9 @@ function UploadSingle({ isSingle = true, user_info }) {
                                     <div className="text-body-2-bold mb-1">Upload file <font color="red"><b>*</b></font></div>
                                     <div className="text-caption-2 neutral-4 mb-3">Drag or choose your file to upload</div>
                                     <FileUploader
+                                        setFakePathVideo={setFakePathVideo}
                                         onDrop={(files) => {
+                                            setFakePathVideo(document.getElementById("myFileInput").value);
                                             detect(files[0])
                                         }} />
                                 </div>

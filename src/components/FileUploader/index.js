@@ -15,7 +15,7 @@ const rejectStyle = {
 };
 
 
-function FileUploader({ onDrop, multiple = false }) {
+function FileUploader({ onDrop, multiple = false, setFakePathVideo }) {
     const {
         isDragActive,
         isDragAccept,
@@ -41,7 +41,11 @@ function FileUploader({ onDrop, multiple = false }) {
 
     return (
         <div className="file-uploader" {...getRootProps({ style })}>
-            <input {...getInputProps()} />
+            <input id="myFileInput" onChange={({ target }) => {
+                if (target.files[0].type === 'video/mp4') {
+                    setFakePathVideo(document.getElementById('myFileInput').value)
+                }
+            }} {...getInputProps()} />
             <div className="text-center">
                 <Icon icon="file-upload" />
                 <div className="text-caption-2 neutral-4 mt-2">

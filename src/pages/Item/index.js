@@ -32,6 +32,7 @@ import ModalPutSale from './ModalPutSale';
 import slugify from 'slugify';
 import ModalChangePrice from './ModalChangePrice';
 import ModalShareLinks from './ModalShareLinks';
+import addresses from '../../shared/addresses';
 
 const infoTabs = [
     {
@@ -318,7 +319,9 @@ function Item({ type = 'purchase', multiple, user_info }) {
                 <div className="items">
                     <div className="item">
                         <span className="title">Contract address:</span>
-                        <span>0x99334...5bAC</span>
+                        <span>
+                            <a href={`https://bscscan.com/address/${addresses.ERC721}`} target="_blank">{addresses.ERC721.slice(0, 6)}...{addresses.ERC721.slice(34, 42)}</a>
+                        </span>
                     </div>
                     <div className="item">
                         <span className="title">Token ID:</span>
@@ -468,8 +471,8 @@ function Item({ type = 'purchase', multiple, user_info }) {
                     console.log("responseNext => ", responseNext.data);
                     setHeart(true);
 
-                   
-                    web3.eth.personal.sign('I want to like '+ nft.itemName, walletAddress)
+
+                    web3.eth.personal.sign('I want to like ' + nft.itemName, walletAddress)
                         .then(() => {
                         }).catch(error => {
                             console.log("error**", error);
@@ -490,11 +493,11 @@ function Item({ type = 'purchase', multiple, user_info }) {
                         axios.delete(`NFTUsers/${response.data[0].id}`).then((res) => {
                             setHeart(false);
 
-                            web3.eth.personal.sign('I want to unlike '+ nft.itemName, walletAddress)
-                            .then(() => {
-                            }).catch(error => {
-                                console.log("error**", error);
-                            });
+                            web3.eth.personal.sign('I want to unlike ' + nft.itemName, walletAddress)
+                                .then(() => {
+                                }).catch(error => {
+                                    console.log("error**", error);
+                                });
                         });
 
                     }).catch(error => {
@@ -692,8 +695,8 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                     Put on sale
                             </Button>
                                 <div className="text-caption neutral-4 mt-32">
-                                  
-                            </div>
+
+                                </div>
                             </>
                         }
                     </div>

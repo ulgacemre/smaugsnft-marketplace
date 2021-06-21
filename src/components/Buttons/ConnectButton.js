@@ -118,6 +118,13 @@ const ConnectButton = function ({ className, user_info, theme, toggleTheme, styl
                                 </div>
                                 <Divider className="mb-3" />
                                 <div className="d-flex align-items-center mb-12">
+                                    <Icon icon="wallet" />
+                                    <Link href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x6bfd576220e8444ca4cc5f89efbd7f02a4c94c16" target="_blank" className="text-button-2 neutral-4 ml-2">
+                                        Buy SMG Token
+                                    </Link>
+                                </div>
+                                <Divider className="mb-3" />
+                                <div className="d-flex align-items-center mb-12">
                                     <Icon icon="light-bulb" />
                                     <div className="text-button-2 neutral-4 ml-2">
                                         {theme === "white" ? "Dark theme" : "White theme"}

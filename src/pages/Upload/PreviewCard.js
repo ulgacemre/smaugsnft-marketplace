@@ -14,7 +14,9 @@ const PreviewCard = function ({ data, hover = true, detectingPhoto, uploadFileTy
     return (
         <div>
             <div className="hotbid-image-container">
-                <img src={uploadFileTypeMp4 ? 'https://lh3.googleusercontent.com/proxy/ON4nOSQ-2d3IT_PzVdyNGTEL53fJyWOrq1flhO3x9fL3xEgUzofzyVEAvTPTpRCG1NcW9PzFVo_h_X9V9ZOzLun3C0i0kAsdcgoD8LZikuS2FVNoCyL1PHBNT82EPnnEVxBgO5sabKE' : data.image} style={detectingPhoto && !uploadFileTypeMp4 ? { opacity: 0.5 } : null} className="hotbid-item-img" />
+                {uploadFileTypeMp4 ? <video controls autoPlay muted width={100 + '%'} height={100 + '%'}>
+                    <source src={data.image} type="video/mp4"></source>
+                </video> : <img src={data.image} style={detectingPhoto && !uploadFileTypeMp4 ? { opacity: 0.5 } : null} className="hotbid-item-img" />}
                 {hover &&
                     <div className="hotbid-item-hover">
                         <div className="d-flex justify-content-between p-2 w-100">

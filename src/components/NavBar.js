@@ -33,17 +33,9 @@ const NavBar = function (props) {
                     <Nav className="d-xl-flex d-none nav navbar-nav" as="ul">
                         <Nav.Item as="li">
                             <Nav.Link
+                                href="/search"
                             >
-                                <ScrollLink
-                                    activeClass="active"
-                                    to="discover-main"
-                                    spy={true}
-                                    smooth={true}
-                                    offset={0}
-                                    duration={2000}
-                                >
-                                    Discover
-                                </ScrollLink>
+                                Discover
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item as="li">
