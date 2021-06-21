@@ -70,7 +70,91 @@ function ModalPurchase({ show, onClose, data, commisionPrice, fetchNftItem, mult
 
             //otherSendAddressSMG("0x8De5021b533ef04C5f2e6875cd473223D42669b9",(commisionPrice() - data.salePrice).toFixed(2) * 10 ** 8);
 
-            console.log('TRANSFER_RESULT => ', res);
+            if (multiple) {
+                // multiple
+
+                if (data.supply === 1) {
+
+                    axios.patch(`multiple/${data.id}`, {
+                        supply: parseInt(data.supply) - 1,
+                        walletAddress: walletAddress
+                    }).then(() => {
+                        if (res) {
+                            setHashAddress(res.hash);
+                            setDone(false);
+                            res.wait(res).then((response) => {
+                                //console.log(response);
+                                if (response.status == 1) {
+                                    setDone(true);
+                                } else {
+                                    setDone(false);
+                                }
+                            })
+                        }
+                        fetchNftItem(data.id);
+                        setBuyingError(false);
+                        setStepStatus(STATUS.SUCCESS)
+                        setTitle("")
+                        setSending(false);
+                    }).catch((error) => {
+                        console.log("update_error => ", error);
+                    });
+
+                } else {
+                    axios.patch(`multiple/${data.id}`, {
+                        supply: parseInt(data.supply) - 1,
+                        tokenId: data.id
+                    }).then(() => {
+
+                        axios.get(`multiple?filter={"where": {"walletAddress": "${walletAddress}", "tokenId": ${data.tokenId}},"include":["category"]}`).then((res) => {
+
+                            if (res.data.length > 0) {
+                                axios.patch(`multiple/${res.data[0].id}`, {
+                                    supply: parseInt(res.data[0].supply) + 1,
+                                    tokenId: res.data[0].tokenId
+                                }).then(() => { }).catch(error => {
+                                    console.log("error => ", error);
+                                });
+                            } else {
+                                var model = {
+                                    categoryId: data.categoryId,
+                                    createdOn: data.createdOn,
+                                    creatorId: data.creatorId,
+                                    description: data.description,
+                                    imageUrl: data.imageUrl,
+                                    itemName: data.itemName,
+                                    property: data.property,
+                                    putSale: false,
+                                    royalties: data.royalties,
+                                    salePrice: data.salePrice,
+                                    size: data.size,
+                                    supply: 1,
+                                    walletAddress: walletAddress,
+                                    tokenId: data.id,
+                                };
+
+                                createNFTMultiple(model).then((response) => {
+                                    console.log("create_multiple_token => ", response);
+                                })
+                            }
+
+                            //console.log("NFT ===> ", data);
+                        }).catch((error) => {
+                            //console.log('NFT FETCH ERROR ===>', error)
+
+                        });
+
+
+
+
+
+                    }).catch((error) => {
+                        console.log("update_error => ", error);
+                    });
+                }
+
+
+            }
 
         } catch (error) {
             setBuyingError(true);

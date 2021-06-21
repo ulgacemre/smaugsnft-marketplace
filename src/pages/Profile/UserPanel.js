@@ -13,9 +13,11 @@ import { CLIENT_URL } from '../../constants/config';
 import useWeb3 from '../../shared/hooks/useWeb3';
 import axios from '../../utils/Api';
 
+import { connect } from 'react-redux';
 
 
-function UserPanel({ isFollowing, setIsFollowing, username, avatar, verified, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
+
+function UserPanel({ user_info, isFollowing, setIsFollowing, username, avatar, verified, walletAddress, description = '', url, createdOn, twitterUsername, facebookUsername, instagramUsername, website, bio }) {
 
     const context = useWeb3();
 
@@ -93,6 +95,20 @@ function UserPanel({ isFollowing, setIsFollowing, username, avatar, verified, wa
         }
     }
 
+    const renderFollowButton = () => {
+        return (
+            walletAddress !== context.walletAddress && user_info.walletAddress && user_info.displayName !== '' ? (
+                <>
+                    {
+                        !isFollowing ? <Button disabled={sendFollowing ? true : false} style={{ cursor: sendFollowing ? "not-allowed" : "pointer" }} onClick={() => follow()} className="primary normal">Follow</Button> : (
+                            <Button disabled={sendFollowing ? true : false} style={{ cursor: sendFollowing ? "not-allowed" : "pointer" }} onClick={() => unFollow()} className="normal">Unfollow</Button>
+                        )
+                    }
+                </>
+            ) : null
+        )
+    }
+
     return (
         <div className="userinfo-panel">
             <ToastContainer />
@@ -136,15 +152,7 @@ function UserPanel({ isFollowing, setIsFollowing, username, avatar, verified, wa
                 </div> : null}
             </div>
             <div className="action d-flex justify-content-center mb-5">
-                {walletAddress !== context.walletAddress ? (
-                    <>
-                        {
-                            !isFollowing ? <Button disabled={sendFollowing ? true : false} style={{ cursor: sendFollowing ? "not-allowed" : "pointer" }} onClick={() => follow()} className="primary normal">Follow</Button> : (
-                                <Button disabled={sendFollowing ? true : false} style={{ cursor: sendFollowing ? "not-allowed" : "pointer" }} onClick={() => unFollow()} className="normal">Unfollow</Button>
-                            )
-                        }
-                    </>
-                ) : null}
+                {renderFollowButton()}
                 <Button className="normal ml-2" icon="share-square" circle={true}></Button>
                 <Button
                     childRef={moreButton}
@@ -182,4 +190,8 @@ function UserPanel({ isFollowing, setIsFollowing, username, avatar, verified, wa
     );
 }
 
-export default UserPanel;
+const mapStateToProps = ({ user }) => {
+    const { user_info } = user;
+    return { user_info }
+};
+export default connect(mapStateToProps)(UserPanel);

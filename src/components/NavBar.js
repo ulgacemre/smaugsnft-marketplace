@@ -18,7 +18,12 @@ const NavBar = function (props) {
     const elementButton = useRef(null);
 
 
-    const { connected, headerDiscoverRef } = useWeb3();
+    const { connected, headerDiscoverRef, handleConnect } = useWeb3();
+
+    const setConnect = () => {
+        localStorage.clear();
+        handleConnect();
+    };
 
 
 
@@ -71,13 +76,13 @@ const NavBar = function (props) {
                 >
                     {!connected ? (
                         <>
-                            
-                                <div className="text-button-2 neutral-4 text-center">
-                                    <Icon icon="wallet" className="mr-2" />
-                                    <ConnectButton style={{ marginLeft: '20px' }} />
-                            
-                        </div>
-                           <Divider className="my-3" />
+
+                            <div className="text-button-2 neutral-4 text-center">
+                                <Icon icon="wallet" className="mr-2" />
+                                <span onClick={() => setConnect()}>Connect Wallet</span>
+
+                            </div>
+                            <Divider className="my-3" />
                         </>
                     ) : null}
 

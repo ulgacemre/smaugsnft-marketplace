@@ -7,9 +7,6 @@ import ItemPageSubNav from '../../components/ItemPageSubNav';
 import Divider from '../../components/Divider';
 import Popup from '../../components/Popup';
 import ModalPurchase from './ModalPurchase';
-import ModalBid from './ModalBid';
-import ModalAccept from './ModalAccept';
-import ModalSale from './ModalSale';
 import ModalTransferToken from './ModalTransferToken';
 import ModalRemoveSale from './ModalRemoveSale';
 import ModalBurnToken from './ModalBurnToken';
@@ -647,10 +644,7 @@ function Item({ type = 'purchase', user_info }) {
                 <ModalPurchase fetchNftItem={fetchNftItem} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
                 <ModalChangePrice fetchNftItem={fetchNftItem} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
                 <ModalShareLinks nft={nft} show={modalShareLinks} onClose={() => setModalShareLinks(false)} />
-                <ModalBid show={modalBidShow} onClose={() => setModalBidShow(false)} />
                 <ModalPutSale nft={nft} fetchNftItem={fetchNftItem} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />
-                <ModalAccept show={modalAcceptShow} onClose={() => setModalAcceptShow(false)} />
-                <ModalSale show={modalSaleShow} onClose={() => setModalSaleShow(false)} />
                 <ModalTransferToken nft={nft} fetchNftItem={fetchNftItem} show={modalTransferTokenShow} onClose={() => setModalTransferTokenShow(false)} />
                 <ModalRemoveSale fetchNftItem={fetchNftItem} nft={nft} show={modalRemoveSaleShow} onClose={() => setModalRemoveSaleShow(false)} />
                 <ModalBurnToken fetchNftItem={fetchNftItem} nft={nft} tokenId={nft.id} show={modalBurnTokenShow} onClose={() => setModalBurnTokenShow(false)} />

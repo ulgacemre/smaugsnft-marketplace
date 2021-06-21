@@ -29,14 +29,17 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
 
             web3.eth.personal.sign('I want to change price of ' + nft.itemName, nft.walletAddress)
                 .then(() => {
+                    setSuccess(true);
+                    setLoading(false);
+                    setError(false);
+
+                    fetchNftItem(nft.id);
                 }).catch(error => {
                     console.log("error**", error);
+                    setSuccess(false);
+                    setLoading(false);
+                    setError(true);
                 });
-            setSuccess(true);
-            setLoading(false);
-            setError(false);
-
-            fetchNftItem(nft.id);
 
         }).catch((error) => {
             //console.log("ERROR ===> ", error);

@@ -24,7 +24,64 @@ function ModalBurnToken({ show, onClose, tokenId, nft, fetchNftItem }) {
     }, [nft]);
 
     const onContinue = async () => {
-        alert('multiple continue!');
+        if (burnQuantity > nft.supply) {
+            toast.error("The amount of supply you want to burn cannot be greater than your token.");
+        } else {
+            try {
+                setBurning(true);
+                const res = await multipleFunctions.multipleBurnERC1155(nft.user.walletAddress, tokenId, parseInt(burnQuantity));
+
+                if (parseInt(burnQuantity) === parseInt(nft.supply)) {
+                    axios.delete(`multiple/${nft.id}`).then(() => {
+                        if (res) {
+                            setHashAddress(res.hash);
+                            setDone(false);
+                            res.wait(res).then((response) => {
+                                //console.log(response);
+                                if (response.status == 1) {
+                                    setDone(true);
+                                    window.location.href = "/";
+                                } else {
+                                    setDone(false);
+                                }
+                            })
+                        }
+                        setBurning(false);
+                        setError(false);
+                    }).catch(error => {
+                        setError(true);
+                        setBurning(false);
+                    });
+                } else {
+                    axios.patch(`multiple/${nft.id}`, {
+                        supply: parseInt(nft.supply) - parseInt(burnQuantity)
+                    }).then(() => {
+                        if (res) {
+                            setHashAddress(res.hash);
+                            setDone(false);
+                            res.wait(res).then((response) => {
+                                //console.log(response);
+                                if (response.status == 1) {
+                                    setDone(true);
+                                    fetchNftItem(nft.id);
+                                } else {
+                                    setDone(false);
+                                }
+                            })
+                        }
+                        setBurning(false);
+                        setError(false);
+                    }).catch(error => {
+                        setError(true);
+                        setBurning(false);
+                    });
+                }
+
+            } catch (error) {
+                setError(true);
+                setBurning(false);
+            }
+        }
     }
 
 

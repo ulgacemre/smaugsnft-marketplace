@@ -24,14 +24,17 @@ function ModalPutSale({ show, onClose, nft, fetchNftItem, multiple }) {
             putSale: true
         }).then((response) => {
 
-            web3.eth.personal.sign('I want to put on sale '+ nft.itemName, nft.walletAddress)
-            .then(() => {
-            }).catch(error => {
-                console.log("error**", error);
-            });
-            setLoading(false);
-            setSuccess(true);
-            fetchNftItem(nft.id);
+            web3.eth.personal.sign('I want to put on sale ' + nft.itemName, nft.walletAddress)
+                .then(() => {
+                    setLoading(false);
+                    setSuccess(true);
+                    fetchNftItem(nft.id);
+                }).catch(error => {
+                    console.log("error**", error);
+                    setLoading(false);
+                    setError(true);
+                });
+
             //console.log("patch_result ===> ", response);
         }).catch(error => {
             //console.log("PUT_SALE_PATCH_ERROR ===> ", error);

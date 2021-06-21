@@ -21,17 +21,7 @@ function Upload({ user_info }) {
     const { connected, walletAddress } = useWeb3();
     const history = useHistory();
 
-    const renderCondition = () => {
-        if (connected) {
-            if (!user_info.displayName) {
-                return "/profile/edit";
-            } else {
-                return "/upload/single";
-            }
-        } else {
-            return "/connect";
-        }
-    };
+
     /*
     useEffect(() => {
         if (walletAddress) {
@@ -43,15 +33,26 @@ function Upload({ user_info }) {
         }
     }, [walletAddress]);
     */
-    const renderConditionMultiple = () => {
+    const comingSoon = () => {
         if (connected) {
             if (!user_info.displayName) {
-                return "/profile/edit";
+                history.push('/profile/edit')
             } else {
-                return "/upload/multiple";
+                history.push('/upload/multiple')
             }
         } else {
-            return "/connect";
+            toast.warn('Please connect your wallet!');
+        }
+    };
+    const renderCondition = () => {
+        if (connected) {
+            if (!user_info.displayName) {
+                history.push('/profile/edit')
+            } else {
+                history.push('/upload/single')
+            }
+        } else {
+            toast.warn('Please connect your wallet!');
         }
     };
 
@@ -89,39 +90,35 @@ function Upload({ user_info }) {
                     <div className="d-none d-lg-flex justify-content-center">
                         <div className="card-upload-type">
                             <img src={imgSingle} className="mb-4" />
-                            <Link href={renderCondition()}>
-                                <Button className="normal m-auto">Create Single</Button>
-                            </Link>
+
+                            <Button onClick={() => renderCondition()} className="normal m-auto">Create Single</Button>
+
                         </div>
                         <div className="card-upload-type ml-32">
                             <img src={imgMultiple} className="mb-4" />
-                            <Link href={renderConditionMultiple()}>
-                                <Button className="primary normal m-auto">Create Multiple</Button>
-                            </Link>
+                            <Button onClick={() => comingSoon()} className="primary normal m-auto">Create Multiple</Button>
                         </div>
                     </div>
                     <div className="d-block d-lg-none">
-                        <div className="list-upload-type d-flex justify-content-between align-items-center">
+                        <div onClick={() => renderCondition()} className="list-upload-type d-flex justify-content-between align-items-center">
                             <div className="d-flex align-items-center">
                                 <img src={imgSingleSmall} />
                                 <div className="text-body-2-bold">Create Single</div>
                             </div>
                             <div className="d-flex align-items-center size-40 pointer">
-                                <Link href={renderCondition()}>
-                                    <Icon icon="chevron-right" iconsize="sm" />
-                                </Link>
+
+                                <Icon icon="chevron-right" iconsize="sm" />
+
                             </div>
                         </div>
                         <Divider className="mt-32 mb-32" />
-                        <div className="list-upload-type d-flex justify-content-between align-items-center">
+                        <div onClick={() => comingSoon()} className="list-upload-type d-flex justify-content-between align-items-center">
                             <div className="d-flex align-items-center">
                                 <img src={imgMultipleSmall} />
                                 <div className="text-body-2-bold">Create Multiple</div>
                             </div>
                             <div className="d-flex align-items-center size-40 pointer">
-                                <Link href={renderConditionMultiple()}>
-                                    <Icon icon="chevron-right" iconsize="sm" />
-                                </Link>
+                                <Icon icon="chevron-right" iconsize="sm" />
                             </div>
                         </div>
                         <Divider className="mt-32" />

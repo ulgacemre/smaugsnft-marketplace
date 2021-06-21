@@ -30,7 +30,105 @@ function ModalTransferToken({ show, onClose, nft, fetchNftItem, multiple }) {
     const { walletAddress } = useWeb3();
 
     const onContinue = async () => {
-        alert('TRANSFER_FROM_FUNCTION');
+        if (multiple) {
+
+            try {
+                setLoading(true);
+                const res = await multipleFunctions.multipleTransferFromERC1155(walletAddress, address, nft.id, parseInt(transferQuantity), []);
+
+                setHashAddress(res.hash);
+
+                if (parseInt(transferQuantity) === parseInt(nft.supply)) {
+                    axios.patch(`multiple/${nft.id}`, {
+                        walletAddress: address,
+                    }).then(({ data }) => {
+                        setSuccess(true);
+                        setLoading(false);
+                        setError(false);
+
+                        console.log("token adama geçti => ", data);
+
+                        res.wait(res).then((response) => {
+                            if (response.status == 1) {
+                                setDone(true);
+
+                                fetchNftItem(nft.id);
+
+                            } else {
+                                setDone(false);
+                                setError(true);
+                            }
+                        });
+
+                    }).catch((error) => {
+                        //console.log("ERROR ===> ", error);
+                        setSuccess(false);
+                        setLoading(false);
+                        setError(true);
+                        console.log("error**", error);
+                    });
+                } else {
+                    axios.patch(`multiple/${nft.id}`, {
+                        supply: parseInt(nft.supply) - parseInt(transferQuantity)
+                    }).then(({ data }) => {
+                        console.log("senden supply düştük son durum =>", data);
+                        // TRANSFER EDİLEN KULLANICIYA EKLEME YAPILACAK //
+                        const newPayload = {
+                            categoryId: nft.categoryId,
+                            createdOn: nft.createdOn,
+                            creatorId: nft.creatorId,
+                            description: nft.description,
+                            imageUrl: nft.imageUrl,
+                            itemName: nft.itemName,
+                            property: nft.property,
+                            putSale: nft.putSale,
+                            royalties: nft.royalties,
+                            salePrice: nft.salePrice,
+                            size: nft.size,
+                            supply: parseInt(transferQuantity),
+                            walletAddress: address
+                        };
+                        axios.post("multiple", newPayload).then(({ data }) => {
+                            console.log("multiple data*** ", data);
+                            setSuccess(true);
+                            setLoading(false);
+                            setError(false);
+                            console.log("senden düştüğümüz değer kadar adama verdik => ", transferQuantity, data);
+                            res.wait(res).then((response) => {
+                                if (response.status == 1) {
+                                    setDone(true);
+
+                                    fetchNftItem(nft.id);
+
+                                } else {
+                                    setDone(false);
+                                    setError(true);
+                                }
+                            });
+                        }).catch(error => {
+                            setSuccess(false);
+                            setLoading(false);
+                            setError(true);
+                            console.log("multiple_add_error**", error);
+                        });
+
+                    }).catch((error) => {
+                        //console.log("ERROR ===> ", error);
+                        setSuccess(false);
+                        setLoading(false);
+                        setError(true);
+                        console.log("error**", error);
+                    });
+                }
+
+            } catch (error) {
+                //console.log("transferFromERC721 ===> ", error);
+                setSuccess(false);
+                setLoading(false);
+                setError(true);
+                console.log("error_contract**", error);
+            }
+        }
     }
 
     return (
