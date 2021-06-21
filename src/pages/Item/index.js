@@ -17,6 +17,7 @@ import ModalBurnToken from './ModalBurnToken';
 import ModalReport from './ModalReport';
 import { useHistory, useParams } from 'react-router-dom';
 
+import Web3 from 'web3';
 import poster from '../../assets/images/home/poster.png'
 import avatar03 from '../../assets/images/avatar/avatar03.png'
 import { dataLabels, dataInfo } from '../../FakeData/Item'
@@ -170,7 +171,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
             axios.get(`Users/${res.data.creatorId}`).then((creator) => {
                 setCreator(creator.data);
                 axios.get(`Users/${res.data.walletAddress}`).then((owner) => {
-                    axios.get(`activities?filter={"where":{"nft721Id":${res.data.id}}, "order": "id DESC"}`).then((response) => {
+                    axios.get(`activities?filter={"where":{"nft721Id":${res.data.id}}, "order": "id DESC"}`).then((activity) => {
 
                         axios.get(`NFTUsers?filter={"where": {"walletAddress": "${walletAddress}", "nft721Id": ${nft_id}}}`).then((response) => {
                             if (response.data.length > 0) {
@@ -183,7 +184,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                 user: owner.data
                             };
                             setNft(payload);
-                            setActivities(response.data);
+                            setActivities(activity.data);
                             setNftLoading(false);
                         }).catch(error => {
                             console.log("error =>", error);
@@ -453,6 +454,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
     }
     const setLike = () => {
         if (!heart) {
+            const web3 = new Web3(window.ethereum);
             axios.post('NFTLikes', {
                 walletAddress: walletAddress,
                 nft721Id: nft.id,
@@ -465,6 +467,13 @@ function Item({ type = 'purchase', multiple, user_info }) {
                 }).then((responseNext) => {
                     console.log("responseNext => ", responseNext.data);
                     setHeart(true);
+
+                   
+                    web3.eth.personal.sign('I want to like '+ nft.itemName, walletAddress)
+                        .then(() => {
+                        }).catch(error => {
+                            console.log("error**", error);
+                        });
                 }).catch(error => {
                     console.log("error => ", error);
                 });
@@ -475,10 +484,17 @@ function Item({ type = 'purchase', multiple, user_info }) {
 
             axios.get(`NFTUsers?filter={"where": {"walletAddress": "${walletAddress}", "nft721Id": ${nft_id}}}`).then((response) => {
                 if (response.data.length > 0) {
+                    const web3 = new Web3(window.ethereum);
                     axios.delete(`NFTLikes/${response.data[0].nftlikesId}`).then((likeData) => {
 
                         axios.delete(`NFTUsers/${response.data[0].id}`).then((res) => {
                             setHeart(false);
+
+                            web3.eth.personal.sign('I want to unlike '+ nft.itemName, walletAddress)
+                            .then(() => {
+                            }).catch(error => {
+                                console.log("error**", error);
+                            });
                         });
 
                     }).catch(error => {
@@ -497,7 +513,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
             <div className="ml-3" style={{ display: "flex", flexDirection: "column", }}>
                 <div className="item-normal-price" style={{ display: "flex", flexDirection: "row", marginTop: "auto", marginBottom: "auto" }}>
                     <span className="mr-12">
-                        {nft.putSale === false ? 'Sold' : `${nft.salePrice} SMG`}
+                        {nft.putSale === false ? 'Not For Sale' : `${nft.salePrice} SMG`}
                     </span>
                     <span className="neutral-4 mr-2">
                         {nft.putSale !== false ? `$ ${renderSmaugsDolar(nft.salePrice)}` : null}
@@ -609,7 +625,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                 <div className="right-panel d-flex flex-column">
                     <h3 className="mb-2"> {nft && nft.itemName} </h3>
                     <div className="d-flex align-items-center" style={{ marginBottom: '15px' }}>
-                        <Label className="green mr-2" font="text-button-1">{nft && nft.putSale === false ? 'Sold' : `${nft.salePrice} SMG`}</Label>
+                        <Label className="green mr-2" font="text-button-1">{nft && nft.putSale === false ? 'Not For Sale' : `${nft.salePrice} SMG`}</Label>
                         {nft.putSale !== false ? <Label className="gray mr-2" font="text-button-1">$ {renderSmaugsDolar(nft.salePrice)}</Label> : null}
                         <div className="text-button-1 neutral-4">
                             {nft.supply} Supply
@@ -676,7 +692,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                     Put on sale
                             </Button>
                                 <div className="text-caption neutral-4 mt-32">
-                                    You can sell this token on Crypter Marketplace
+                                  
                             </div>
                             </>
                         }

@@ -60,7 +60,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
 
                 <div className="d-flex justify-content-between align-items-center mb-12">
 
-                    <Label className="green">{data.putSale ? `${data.salePrice} SMG` : 'Sold'} </Label>
+                    <Label className="green">{data.putSale ? `${data.salePrice} SMG` : 'Not For Sale'} </Label>
                     {data.putSale ? <Label className="black neutral-2">
                         {(data.salePrice * smaugsDolar).toFixed(2)} $
                     </Label> : null}

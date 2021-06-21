@@ -119,9 +119,7 @@ const Provider = ({ children }) => {
                         setWalletAddress(newAccounts[0])
                     }
                 })
-            } else {
-                window.location.reload();
-            }
+            } 
         }
     }, [setWalletAddress, setWallet, web3Modal, setConnected])
 

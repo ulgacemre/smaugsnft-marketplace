@@ -6,19 +6,19 @@ import CardBid from '../../components/CardBid';
 import Loading from '../../components/Loading';
 import axios from '../../utils/Api';
 import imgHero from '../../assets/images/search/no-result-bg.png'
-function Created({ walletAddress, className, smaugsDolar }) {
+function Likes({ walletAddress, className, smaugsDolar }) {
 
-    const [createdItems, setCreatedItems] = useState([]);
-    const [createdItemsLoading, setCreatedItemsLoading] = useState(true);
+    const [likedItems, setLikedItems] = useState([]);
+    const [likedItemsLoading, setLikedItemsLoading] = useState(true);
 
     const fetchCreatedItems = () => {
-        axios.get(`single?filter={"where":{"creatorId":"${walletAddress}"}, "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-            setCreatedItems(data);
-            setCreatedItemsLoading(false);
+        axios.get(`NFTUsers?filter={"where":{"walletAddress": "${walletAddress}"}, "include":"single"}`).then(({ data }) => {
+            setLikedItems(data);
+            setLikedItemsLoading(false);
         }).catch((error) => {
             //console.log("FETCH_ON_SALE_ITEMS_ERROR ===> ", error)
-            setCreatedItems([]);
-            setCreatedItemsLoading(false);
+            setLikedItems([]);
+            setLikedItemsLoading(false);
         });
     };
 
@@ -30,14 +30,14 @@ function Created({ walletAddress, className, smaugsDolar }) {
         }
     }, [walletAddress]);
     const renderContent = () => {
-        if (createdItemsLoading && createdItems.length === 0) {
+        if (likedItemsLoading && likedItems.length === 0) {
             return (
                 <div className="container-fluid" style={{ width: 100 + '%' }}>
                     <div className="row">
                         <div className="col-xl-12 col-lg-12 col-md-12 col-12 mb-32">
                             <Loading
                                 position={"center"}
-                                loading={createdItemsLoading}
+                                loading={likedItemsLoading}
                                 color={"black"}
                                 size={40}
                             />
@@ -45,7 +45,7 @@ function Created({ walletAddress, className, smaugsDolar }) {
                     </div>
                 </div>
             )
-        } else if (!createdItemsLoading && createdItems.length === 0) {
+        } else if (!likedItemsLoading && likedItems.length === 0) {
             return (
                 <div className="container content text-center mt-4" style={{ display: "flex", flexDirection: "column" }}>
                 <img src={imgHero} className="w-100 mb-5" />
@@ -63,7 +63,7 @@ function Created({ walletAddress, className, smaugsDolar }) {
             return (
                 <>
                     <div className="row">
-                        {createdItems.map((item, idx) => (
+                        {likedItems.map((item, idx) => (
                             <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-32" key={idx}>
                                 <div className="profile-card-item">
                                     <CardBid smaugsDolar={smaugsDolar} data={item} />
@@ -79,4 +79,4 @@ function Created({ walletAddress, className, smaugsDolar }) {
     return <div className={className}>{renderContent()}</div>;
 }
 
-export default Created
+export default Likes

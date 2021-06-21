@@ -6,6 +6,7 @@ import Icon from '../../components/Icon';
 import Modal from '../../components/Modal'
 import useWeb3 from '../../shared/hooks/useWeb3';
 import axios from '../../utils/Api';
+import Web3 from 'web3';
 
 function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
 
@@ -21,9 +22,16 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
     }, [nft]);
 
     const onContinue = async () => {
+        const web3 = new Web3(window.ethereum);
         axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
             salePrice: parseInt(price),
         }).then(() => {
+
+            web3.eth.personal.sign('I want to change price of '+ nft.itemName, nft.walletAddress)
+            .then(() => {
+            }).catch(error => {
+                console.log("error**", error);
+            });
             setSuccess(true);
             setLoading(false);
             setError(false);

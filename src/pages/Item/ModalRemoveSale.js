@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '../../components/Buttons/Button';
 import Modal from '../../components/Modal'
 import Icon from '../../components/Icon';
-
+import Web3 from 'web3';
 import axios from '../../utils/Api';
 
 function ModalRemoveSale({ show, onClose, nft, fetchNftItem, multiple }) {
@@ -20,9 +20,16 @@ function ModalRemoveSale({ show, onClose, nft, fetchNftItem, multiple }) {
     }
 
     const onRemove = () => {
+        const web3 = new Web3(window.ethereum);
         axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
             putSale: false
         }).then((response) => {
+
+            web3.eth.personal.sign('I want to remove from sale '+ nft.itemName, nft.walletAddress)
+            .then(() => {
+            }).catch(error => {
+                console.log("error**", error);
+            });
             setLoading(false);
             setSuccess(true);
             fetchNftItem(nft.id);

@@ -98,6 +98,9 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
         newStepStatus[2] = STEP_STATUS.PROCESSING;
         setStepStatus(newStepStatus);
         // console.log("SECOND_STEP RUNNING");
+
+
+
         const web3 = new Web3(window.ethereum);
         web3.eth.personal.sign(isSingle ? 'I agree to create single NFT token.' : 'I agree to create multiple NFT token.', walletAddress)
             .then(() => {

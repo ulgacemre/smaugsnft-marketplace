@@ -20,6 +20,7 @@ import imgDefaultBg from '../../assets/images/profile/back.png'
 import OnSale from './OnSale';
 import Loading from '../../components/Loading';
 import Created from './Created';
+import Likes from './Likes';
 
 import imgHero from '../../assets/images/search/no-result-bg.png'
 import DropDown from '../../components/DropDown';
@@ -221,22 +222,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
             case "Created":
                 return <Created smaugsDolar={smaugsDolar} walletAddress={queryAddress} className="mt-5" />;
             case "Likes":
-                return (
-                    <div className="container content text-center mt-5" style={{
-                        display: "flex",
-                        flexDirection: "column"
-                    }}>
-                        <img src={imgHero} className="w-100" />
-                        <div className="content-text mx-auto">
-                            <h2>
-                                Sorry, we couldn’t find any results for this search.
-                </h2>
-                            <div className="text-caption neutral-4 mt-2">
-                                Maybe give one of these a try?
-                </div>
-                        </div>
-                    </div>
-                );
+                return <Likes smaugsDolar={smaugsDolar} walletAddress={queryAddress} className="mt-5" />;
             case "Following":
                 return <UserCollections address={userInfo.walletAddress} smaugsDolar={smaugsDolar} className="mt-5" />;
             case "Followers":

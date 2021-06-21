@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '../../components/Buttons/Button';
 import Modal from '../../components/Modal'
 import Icon from '../../components/Icon';
-
+import Web3 from 'web3';
 import axios from '../../utils/Api';
 
 function ModalPutSale({ show, onClose, nft, fetchNftItem, multiple }) {
@@ -19,9 +19,16 @@ function ModalPutSale({ show, onClose, nft, fetchNftItem, multiple }) {
     }
 
     const onPutOnSale = () => {
+        const web3 = new Web3(window.ethereum);
         axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
             putSale: true
         }).then((response) => {
+
+            web3.eth.personal.sign('I want to put on sale '+ nft.itemName, nft.walletAddress)
+            .then(() => {
+            }).catch(error => {
+                console.log("error**", error);
+            });
             setLoading(false);
             setSuccess(true);
             fetchNftItem(nft.id);
