@@ -71,12 +71,13 @@ const NavBar = function (props) {
                 >
                     {!connected ? (
                         <>
-                            <Link href="/connect" >
+                            
                                 <div className="text-button-2 neutral-4 text-center">
                                     <Icon icon="wallet" className="mr-2" />
-                            Connect Wallet
+                                    <ConnectButton style={{ marginLeft: '20px' }} />
+                            
                         </div>
-                            </Link> <Divider className="my-3" />
+                           <Divider className="my-3" />
                         </>
                     ) : null}
 

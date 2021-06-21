@@ -66,7 +66,7 @@ function Router() {
                         title="Wrong network"
                     >
                         <p className="text-center">
-                            Please change your network to Binance Smart Chain Testnet
+                            Please change your network to Binance Smart Chain Mainnet
             </p>
                     </Modal>
                 ) : (
