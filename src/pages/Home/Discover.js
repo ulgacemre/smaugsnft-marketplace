@@ -63,11 +63,14 @@ function Discover({ smaugsDolar }) {
     const [price, setPrice] = useState(500)
     const [allNfts, setAllNfts] = useState([]);
     const [nftsLoading, setNftsLoading] = useState(true);
+    const [limit, setLimit] = useState('12');
+    const [skip, setSkip] = useState('0');
+    const [paginationLoading, setPaginationLoading] = useState(false);
     // search datas
 
     const [searchCategory, setSearchCategory] = useState(-1);
 
-    
+
 
 
     useEffect(() => {
@@ -92,7 +95,7 @@ function Discover({ smaugsDolar }) {
             });
     };
     const firstFetchNfts = () => {
-        axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"skip":0,"limit":12,"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
             //console.log("NFTS ===> ", data);
@@ -101,6 +104,28 @@ function Discover({ smaugsDolar }) {
             setAllNfts([]);
             setNftsLoading(false);
         })
+    };
+
+    const paginationContinue = () => {
+        setPaginationLoading(true);
+        const newLimit = parseInt(limit) + 12;
+        const newSkip = parseInt(skip) + 12;
+
+        setLimit(`${newLimit}`)
+        setSkip(`${newSkip}`)
+
+        axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            setAllNfts(data);
+            setNftsLoading(false);
+            setPaginationLoading(false);
+            //console.log("NFTS ===> ", data);
+        }).catch((error) => {
+            //console.log("FETCH_NFTS_ERROR ===> ", error);
+            setPaginationLoading(true);
+            setAllNfts([]);
+            setNftsLoading(false);
+        })
+
     };
 
     const fetchNftsWithCategory = (category) => {
@@ -139,10 +164,10 @@ function Discover({ smaugsDolar }) {
                     <div className="content-text mx-auto">
                         <h2>
                             Sorry, we couldn’t find any results for this search.
-                </h2>
+                        </h2>
                         <div className="text-caption neutral-4 mt-2">
                             Maybe give one of these a try?
-                </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -188,24 +213,29 @@ function Discover({ smaugsDolar }) {
                     <div className="content-text mx-auto">
                         <h2>
                             Sorry, we couldn’t find any results for this search.
-                </h2>
+                        </h2>
                         <div className="text-caption neutral-4 mt-2">
                             Maybe give one of these a try?
-                </div>
+                        </div>
                     </div>
                 </div>
             );
         } else {
             return (
-                <div className="row">
-                    {allNfts.map((nft, idx) => (
-                        <div className="col-xl-3 col-4 mb-32" style={{ display: "flex" }} key={idx}>
-                            <div className="discover-card-item">
-                                <CardBid smaugsDolar={smaugsDolar} data={nft} />
+                <>
+                    <div className="row">
+                        {allNfts.map((nft, idx) => (
+                            <div className="col-xl-3 col-4 mb-32" style={{ display: "flex" }} key={idx}>
+                                <div className="discover-card-item">
+                                    <CardBid smaugsDolar={smaugsDolar} data={nft} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                    <Button onClick={() => !paginationLoading ? paginationContinue() : null} disabled={!paginationLoading ? null : 'disabled'} className="normal m-auto mt-32 d-none d-lg-block" icon="loading" iconPos="right" iconsize="xs">
+                        {paginationLoading ? null : 'Load more'}
+                    </Button>
+                </>
             )
         }
     };

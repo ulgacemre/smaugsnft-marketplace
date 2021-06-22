@@ -12,6 +12,7 @@ import ModalBid from './ModalBid';
 import ModalAccept from './ModalAccept';
 import ModalSale from './ModalSale';
 import ModalTransferToken from './ModalTransferToken';
+import ModalUnlockData from './ModalUnlockData';
 import ModalRemoveSale from './ModalRemoveSale';
 import ModalBurnToken from './ModalBurnToken';
 import ModalReport from './ModalReport';
@@ -33,6 +34,7 @@ import slugify from 'slugify';
 import ModalChangePrice from './ModalChangePrice';
 import ModalShareLinks from './ModalShareLinks';
 import addresses from '../../shared/addresses';
+import { Helmet } from "react-helmet";
 
 const infoTabs = [
     {
@@ -49,7 +51,7 @@ const infoTabs = [
 
 
 
-const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSale, onBurnToken, onReport, owner, walletAddress, nft }) => (
+const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSale, onBurnToken, onReport, owner, walletAddress, nft, onUnlockData }) => (
     <>
         {walletAddress === owner.walletAddress ? (
             <>
@@ -61,6 +63,11 @@ const PopupMenu = ({ onChangePrice, onTransferToken, onRemoveFromSale, onPutOnSa
                 <div className="item-popup-item d-flex align-items-center mb-12" onClick={onTransferToken}>
                     <Icon icon="chevron-right-square" size="sm" />
                     <div className="neutral-4 ml-2">Transfer token</div>
+                </div>
+                <Divider className="mb-3" />
+                <div className="item-popup-item d-flex align-items-center mb-12" onClick={onUnlockData}>
+                    <Icon icon="wallet" size="sm" />
+                    <div className="neutral-4 ml-2">Unlock Data</div>
                 </div>
                 <Divider className="mb-3" />
                 {nft.putSale ? <div className="item-popup-item d-flex align-items-center mb-12" onClick={onRemoveFromSale}>
@@ -93,6 +100,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
     const [heart, setHeart] = useState(false)
     const [modalPurchaseShow, setModalPurchaseShow] = useState(false)
     const [modalBidShow, setModalBidShow] = useState(false)
+    const [modalUnlockData, setModalUnlockData] = useState(false)
     const [modalAcceptShow, setModalAcceptShow] = useState(false)
     const [modalSaleShow, setModalSaleShow] = useState(false)
     const [modalTransferTokenShow, setModalTransferTokenShow] = useState(false)
@@ -188,7 +196,6 @@ function Item({ type = 'purchase', multiple, user_info }) {
                             setActivities(activity.data);
                             setNftLoading(false);
                         }).catch(error => {
-                            console.log("error =>", error);
                         });
 
                     }).catch(error => {
@@ -399,7 +406,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                             onClick={purchaseModalActive}
                         >
                             Purchase now
-                                </Button></div>
+                        </Button></div>
                     )
                 } else {
                     return null;
@@ -422,6 +429,9 @@ function Item({ type = 'purchase', multiple, user_info }) {
 
     const onPutOnSale = () => {
         setModalPutOnSale(true);
+    }
+    const onUnlockData = () => {
+        setModalUnlockData(true);
     }
     const onChangePrice = () => {
         setModalChangePrice(true);
@@ -545,6 +555,16 @@ function Item({ type = 'purchase', multiple, user_info }) {
     };
     return (
         <Layout page="item">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{nft.itemName}</title>
+                <meta property="og:title" content={nft.itemName} />
+                <meta property="og:description" content={nft.description} />
+                <meta property="og:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
+                <meta name="twitter:title" content={nft.itemName} />
+                <meta name="twitter:description" content={nft.description} />
+                <meta name="twitter:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
+            </Helmet>
             {!nftLoading ? <div className="container content d-flex justify-content-between flex-lg-row flex-column">
                 <div className="sticky-action d-xl-block d-none">
                     <Button className="large mb-3 bg-neutral-2 svg-neutral-4" icon="close" circle />
@@ -579,6 +599,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                             onBurnToken={onBurnToken}
                             onReport={onReport}
                             onPutOnSale={onPutOnSale}
+                            onUnlockData={onUnlockData}
                             nft={nft}
                             walletAddress={walletAddress}
                             owner={nft.user}
@@ -617,6 +638,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                 onBurnToken={onBurnToken}
                                 onReport={onReport}
                                 onPutOnSale={onPutOnSale}
+                                onUnlockData={onUnlockData}
                                 nft={nft}
                                 walletAddress={walletAddress}
                                 owner={nft.user}
@@ -682,7 +704,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                         onClick={() => setModalAcceptShow(true)}
                                     >
                                         Accept
-                                </Button>
+                                    </Button>
                                 </div>
                             </>
                         }
@@ -693,7 +715,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
                                     onClick={() => setModalSaleShow(true)}
                                 >
                                     Put on sale
-                            </Button>
+                                </Button>
                                 <div className="text-caption neutral-4 mt-32">
 
                                 </div>
@@ -704,6 +726,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
 
                 <ModalPurchase multiple={multiple} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} data={nft} commisionPrice={renderComissionPrice} show={modalPurchaseShow} onClose={() => setModalPurchaseShow(false)} />
                 <ModalChangePrice multiple={multiple} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} nft={nft} show={modalChangePrice} onClose={() => setModalChangePrice(false)} />
+                <ModalUnlockData fetchNftItem={fetchNftItemSingle} nft={nft} show={modalUnlockData} onClose={() => setModalUnlockData(false)} />
                 <ModalShareLinks multiple={multiple} nft={nft} show={modalShareLinks} onClose={() => setModalShareLinks(false)} />
                 <ModalBid multiple={multiple} show={modalBidShow} onClose={() => setModalBidShow(false)} />
                 <ModalPutSale multiple={multiple} nft={nft} fetchNftItem={multiple ? fetchNftItemMultiple : fetchNftItemSingle} show={modalPutOnSale} onClose={() => setModalPutOnSale(false)} />

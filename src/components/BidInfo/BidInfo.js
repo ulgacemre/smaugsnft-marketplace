@@ -3,6 +3,7 @@ import { DOWNLOAD_USERS_URL } from '../../utils/Api';
 import Button from '../Buttons/Button';
 import avatar02 from '../../assets/images/avatar/avatar02.png';
 import Link from '../Link';
+import addresses from '../../shared/addresses';
 const BidInfo = function ({ item, smaugsDolarConverted }) {
 
 
@@ -28,20 +29,20 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
     return (
         <div className="bid-container">
             <div className="section bid-info">
-                <h1>{item.itemName}</h1>
+                <h1>{item && item.user && item.itemName}</h1>
                 <div className="d-flex justify-content-between">
                     <div className="d-flex bid-info-item">
                         <img src={DOWNLOAD_USERS_URL + item.user.imageUrl} className="size-40 rounded-circle mr-2" />
                         <div>
                             <div className="text-caption-2">Owner</div>
-                            <div className="text-caption-bold">{item.user.displayName}</div>
+                            <div className="text-caption-bold">{item && item.user && item.user.displayName}</div>
                         </div>
                     </div>
                     <div className="d-flex bid-info-item">
                         <img src={avatar02} className="size-40 rounded-circle mr-2" />
                         <div>
                             <div className="text-caption-2">Instant price</div>
-                            <div className="text-caption-bold">{item.salePrice} SMG</div>
+                            <div className="text-caption-bold">{item && item.user && item.salePrice} SMG</div>
                         </div>
                     </div>
                 </div>
@@ -61,8 +62,8 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
             </div>
 
             <div className="section">
-                <Link href={`assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${item.id}`}><Button className="normal w-100 primary mb-2" >Buy Now</Button></Link>
-                <Link href={`assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${item.id}`}><Button className="normal w-100 " >View item</Button></Link>
+                <Link href={`assets/${addresses.ERC721}/${item.id}`}><Button className="normal w-100 primary mb-2" >Buy Now</Button></Link>
+                <Link href={`assets/${addresses.ERC721}/${item.id}`}><Button className="normal w-100 " >View item</Button></Link>
             </div>
         </div>
     );

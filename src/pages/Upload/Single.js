@@ -7,6 +7,7 @@ import Icon from '../../components/Icon'
 import Link from '../../components/Link'
 import FileUploader from '../../components/FileUploader'
 import Input from '../../components/Input'
+import TextArea from '../../components/Input/TextArea'
 import DropDown from '../../components/DropDown';
 import Modal from '../../components/Modal'
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -83,6 +84,8 @@ function UploadSingle({ isSingle = true, user_info }) {
     const [itemCategory, setItemCategory] = useState('');
 
     const [uploadFileTypeMp4, setUploadFileTypeMp4] = useState(false);
+
+    const [link, setLink] = useState('');
 
     const [fakePathVideo, setFakePathVideo] = useState("");
 
@@ -293,7 +296,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                 draggable: true,
                 progress: undefined,
             });
-        } else if (parseInt(itemPrice) < 100) {
+        } else if (parseInt(itemPrice) < 100 && putOnSale === true) {
             toast.warn('Max 100 SMG!');
         } else {
             setShowCreateItemModal(true);
@@ -376,7 +379,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                                         value={itemName}
                                         onChange={(name) => setItemName(name)}
                                     />
-                                    <Input
+                                    <TextArea
                                         className="mt-32"
                                         label="Description"
                                         required={true}
@@ -483,19 +486,31 @@ function UploadSingle({ isSingle = true, user_info }) {
                                     <Switch
                                         title="Unlock once purchased"
                                         description="Content will be unlocked after successful transaction"
-                                        className="mb-32 w-100"
+                                        className="w-100"
                                         value={unlockPurchase}
                                         onChange={(val) => setUnlockPurchase(val)}
                                     />
+
+                                    <br />
+
+                                    {unlockPurchase ? <Input
+                                        label="Related Link"
+                                        placeholder="Related Link"
+                                        className="mb-32"
+                                        type="text"
+                                        value={link}
+                                        onChange={(val) => setLink(val)}
+
+                                    /> : null}
 
                                     <div className="choose-collection">
                                         <div className="mb-4">
                                             <div className="text-body-2-bold" >
                                                 Choose collection
-                                    </div>
+                                            </div>
                                             <div className="text-caption-2 neutral-4 mt-1" >
                                                 Choose an exiting collection or create a new one
-                                    </div>
+                                            </div>
                                         </div>
 
                                         <Swiper
@@ -523,15 +538,15 @@ function UploadSingle({ isSingle = true, user_info }) {
                                     <div className="d-none d-lg-flex justify-content-between align-items-center">
                                         <Button className="large primary" icon="arrow-right" iconPos="right" onClick={onCreateItem} disabled={disableCreate}>
                                             Create item
-                                </Button>
+                                        </Button>
                                     </div>
                                     <div className="d-lg-none d-block">
                                         <Button className="large w-100 mb-12" onClick={onPreview}>
                                             Preview
-                                </Button>
+                                        </Button>
                                         <Button className="large primary w-100" icon="arrow-right" iconPos="right" onClick={onCreateItem} disabled={disableCreate} >
                                             Create item
-                                </Button>
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -539,7 +554,7 @@ function UploadSingle({ isSingle = true, user_info }) {
                                 <div className="preview-panel">
                                     <div className="text-body-1-bold mb-4" >
                                         Preview
-                            </div>
+                                    </div>
                                     <PreviewModalContent
                                         detectingPhoto={detectingPhoto}
                                         uploadFileTypeMp4={uploadFileTypeMp4}
@@ -604,7 +619,8 @@ function UploadSingle({ isSingle = true, user_info }) {
                                 putOnSale,
                                 instantSalePrice,
                                 unlockPurchase,
-                                itemCategory
+                                itemCategory,
+                                link
                             }}
                         />
                     </section>

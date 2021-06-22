@@ -41,23 +41,23 @@ function Home() {
                 <HomeSlider smaugsDolar={smaugsDolar} />
             </section>
 
-            {/*<section className="section bg-neutral-7">
+            <section className="section bg-neutral-7">
                 <div className="container">
                     <PopularSellers smaugsDolar={smaugsDolar} />
                 </div>
-    </section>*/}
-            {/*
-            <section className="section">
+            </section>
+
+            {/*<section className="section">
                 <div className="container">
                     <HotBid />
                 </div>
-            </section>
-            */}
-            {/*<section className="section bg-neutral-8">
+            </section> */}
+
+            <section className="section bg-neutral-8">
                 <div className="container">
                     <HotCollection smaugsDolar={smaugsDolar} />
                 </div>
-            </section> */}
+            </section>
 
             <section className="section bg-neutral-7">
                 <div className="container">

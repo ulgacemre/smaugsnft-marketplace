@@ -75,51 +75,46 @@ const Provider = ({ children }) => {
 
 
     const handleConnect = useCallback(async () => {
-        const provider = await web3Modal.connect();
-
-
-
+        const provider = await web3Modal?.connect();
         if (provider) {
-            if (provider.networkVersion === '56') {
-                const newWeb3 = new ethers.providers.Web3Provider(provider)
-                const accounts = await newWeb3.listAccounts()
+            const newWeb3 = new ethers.providers.Web3Provider(provider)
+            const accounts = await newWeb3.listAccounts()
 
-                let balance = await newWeb3.getBalance(accounts[0])
-
-
-
-                setNetworkError({
-                    loading: false,
-                    status: false
-                });
+            let balance = await newWeb3.getBalance(accounts[0])
 
 
 
-
-                setWalletBalance(ethers.utils.formatEther(balance));
-                setWalletAddress(accounts[0]);
-                setWallet(newWeb3.getSigner());
-                setConnected(true);
-
-                setConnecting(false);
-
-                const contract = SMG.connect(newWeb3.getSigner());
-                let balanceOf = (await contract.balanceOf(accounts[0]));
-
-                const unit = 8;
-                const lastBalance = ethers.utils.formatUnits(balanceOf, [unit]);
-                setSMGWalletBalance(lastBalance);
+            setNetworkError({
+                loading: false,
+                status: false
+            });
 
 
-                localStorage.setItem("wallet_connect", true);
 
 
-                provider.on('accountsChanged', (newAccounts) => {
-                    if (Array.isArray(newAccounts) && newAccounts.length) {
-                        setWalletAddress(newAccounts[0])
-                    }
-                })
-            }
+            setWalletBalance(ethers.utils.formatEther(balance));
+            setWalletAddress(accounts[0]);
+            setWallet(newWeb3.getSigner());
+            setConnected(true);
+
+            setConnecting(false);
+
+            const contract = SMG.connect(newWeb3.getSigner());
+            let balanceOf = (await contract.balanceOf(accounts[0]));
+
+            const unit = 8;
+            const lastBalance = ethers.utils.formatUnits(balanceOf, [unit]);
+            setSMGWalletBalance(lastBalance);
+
+
+            localStorage.setItem("wallet_connect", true);
+
+
+            provider.on('accountsChanged', (newAccounts) => {
+                if (Array.isArray(newAccounts) && newAccounts.length) {
+                    setWalletAddress(newAccounts[0])
+                }
+            })
         }
     }, [setWalletAddress, setWallet, web3Modal, setConnected])
 

@@ -118,8 +118,6 @@ function Profile({ user_info, getUserSingleNFTs }) {
                     setIsFollowing(false);
                 }
 
-                console.log("res => ", res);
-                console.log("data => ", data);
 
 
                 setUserInfo(data);

@@ -7,6 +7,7 @@ import '../assets/styles/_card-bid.css';
 import { DOWNLOAD_NFTS_URL, DOWNLOAD_USERS_URL } from '../utils/Api';
 
 import { connect } from "react-redux";
+import addresses from '../shared/addresses';
 
 const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
     const [heart, setHeart] = useState(false);
@@ -16,7 +17,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
     return (
         <>
             <div className="hotbid-image-container">
-                <Link href={`/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${data.id}`}>
+                <Link href={`/assets/${addresses.ERC721}/${data.id}`}>
                     {convertedImageType === 'mp4' ? <video width={100 + '%'} height={100 + '%'} autoPlay muted> <source src={DOWNLOAD_NFTS_URL + data.imageUrl} type="video/mp4"></source> </video> : <img src={DOWNLOAD_NFTS_URL + data.imageUrl} className="hotbid-item-img" />}
                     {hover &&
                         <div className="hotbid-item-hover">
@@ -43,7 +44,7 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
             <div className="hotbid-content">
                 <div className="d-flex justify-content-between align-items-center mb-12">
 
-                    <Link href={`/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/${data.id}`}>
+                    <Link href={`/assets/${addresses.ERC721}/${data.id}`}>
                         <div className="text-body-2-bold neutral-2">{data.itemName}</div>
                     </Link>
 

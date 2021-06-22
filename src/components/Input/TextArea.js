@@ -1,12 +1,13 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 
-const TextArea = function({
-    className='', 
-    value = '', 
-    label='', 
-    placeholder='', 
+const TextArea = function ({
+    className = '',
+    value = '',
+    label = '',
+    placeholder = '',
     childRef,
     onChange,
+    required
 }) {
     const inputRef = useRef(null);
 
@@ -15,17 +16,17 @@ const TextArea = function({
     }, [value])
 
     return (
-        <div className={ "input " + className } ref={childRef}>
+        <div className={"input " + className} ref={childRef}>
             {label !== '' &&
-            <div className="label">{label}</div>
+                <div className="label">{label}  {required ? <font color="red"><b>*</b></font> : null}</div>
             }
             <textarea
-                type="input" 
+                type="input"
                 ref={inputRef}
-                className="form-control w-100" 
+                className="form-control w-100"
                 placeholder={placeholder}
                 onChange={(event) => {
-                    if(onChange) onChange(event.target.value)
+                    if (onChange) onChange(event.target.value)
                 }}
             />
         </div>

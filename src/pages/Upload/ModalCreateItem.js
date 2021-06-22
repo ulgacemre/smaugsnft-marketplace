@@ -10,6 +10,7 @@ import { useContext } from 'react';
 import Context from '../../shared/context/Contracts/Context';
 import { API_URL } from '../../constants/config';
 import axios from '../../utils/Api';
+import addresses from '../../shared/addresses';
 
 function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, uploadInfo, createNFTMultiple, isSingle, createNFT }) {
     const history = useHistory();
@@ -54,7 +55,8 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
                     putSale: uploadInfo.putOnSale,
                     walletAddress: walletAddress,
                     creatorId: walletAddress,
-                    categoryId: uploadInfo.itemCategory
+                    categoryId: uploadInfo.itemCategory,
+                    unlockData: uploadInfo.link
                 },
                 imageFile: uploadInfo.uploadImageFile
             });
@@ -113,7 +115,7 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
                     let newStepStatus = [...stepStatus];
                     newStepStatus[2] = STEP_STATUS.SUCCESS;
                     setStepStatus(newStepStatus);
-                    window.location.href = `/assets/${!isSingle ? '0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f' : '0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC'}/${localStorage.getItem("3295893275832758235")}`;
+                    window.location.href = `/assets/${!isSingle ? '0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f' : addresses.ERC721 + '/' + localStorage.getItem("3295893275832758235")}`;
                 }).catch((error) => {
                     console.log("error => ", error);
                 })
@@ -132,7 +134,7 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
 
         if (isSingle) {
             try {
-                await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], `${API_URL}multiple/${localStorage.getItem("3295893275832758235")}`);
+                await mintERC721(localStorage.getItem("3295893275832758235"), [[walletAddress, 10], [walletAddress, 20]], `${API_URL} multiple / ${localStorage.getItem("3295893275832758235")} `);
                 let newStepStatus = [...stepStatus];
                 newStepStatus[1] = STEP_STATUS.SUCCESS;
                 newStepStatus[2] = STEP_STATUS.START;
@@ -146,7 +148,7 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
         } else {
             axios.get('multiple/tokenId?access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS').then(async (info) => {
                 try {
-                    await multipleFunctions.multipleMintERC1155(info.data.info, [[walletAddress, 10], [walletAddress, 20]], uploadInfo.itemSupply, `${API_URL}multiple/${info.data.info}`);
+                    await multipleFunctions.multipleMintERC1155(info.data.info, [[walletAddress, 10], [walletAddress, 20]], uploadInfo.itemSupply, `${API_URL} multiple / ${info.data.info} `);
                     let newStepStatus = [...stepStatus];
                     newStepStatus[1] = STEP_STATUS.SUCCESS;
                     newStepStatus[2] = STEP_STATUS.START;

@@ -4,61 +4,72 @@ import Button from '../../components/Buttons/Button';
 import Divider from '../../components/Divider';
 import Icon from '../../components/Icon';
 import Modal from '../../components/Modal'
+import Context from '../../shared/context/Contracts/Context';
 import useWeb3 from '../../shared/hooks/useWeb3';
 import axios from '../../utils/Api';
-import Web3 from 'web3';
+const Web3 = require('web3');
 
-function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
+function ModalUnlockData({ show, onClose, nft, fetchNftItem, multiple }) {
 
-    const [price, setPrice] = useState('');
-    const [loading, setLoading] = useState('');
+    const { multipleFunctions, transferFromERC721 } = useContext(Context);
+    const [done, setDone] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+    const [relatedLink, setRelatedLink] = useState('');
+
     useEffect(() => {
         if (nft) {
-            setPrice(nft.salePrice);
+            setRelatedLink(nft.unlockData);
         }
     }, [nft]);
 
-    const onContinue = async () => {
-        const web3 = new Web3(window.ethereum);
-        axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
-            salePrice: parseInt(price),
-        }).then(() => {
+    const web3 = new Web3(window.ethereum);
 
-            web3.eth.personal.sign('I want to change price of ' + nft.itemName, nft.walletAddress)
-                .then(() => {
-                    setSuccess(true);
+
+    const onContinue = () => {
+        setLoading(true);
+        web3.eth.personal.sign('I want to change unlock data link.', nft.walletAddress)
+            .then(() => {
+                axios.patch(`single/${nft.id}`, {
+                    unlockData: relatedLink
+                }).then((response) => {
                     setLoading(false);
                     setError(false);
+                    setSuccess(true);
                     fetchNftItem(nft.id);
-                }).catch(error => {
-                    setSuccess(false);
+                }).catch((error) => {
                     setLoading(false);
                     setError(true);
+                    setSuccess(false);
                 });
+            }).catch(error => {
+                console.log("error**", error);
+                setSuccess(false);
+                setLoading(false);
+                setError(true);
+            });
 
+    };
 
-        }).catch((error) => {
-            //console.log("ERROR ===> ", error);
-            setSuccess(false);
-            setLoading(false);
-            setError(true);
-        });
-    }
+    const myClose = () => {
+        setSuccess(false);
+        setLoading(false);
+        onClose();
+    };
 
     return (
         <Modal
             show={show}
-            onClose={onClose}
-            title="Change price"
+            onClose={myClose}
+            title="Unlock data"
             className="transfer-token-modal"
         >
             {success ? <div>
                 <h2 className="text-center mb-32">Success</h2>
                 <div className="text-center text-body-2-bold mb-32">
-                    You successfully changed price <br /> {nft.itemName} token
+                    You successfully updated unlock data link!
                 </div>
             </div> : (
                 <>
@@ -73,19 +84,16 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
                             </div>
                         </div>
                     </div> : null}
-                    <div className="text-body-2 neutral-4 mb-32">
-                        Change price token
-                    </div>
                     <div className="mb-32">
                         <div className="text-body-1-bold mb-3">
-                            Token price
+                            Related Link
                         </div>
-                        <input type="number" value={price} onChange={({ target }) => setPrice(target.value)} placeholder="Type token price" className="no-border w-100 bg-neutral-8 mb-12"></input>
+                        <input type="text" value={relatedLink} onChange={({ target }) => setRelatedLink(target.value)} placeholder="Related link" className="no-border w-100 bg-neutral-8 mb-12"></input>
                         <Divider />
                     </div>
                     <div>
                         <Button className="large primary w-100 mb-2" disabled={loading ? 'disabled' : null} onClick={onContinue}>
-                            {loading ? 'Sending...' : 'Send'}
+                            {loading ? 'Loading...' : 'Continue'}
                         </Button>
                         <Button className="large w-100" onClick={onClose}>
                             Cancel
@@ -97,4 +105,4 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
     );
 }
 
-export default ModalChangePrice;
+export default ModalUnlockData;

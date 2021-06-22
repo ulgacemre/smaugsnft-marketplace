@@ -12,7 +12,6 @@ import Activity from '../pages/Activity';
 import Search from '../pages/Search';
 import SearchNoResult from '../pages/Search/SearchNoResult';
 import Item from '../pages/Item';
-import Test from '../pages/Test';
 import useWeb3 from '../shared/hooks/useWeb3';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
@@ -22,6 +21,7 @@ import Web3 from 'web3';
 import MultipleSoon from '../pages/Upload/MultipleSoon';
 import MultipleItem from '../pages/MultipleItem';
 import Multiple from '../pages/Upload/Multiple';
+import addresses from '../shared/addresses';
 
 function Router() {
 
@@ -69,7 +69,7 @@ function Router() {
                     >
                         <p className="text-center">
                             Please change your network to Binance Smart Chain Mainnet
-            </p>
+                        </p>
                     </Modal>
                 ) : (
                     <BrowserRouter>
@@ -95,8 +95,7 @@ function Router() {
                                 <Route exact path="/profile/edit" component={EditProfile} />
                                 <Route exact path="/profile/:address" component={Profile} />
                                 <Route exact path="/activity" component={Activity} />
-                                <Route exact path="/test" component={Test} />
-                                <Route exact path="/assets/0x993342a4ee7ED09622692F7e6A7dF97c0e8D5bAC/:nft_id" render={(props) => (
+                                <Route exact path={`/assets/${addresses.ERC721}/:nft_id`} render={(props) => (
                                     <Item {...props} multiple={false} type="purchase" />
                                 )} />
                                 <Route exact path="/assets/0x39Ce7Ac544f211e89564625ff8FE0a9c62a8aD8f/:nft_id/:ownerId" render={(props) => (
