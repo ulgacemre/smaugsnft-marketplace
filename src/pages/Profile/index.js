@@ -20,6 +20,7 @@ import imgDefaultBg from '../../assets/images/profile/back.png'
 import OnSale from './OnSale';
 import Loading from '../../components/Loading';
 import Created from './Created';
+import Sold from './Sold';
 import Likes from './Likes';
 
 import imgHero from '../../assets/images/search/no-result-bg.png'
@@ -44,6 +45,9 @@ const filterType = [
     },
     {
         title: 'Created'
+    },
+    {
+        title: 'Sold'
     },
     {
         title: 'Likes'
@@ -112,7 +116,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
 
                 const res = await data.follower.find(item => item.walletAddress === walletAddress);
 
-                if(res) {
+                if (res) {
                     setIsFollowing(true);
                 } else {
                     setIsFollowing(false);
@@ -149,7 +153,7 @@ function Profile({ user_info, getUserSingleNFTs }) {
                 }
             }
         }
-        
+
 
     }, [user_info, address]);
 
@@ -219,6 +223,8 @@ function Profile({ user_info, getUserSingleNFTs }) {
                 return <Collectibles smaugsDolar={smaugsDolar} walletAddress={queryAddress} className="mt-5" />;
             case "Created":
                 return <Created smaugsDolar={smaugsDolar} walletAddress={queryAddress} className="mt-5" />;
+            case "Sold":
+                return <Sold smaugsDolar={smaugsDolar} queryAddress={queryAddress} className="mt-5" />;
             case "Likes":
                 return <Likes smaugsDolar={smaugsDolar} walletAddress={queryAddress} className="mt-5" />;
             case "Following":
@@ -242,10 +248,10 @@ function Profile({ user_info, getUserSingleNFTs }) {
                     <div className="content-text mx-auto">
                         <h2>
                             Sorry, we couldn’t find any results for this search.
-                                </h2>
+                        </h2>
                         <div className="text-caption neutral-4 mt-2">
                             Maybe give one of these a try?
-                                </div>
+                        </div>
                     </div>
                 </div>
             ) : (

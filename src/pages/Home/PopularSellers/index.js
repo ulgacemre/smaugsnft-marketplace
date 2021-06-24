@@ -53,17 +53,19 @@ function PopularSellers() {
 
     const fetchPopularUsers = () => {
         axios.get('single/popular').then((response) => {
-        axios.get(`Users?filter={"where": {"imageUrl": {"neq": "default.png"}}, "skip":0, "limit": 5}`).then(({ data }) => {
-            setPopularSellers(data);
-            setPopularSellersLoading(false);
-        }).catch(error => {
-            //console.log("FETCH_POPULAR_USERS ===> ", error);
-            setPopularSellers([]);
-            setPopularSellersLoading(false);
-        }).catch(error => {
-            console.log('error => ', error);
-        })
-    });
+            response.data.all.forEach(item => {
+                axios.get(`Users?filter={"where": {"imageUrl": {"neq": "default.png"}, "walletAddress": "${item}"}}`).then(({ data }) => {
+                    setPopularSellers(popularSellers => [...popularSellers, data[0]]);
+                    setPopularSellersLoading(false);
+                }).catch(error => {
+                    //console.log("FETCH_POPULAR_USERS ===> ", error);
+                    setPopularSellers([]);
+                    setPopularSellersLoading(false);
+                }).catch(error => {
+                    console.log('error => ', error);
+                })
+            });
+        });
     };
 
     useEffect(() => {
@@ -74,10 +76,10 @@ function PopularSellers() {
         <>
             <div className="section-topbar d-flex justify-content-between flex-column flex-lg-row align-lg-items-center">
                 <div>
-                  
+
                     <h3>
-                    Popular Sellers
-                       
+                        Popular Sellers
+
                     </h3>
                 </div>
                 <div className="pt-32"></div>

@@ -14,6 +14,7 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
     const [loading, setLoading] = useState('');
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const { walletAddress } = useWeb3();
 
     useEffect(() => {
         if (nft) {
@@ -23,29 +24,36 @@ function ModalChangePrice({ show, onClose, nft, fetchNftItem, multiple }) {
 
     const onContinue = async () => {
         const web3 = new Web3(window.ethereum);
-        axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
-            salePrice: parseInt(price),
-        }).then(() => {
+        web3.eth.personal.sign('I want to change price of ' + nft.itemName, nft.walletAddress)
+            .then(() => {
 
-            web3.eth.personal.sign('I want to change price of ' + nft.itemName, nft.walletAddress)
-                .then(() => {
-                    setSuccess(true);
-                    setLoading(false);
-                    setError(false);
-                    fetchNftItem(nft.id);
+                axios.patch(`${multiple ? 'multiple' : 'single'}/${nft.id}`, {
+                    salePrice: parseInt(price),
+                }).then(() => {
+                    axios.post('activities', {
+                        action: `Price changed to ${price} by ${walletAddress}`,
+                        walletAddress: walletAddress,
+                        nft721Id: nft.id
+                    }).then(() => {
+                        setSuccess(true);
+                        setLoading(false);
+                        setError(false);
+                        fetchNftItem(nft.id);
+                    }).catch((error) => {
+                        console.log("error => ", error);
+                    });
                 }).catch(error => {
                     setSuccess(false);
                     setLoading(false);
                     setError(true);
                 });
 
-
-        }).catch((error) => {
-            //console.log("ERROR ===> ", error);
-            setSuccess(false);
-            setLoading(false);
-            setError(true);
-        });
+            }).catch((error) => {
+                //console.log("ERROR ===> ", error);
+                setSuccess(false);
+                setLoading(false);
+                setError(true);
+            });
     }
 
     return (

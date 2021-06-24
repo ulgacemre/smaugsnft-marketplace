@@ -25,11 +25,11 @@ const CardBid = function ({ data, hover = true, user_info, smaugsDolar }) {
                                 <div>
                                     {/* <Label className="green" fill>Purchasing !</Label> */}
                                 </div>
-                                <Button className="size-32 rounded-circle bg-neutral-8 border-0"
+                                {/*                                <Button className="size-32 rounded-circle bg-neutral-8 border-0"
                                     onClick={() => setHeart(!heart)}
                                 >
                                     <Icon icon={heart ? "heart-fill" : "heart"} className={heart ? "svg-primary-3" : ""} />
-                                </Button>
+                                </Button> */}
                             </div>
                             <Button
                                 className="primary normal mb-3"

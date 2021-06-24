@@ -56,7 +56,6 @@ function UserPanel({ user_info, isFollowing, setIsFollowing, username, avatar, v
         }).then((response) => {
             setSendFollowing(false);
             setIsFollowing(!isFollowing);
-            console.log("FollowingUsers Post Result => ", response.data);
         }).catch(error => {
             toast.error('Something went error!');
             setSendFollowing(false);
@@ -148,7 +147,7 @@ function UserPanel({ user_info, isFollowing, setIsFollowing, username, avatar, v
                 </div>
                 {website ? <div className="text-button-2 d-flex align-items-center justify-content-center">
                     <Icon icon="globe" size="xs" className="mr-2" />
-                    <a href={website} target="_blank" className="text-decoration-none neutral-2" >{website}</a>
+                    <a href={website} target="_blank" className="text-decoration-none neutral-2" >{website.slice(0, 30) + '...'}</a>
                 </div> : null}
             </div>
             <div className="action d-flex justify-content-center mb-5">

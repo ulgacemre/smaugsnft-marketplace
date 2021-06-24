@@ -34,11 +34,17 @@ function Search() {
 
 
     // search states start
+    const [paginationLoading, setPaginationLoading] = useState(false);
     const [allNfts, setAllNfts] = useState([]);
     const [nftsLoading, setNftsLoading] = useState(true);
     const [categoriesData, setCategoriesData] = useState([]);
     const [searchCategoryId, setSearchCategoryId] = useState('');
     const [filterType, setFilterType] = useState('');
+
+    const [limit, setLimit] = useState('12');
+    const [skip, setSkip] = useState('0');
+    const [category, setCategory] = useState(null);
+    const [filter, setFilter] = useState(null);
     // search states end
 
     // single search start
@@ -61,6 +67,79 @@ function Search() {
             });
     };
 
+    const paginationContinue = () => {
+        setPaginationLoading(true);
+        const newLimit = parseInt(limit) + 12;
+        const newSkip = parseInt(skip) + 12;
+
+        setLimit(`${newLimit}`)
+        setSkip(`${newSkip}`)
+
+        if (category && category === 0) {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+                setPaginationLoading(false);
+                //console.log("NFTS ===> ", data);
+            }).catch((error) => {
+                //console.log("FETCH_NFTS_ERROR ===> ", error);
+                setPaginationLoading(true);
+                setAllNfts([]);
+                setNftsLoading(false);
+            });
+        } else if (filter) {
+            if (filter === "Highest price") {
+                axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else if (filter === "Lowest price") {
+                axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else if (filter === "Not for sale") {
+                axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                    setNftsLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else {
+                firstFetchNfts();
+            }
+        } else {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+                setPaginationLoading(false);
+                //console.log("NFTS ===> ", data);
+            }).catch((error) => {
+                //console.log("FETCH_NFTS_ERROR ===> ", error);
+                setPaginationLoading(true);
+                setAllNfts([]);
+                setNftsLoading(false);
+            });
+        }
+
+    };
+
     useEffect(() => {
         getSmaugsApiDolar();
     }, []);
@@ -68,7 +147,7 @@ function Search() {
 
     const firstFetchNfts = () => {
         setNftsLoading(true);
-        axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
             //console.log("NFTS ===> ", data);
@@ -81,11 +160,12 @@ function Search() {
 
     const fetchNftsWithCategory = (category) => {
         setNftsLoading(true);
+        setCategory(category);
         if (category === 0) {
             firstFetchNfts();
         } else {
             setNftsLoading(true);
-            axios.get(`single?filter={"where": {"categoryId": ${category.id}}, "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"where": {"categoryId": ${category.id}}, "include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
@@ -128,6 +208,7 @@ function Search() {
     const handleFilterHighestLowest = ({ title }) => {
         setFilterType(title);
         setNftsLoading(true);
+        setFilter(title);
         if (title === "Highest price") {
             axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user" }`).then(({ data }) => {
                 setAllNfts(data);
@@ -166,10 +247,10 @@ function Search() {
                     <div className="content-text mx-auto">
                         <h2>
                             Sorry, we couldn’t find any results for this search.
-                </h2>
+                        </h2>
                         <div className="text-caption neutral-4 mt-2">
                             Maybe give one of these a try?
-                </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -221,7 +302,7 @@ function Search() {
                        <Divider className="d-none d-lg-block mt-32 mb-5" />
                  */}
 
-         
+
 
                 <div className="row">
                     <div className="col-xl-3 col-lg-4 col-12 mb-32">
@@ -292,6 +373,9 @@ function Search() {
                     </div>
                     <div className="col-xl-9 col-lg-8 col-12">
                         {renderContent()}
+                        <Button onClick={() => !paginationLoading ? paginationContinue() : null} disabled={!paginationLoading ? null : 'disabled'} className="normal m-auto mt-32 d-none d-lg-block" icon="loading" iconPos="right" iconsize="xs">
+                            {paginationLoading ? null : 'Load more'}
+                        </Button>
                     </div>
                 </div>
             </div>

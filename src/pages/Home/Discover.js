@@ -70,6 +70,9 @@ function Discover({ smaugsDolar }) {
 
     const [searchCategory, setSearchCategory] = useState(-1);
 
+    const [category, setCategory] = useState(null);
+    const [filter, setFilter] = useState(null);
+
 
 
 
@@ -114,26 +117,79 @@ function Discover({ smaugsDolar }) {
         setLimit(`${newLimit}`)
         setSkip(`${newSkip}`)
 
-        axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-            setAllNfts(data);
-            setNftsLoading(false);
-            setPaginationLoading(false);
-            //console.log("NFTS ===> ", data);
-        }).catch((error) => {
-            //console.log("FETCH_NFTS_ERROR ===> ", error);
-            setPaginationLoading(true);
-            setAllNfts([]);
-            setNftsLoading(false);
-        })
+        if (category && category === 0) {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+                setPaginationLoading(false);
+                //console.log("NFTS ===> ", data);
+            }).catch((error) => {
+                //console.log("FETCH_NFTS_ERROR ===> ", error);
+                setPaginationLoading(true);
+                setAllNfts([]);
+                setNftsLoading(false);
+            });
+        } else if (filter) {
+            if (filter === "Highest price") {
+                axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else if (filter === "Lowest price") {
+                axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else if (filter === "Not for sale") {
+                axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
+                    setAllNfts(data);
+                    setNftsLoading(false);
+                    setPaginationLoading(false);
+                    setNftsLoading(false);
+                }).catch((error) => {
+                    setAllNfts([]);
+                    setNftsLoading(false);
+                    //console.log("FILTER_ERROR ===> ", error);
+                })
+            } else {
+                firstFetchNfts();
+            }
+        } else {
+            axios.get(`single?filter={"where": {"categoryId": ${category}},"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+                setPaginationLoading(false);
+                //console.log("NFTS ===> ", data);
+            }).catch((error) => {
+                //console.log("FETCH_NFTS_ERROR ===> ", error);
+                setPaginationLoading(true);
+                setAllNfts([]);
+                setNftsLoading(false);
+            });
+        }
 
     };
 
     const fetchNftsWithCategory = (category) => {
         setNftsLoading(true);
+        setCategory(category);
+        setFilter(null);
         if (category === 0) {
             firstFetchNfts();
         } else {
-            axios.get(`single?filter={"where": {"categoryId": ${category.id}},"order": "id DESC", "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"where": {"categoryId": ${category.id}},"order": "id DESC", "include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
@@ -241,8 +297,10 @@ function Discover({ smaugsDolar }) {
     };
     const handleFilterHighestLowest = ({ title }) => {
         setNftsLoading(true);
+        setFilter(title);
+        setCategory(null);
         if (title === "Highest price") {
-            axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user" }`).then(({ data }) => {
+            axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
@@ -251,7 +309,7 @@ function Discover({ smaugsDolar }) {
                 //console.log("FILTER_ERROR ===> ", error);
             })
         } else if (title === "Lowest price") {
-            axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user" }`).then(({ data }) => {
+            axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
@@ -260,7 +318,7 @@ function Discover({ smaugsDolar }) {
                 //console.log("FILTER_ERROR ===> ", error);
             })
         } else if (title === "Not for sale") {
-            axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user" }`).then(({ data }) => {
+            axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {
