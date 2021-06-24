@@ -3,7 +3,7 @@ import Button from '../../components/Buttons/Button';
 import Divider from '../../components/Divider';
 import { Swiper, SwiperSlide } from "swiper/react";
 import Icon from '../../components/Icon';
-
+import Web3 from 'web3';
 import { dataFollowers } from '../../FakeData/Profile'
 
 import axios, { DOWNLOAD_USERS_URL } from '../../utils/Api';
@@ -17,13 +17,21 @@ const FollowingItem = ({ data, idx, walletAddress, address, changeFollowingsData
 
     const follow = () => {
         setFollowingPayload(true);
+        const web3 = new Web3(window.ethereum);
         axios.post('Followerusers', {
             followeeId: data.walletAddress,
             followerId: walletAddress
         }).then((response) => {
-            setFollowingPayload(false);
-            setFollowing(!following);
-            console.log("FollowingUsers Post Result => ", response.data);
+  
+            web3.eth.personal.sign('I want to follow '+ data.walletAddress, walletAddress)
+            .then(() => {
+                setFollowingPayload(false);
+                setFollowing(!following);
+    
+            }).catch(error => {
+                console.log("error**", error);
+            });
+          
         }).catch(error => {
             toast.error('Something went error!');
             setFollowingPayload(false);
@@ -32,12 +40,20 @@ const FollowingItem = ({ data, idx, walletAddress, address, changeFollowingsData
     };
     const unFollow = () => {
         setFollowingPayload(true);
+        const web3 = new Web3(window.ethereum);
         axios.delete(`Users/${address}/follower/rel/${data.walletAddress}`).then((response) => {
-            setFollowingPayload(false);
-            setFollowing(!following);
-            var allFollowingsData = followingsData;
-            allFollowingsData = allFollowingsData.splice(1, idx);
-            changeFollowingsData(allFollowingsData);
+
+            web3.eth.personal.sign('I want to unfollow '+ data.walletAddress, walletAddress)
+            .then(() => {
+                setFollowingPayload(false);
+                setFollowing(!following);
+                var allFollowingsData = followingsData;
+                allFollowingsData = allFollowingsData.splice(1, idx);
+                changeFollowingsData(allFollowingsData);
+            }).catch(error => {
+                console.log("error**", error);
+            });
+  
             console.log("FollowingUsers Post Result => ", response.data);
         }).catch(error => {
             toast.error('Something went error!');

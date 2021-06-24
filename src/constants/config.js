@@ -1,5 +1,5 @@
 const API_URL = "https://smaugsapi.smaugs.com:3000/api/";
-const CLIENT_URL = "http://localhost:3000/";
+const CLIENT_URL = "https://nft.smaugs.com/";
 
 export {
     API_URL,

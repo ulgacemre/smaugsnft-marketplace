@@ -95,7 +95,7 @@ function Discover({ smaugsDolar }) {
             });
     };
     const firstFetchNfts = () => {
-        axios.get(`single?filter={"skip":0,"limit":12,"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"skip":0,"limit":12,"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
             //console.log("NFTS ===> ", data);
@@ -114,7 +114,7 @@ function Discover({ smaugsDolar }) {
         setLimit(`${newLimit}`)
         setSkip(`${newSkip}`)
 
-        axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
             setPaginationLoading(false);
@@ -133,7 +133,7 @@ function Discover({ smaugsDolar }) {
         if (category === 0) {
             firstFetchNfts();
         } else {
-            axios.get(`single?filter={"where": {"categoryId": ${category.id}}, "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"where": {"categoryId": ${category.id}},"order": "id DESC", "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {

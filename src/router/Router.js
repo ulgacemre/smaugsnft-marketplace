@@ -61,17 +61,6 @@ function Router() {
                     <Loading loading={loading} size={55} color="black" position="center" />
                 </div>
             ) : (
-                error === "true" ? (
-                    <Modal
-                        show={error === "true" ? true : false}
-                        closeBtn={false}
-                        title="Wrong network"
-                    >
-                        <p className="text-center">
-                            Please change your network to Binance Smart Chain Mainnet
-                        </p>
-                    </Modal>
-                ) : (
                     <BrowserRouter>
                         <Fragment>
                             <Switch>
@@ -86,7 +75,7 @@ function Router() {
                                 {/*<Route exact path="/upload/multiple" render={(props) => (
                                     <UploadMultiple {...props} isSingle={false} />
                                 )} />*/}
-                                <Route exact path="/upload/multiple" component={Multiple} />
+                                <Route exact path="/upload/multiple" component={MultipleSoon} />
                                 <Route exact path="/upload" component={Upload} />
 
                                 <Route exact path="/search" component={Search} />
@@ -112,7 +101,7 @@ function Router() {
                         </Fragment>
                     </BrowserRouter>
                 )
-            )}
+            }
 
         </>
     );

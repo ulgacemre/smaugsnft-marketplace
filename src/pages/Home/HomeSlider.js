@@ -61,7 +61,7 @@ function HomeSlider() {
                     <div className="video-player-container">
                         {convertedImageType === 'mp4' ? <video width={100 + '%'} height={600} controls muted autoPlay>
                             <source src={DOWNLOAD_NFTS_URL + nfts.imageUrl} type="video/mp4"></source>
-                        </video> : <img src={DOWNLOAD_NFTS_URL + nfts && nfts.imageUrl} style={{ objectFit: "contain", maxHeight: 700, borderRadius: 30, }} className="w-100" />}
+                        </video> : <img src={DOWNLOAD_NFTS_URL + nfts.imageUrl} style={{ objectFit: "contain", maxHeight: 700, borderRadius: 30, }} className="w-100" />}
                     </div>
                     <BidInfoSlider smaugsDolarConverted={convertedSmaugsDolar} item={nfts} />
                 </>

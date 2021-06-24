@@ -31,6 +31,7 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
             <div className="section bid-info">
                 <h1>{item && item.user && item.itemName}</h1>
                 <div className="d-flex justify-content-between">
+                <Link href={`/profile/${item.user.walletAddress}`}>
                     <div className="d-flex bid-info-item">
                         <img src={DOWNLOAD_USERS_URL + item.user.imageUrl} className="size-40 rounded-circle mr-2" />
                         <div>
@@ -38,6 +39,7 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
                             <div className="text-caption-bold">{item && item.user && item.user.displayName}</div>
                         </div>
                     </div>
+                    </Link>
                     <div className="d-flex bid-info-item">
                         <img src={avatar02} className="size-40 rounded-circle mr-2" />
                         <div>

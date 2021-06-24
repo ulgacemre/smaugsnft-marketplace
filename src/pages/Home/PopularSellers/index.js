@@ -52,6 +52,7 @@ function PopularSellers() {
     const [popularSellersLoading, setPopularSellersLoading] = useState(true);
 
     const fetchPopularUsers = () => {
+        axios.get('single/popular').then((response) => {
         axios.get(`Users?filter={"where": {"imageUrl": {"neq": "default.png"}}, "skip":0, "limit": 5}`).then(({ data }) => {
             setPopularSellers(data);
             setPopularSellersLoading(false);
@@ -59,7 +60,10 @@ function PopularSellers() {
             //console.log("FETCH_POPULAR_USERS ===> ", error);
             setPopularSellers([]);
             setPopularSellersLoading(false);
+        }).catch(error => {
+            console.log('error => ', error);
         })
+    });
     };
 
     useEffect(() => {

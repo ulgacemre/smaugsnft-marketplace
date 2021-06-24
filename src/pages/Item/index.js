@@ -555,16 +555,7 @@ function Item({ type = 'purchase', multiple, user_info }) {
     };
     return (
         <Layout page="item">
-            <Helmet>
-                <meta charSet="utf-8" />
-                <title>{nft.itemName}</title>
-                <meta property="og:title" content={nft.itemName} />
-                <meta property="og:description" content={nft.description} />
-                <meta property="og:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
-                <meta name="twitter:title" content={nft.itemName} />
-                <meta name="twitter:description" content={nft.description} />
-                <meta name="twitter:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
-            </Helmet>
+      
             {!nftLoading ? <div className="container content d-flex justify-content-between flex-lg-row flex-column">
                 <div className="sticky-action d-xl-block d-none">
                     <Button className="large mb-3 bg-neutral-2 svg-neutral-4" icon="close" circle />
@@ -583,6 +574,17 @@ function Item({ type = 'purchase', multiple, user_info }) {
                         onClick={() => setPopupShow(true)}
                         circle
                     />
+
+<Helmet>
+                <meta charSet="utf-8" />
+                <title>{nft.itemName}</title>
+                <meta property="og:title" content={nft.itemName} />
+                <meta property="og:description" content={nft.description} />
+                <meta property="og:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
+                <meta name="twitter:title" content={nft.itemName} />
+                <meta name="twitter:description" content={nft.description} />
+                <meta name="twitter:image" content={DOWNLOAD_NFTS_URL + nft.imageUrl} />
+            </Helmet>
 
 
                     <Popup
