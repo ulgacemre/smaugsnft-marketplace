@@ -28,20 +28,29 @@ const BidInfo = function ({ item, smaugsDolar }) {
                         </div>
                     </div>
     */
+    const renderDescription = () => {
+        if (item.description.length > 192) {
+            return (
+                <span>{item.description.slice(0, 192) + '...'} <Link href={`assets/${addresses.ERC721}/${item.id}`}> Read More </Link></span>
+            )
+        } else {
+            return item.description;
+        }
+    }
 
     return (
         <div className="bid-container">
             <div className="section bid-info">
                 <h1>{item && item.user && item.itemName}</h1>
                 <div className="d-flex justify-content-between">
-                <Link href={`/profile/${item.user.walletAddress}`}>
-                    <div className="d-flex bid-info-item">
-                        <img src={DOWNLOAD_USERS_URL + item.user.imageUrl} className="size-40 rounded-circle mr-2" />
-                        <div>
-                            <div className="text-caption-2">Owner</div>
-                            <div className="text-caption-bold">{item && item.user && item.user.displayName}</div>
+                    <Link href={`/profile/${item.user.walletAddress}`}>
+                        <div className="d-flex bid-info-item">
+                            <img src={DOWNLOAD_USERS_URL + item.user.imageUrl} className="size-40 rounded-circle mr-2" />
+                            <div>
+                                <div className="text-caption-2">Owner</div>
+                                <div className="text-caption-bold">{item && item.user && item.user.displayName}</div>
+                            </div>
                         </div>
-                    </div>
                     </Link>
                     <div className="d-flex bid-info-item">
                         <img src={avatar02} className="size-40 rounded-circle mr-2" />
@@ -61,7 +70,8 @@ const BidInfo = function ({ item, smaugsDolar }) {
                 </div>
                 <div>
                     <p className="text-center neutral-2">
-                        {item.description}
+
+                        {renderDescription()}
                     </p>
                 </div>
             </div>
