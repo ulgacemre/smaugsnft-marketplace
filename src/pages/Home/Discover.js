@@ -166,8 +166,20 @@ function Discover({ smaugsDolar }) {
             } else {
                 firstFetchNfts();
             }
-        } else {
+        } else if (category && category !== 0) {
             axios.get(`single?filter={"where": {"categoryId": ${category}},"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+                setAllNfts(data);
+                setNftsLoading(false);
+                setPaginationLoading(false);
+                //console.log("NFTS ===> ", data);
+            }).catch((error) => {
+                //console.log("FETCH_NFTS_ERROR ===> ", error);
+                setPaginationLoading(true);
+                setAllNfts([]);
+                setNftsLoading(false);
+            });
+        } else {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
                 setPaginationLoading(false);

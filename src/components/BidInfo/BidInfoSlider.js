@@ -18,7 +18,7 @@ const mainSlideOptions = {
     noSwiping: true
 };
 
-const BidInfoSlider = function ({ item, smaugsDolarConverted }) {
+const BidInfoSlider = function ({ items, smaugsDolar, setIndex, index }) {
     /*
     //////////////////////   SLIDER //////////////////////
         <Swiper {...mainSlideOptions}>
@@ -40,7 +40,22 @@ const BidInfoSlider = function ({ item, smaugsDolarConverted }) {
     */
     return (
         <div className="bidinfo-slider">
-            <BidInfo smaugsDolarConverted={smaugsDolarConverted} item={item} />
+            <Swiper {...mainSlideOptions}>
+                {items.map((item, idx) => (
+                    <SwiperSlide key={idx}>
+                        <BidInfo smaugsDolar={smaugsDolar} item={item} />
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+            <div className="d-flex justify-content-lg-start justify-content-center">
+                <div onClick={() => index === 0 ? setIndex(0) : setIndex(index - 1)} className="bidinfo-button-prev button nav-button size-40 mr-2 rounded-circle">
+                    <Icon icon="arrow-left" size="sm" />
+                </div>
+                <div onClick={() => index === 2 ? setIndex(2) : setIndex(index + 1)} className="bidinfo-button-next button nav-button size-40 rounded-circle">
+                    <Icon icon="arrow-right" size="sm" />
+                </div>
+            </div>
+
         </div>
     );
 }

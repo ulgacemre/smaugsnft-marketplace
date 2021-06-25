@@ -23,7 +23,6 @@ const FollowingItem = ({ data, idx, walletAddress, address, followingsData }) =>
         }).then((response) => {
             setFollowingPayload(false);
             setFollowing(!following);
-            console.log("FollowingUsers Post Result => ", response.data);
         }).catch(error => {
             toast.error('Something went error!');
             setFollowingPayload(false);
@@ -35,7 +34,6 @@ const FollowingItem = ({ data, idx, walletAddress, address, followingsData }) =>
         axios.delete(`Users/${address}/follower/rel/${data.walletAddress}`).then((response) => {
             setFollowingPayload(false);
             setFollowing(!following);
-            console.log("FollowingUsers Post Result => ", response.data);
         }).catch(error => {
             toast.error('Something went error!');
             setFollowingPayload(false);

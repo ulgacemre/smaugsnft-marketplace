@@ -54,7 +54,6 @@ const FollowingItem = ({ data, idx, walletAddress, address, changeFollowingsData
                 console.log("error**", error);
             });
   
-            console.log("FollowingUsers Post Result => ", response.data);
         }).catch(error => {
             toast.error('Something went error!');
             setFollowingPayload(false);

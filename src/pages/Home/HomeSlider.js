@@ -6,31 +6,33 @@ import Loading from '../../components/Loading';
 import axios, { DOWNLOAD_NFTS_URL } from '../../utils/Api';
 import axiosOther from 'axios';
 function HomeSlider() {
-    const [nfts, setNfts] = useState(null);
+    const [nfts, setNfts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [smaugsDolar, setSmaugsDolar] = useState('');
     const [smaugsDolarLoading, setSmaugsDolarLoading] = useState('');
     const [convertedImageType, setConvertedImageType] = useState('');
+    const [index, setIndex] = useState(0);
     const fetchNfts = () => {
         axios.get('single/banner').then((response) => {
-            axios.get(`single/${response.data.all}?filter={"include": {"relation": "user"}}`).then(({ data }) => {
-                if (data && data.id) {
-                    setNfts(data);
+            response.data.all.forEach(element => {
+                axios.get(`single/${element}?filter={"include": {"relation": "user"}}`).then(({ data }) => {
+                    if (data && data.id) {
+                        setNfts(nfts => [...nfts, data]);
+                        setLoading(false);
+                        const convertedImageRegex = (/[.]/.exec(data.imageUrl)) ? /[^.]+$/.exec(data.imageUrl) : undefined;
+                        setConvertedImageType(convertedImageRegex[0]);
+                        //console.log("HOME_SLIDER_NFTS ===>", data);
+                    }
+                }).catch(error => {
+                    console.log("HOME_SLIDER_FETCH_NFTS ===> ", error);
+                    setNfts([]);
                     setLoading(false);
-                    const convertedImageRegex = (/[.]/.exec(data.imageUrl)) ? /[^.]+$/.exec(data.imageUrl) : undefined;
-                    setConvertedImageType(convertedImageRegex[0]);
-                    //console.log("HOME_SLIDER_NFTS ===>", data);
-                    getSmaugsApiDolar();
-                }
-            }).catch(error => {
-                console.log("HOME_SLIDER_FETCH_NFTS ===> ", error);
-                setNfts(null);
-                setLoading(false);
-            })
+                })
+            });
+            getSmaugsApiDolar();
         }).catch(error => {
             console.log('error => ', error);
         })
-
     };
     const getSmaugsApiDolar = async () => {
         const { data } = await axiosOther.get("https://api.coingecko.com/api/v3/simple/price?ids=smaugs-nft&vs_currencies=usd");
@@ -40,10 +42,7 @@ function HomeSlider() {
         }
     };
 
-    const convertedSmaugsDolar = () => {
-        let result = nfts.salePrice * smaugsDolar;
-        return result.toFixed(2);
-    };
+    
 
 
 
@@ -60,10 +59,10 @@ function HomeSlider() {
                 <>
                     <div className="video-player-container">
                         {convertedImageType === 'mp4' ? <video width={100 + '%'} height={600} controls muted autoPlay>
-                            <source src={DOWNLOAD_NFTS_URL + nfts.imageUrl} type="video/mp4"></source>
-                        </video> : <img src={DOWNLOAD_NFTS_URL + nfts.imageUrl} style={{ objectFit: "contain", maxHeight: 700, borderRadius: 30, }} className="w-100" />}
+                            <source src={DOWNLOAD_NFTS_URL + nfts[index].imageUrl} type="video/mp4"></source>
+                        </video> : <img src={DOWNLOAD_NFTS_URL + nfts[index].imageUrl} style={{ objectFit: "contain", maxHeight: 700, borderRadius: 30, }} className="w-100" />}
                     </div>
-                    <BidInfoSlider smaugsDolarConverted={convertedSmaugsDolar} item={nfts} />
+                    <BidInfoSlider index={index} setIndex={setIndex} smaugsDolar={smaugsDolar} items={nfts} />
                 </>
             )
         }

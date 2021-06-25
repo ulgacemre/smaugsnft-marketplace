@@ -4,9 +4,12 @@ import Button from '../Buttons/Button';
 import avatar02 from '../../assets/images/avatar/avatar02.png';
 import Link from '../Link';
 import addresses from '../../shared/addresses';
-const BidInfo = function ({ item, smaugsDolarConverted }) {
+const BidInfo = function ({ item, smaugsDolar }) {
 
-
+    const convertedSmaugsDolar = () => {
+        let result = item.salePrice * smaugsDolar;
+        return result.toFixed(2);
+    };
     ////////////////// AUCTION ENDING IN SECTION ////////////////////
     /*
                 <div className="text-body-2-bold mb-2">Auction ending in</div>
@@ -54,7 +57,7 @@ const BidInfo = function ({ item, smaugsDolarConverted }) {
                 <div className="mb-4">
                     <div className="text-body-2-bold">Price</div>
                     <h2 className="neutral-1">{item.salePrice} SMG</h2>
-                    <div className="text-body-1-bold neutral-4">${smaugsDolarConverted()}</div>
+                    <div className="text-body-1-bold neutral-4">${convertedSmaugsDolar()}</div>
                 </div>
                 <div>
                     <p className="text-center neutral-2">
