@@ -22,6 +22,7 @@ import MultipleSoon from '../pages/Upload/MultipleSoon';
 import MultipleItem from '../pages/MultipleItem';
 import Multiple from '../pages/Upload/Multiple';
 import addresses from '../shared/addresses';
+import AddCollection from '../pages/AddCollection';
 
 function Router() {
 
@@ -71,6 +72,7 @@ function Router() {
                                 <Route exact path="/upload/single" render={(props) => (
                                     <UploadSingle {...props} isSingle={true} />
                                 )} />
+                                <Route exact path="/add-collection" component={AddCollection} />
 
                                 {/*<Route exact path="/upload/multiple" render={(props) => (
                                     <UploadMultiple {...props} isSingle={false} />

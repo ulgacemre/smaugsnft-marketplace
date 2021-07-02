@@ -11,8 +11,14 @@ const Provider = ({ children }) => {
   const [ERC721, setERC721] = useState(
     new Contract(addresses.ERC721, abis.ERC721)
   )
+  const [SMAUGSBUY, setSMAUGSBUY] = useState(
+    new Contract(addresses.SMAUGSBUY, abis.SMAUGSBUY)
+  )
   const [ERC1155, setERC1155] = useState(
     new Contract(addresses.ERC1155, abis.ERC1155)
+  )
+  const [SMG, setSMG] = useState(
+    new Contract(addresses.SMG, abis.SMG)
   )
   const { wallet, walletAddress } = useWeb3()
 
@@ -27,10 +33,40 @@ const Provider = ({ children }) => {
     }
   }, [wallet, setERC721, ERC721])
   useEffect(() => {
+    if (!!wallet && !SMAUGSBUY.signer) {
+      setSMAUGSBUY(SMAUGSBUY.connect(wallet))
+    }
+  }, [wallet, setSMAUGSBUY, SMAUGSBUY])
+  useEffect(() => {
+    if (!!wallet && !SMG.signer) {
+      setSMG(SMG.connect(wallet))
+    }
+  }, [wallet, setSMG, SMG])
+  useEffect(() => {
     if (!!wallet && !ERC1155.signer) {
       setERC1155(ERC1155.connect(wallet))
     }
   }, [wallet, setERC1155, ERC1155])
+
+  /*useEffect(() => {
+    if (SMAUGSBUY) {
+      buy();
+    }
+  }, [SMAUGSBUY]);
+
+  const buy = async () => {
+    try {
+      const approveRes = await SMG.approve("0x285D3A994581CAc3457f8d24D05720A4fD004d09", 10000000000);
+
+      const buyResponse = await SMAUGSBUY.buy("0x32c6AE9A47B91d073BF6FE0DFD3D15917E667D2c", "0x8De5021b533ef04C5f2e6875cd473223D42669b9", "0xfDCe6A128e22e0a4A98C16F02B3BCbF16f4D8945", 10000000000, 1000000000, 9000000000);
+      console.log('buyResponse => ', buyResponse);
+      console.log('approveResponse => ', approveRes);
+      
+    } catch (error) {
+      console.log('error => ', error);
+    }
+  };
+  */
 
 
   const ERC721ForUser = useCallback(
@@ -133,8 +169,8 @@ const Provider = ({ children }) => {
         burnERC721,
         transferFromERC721,
         multipleFunctions,
-        userInfoLoading, 
-        setUserInfoLoading
+        userInfoLoading,
+        setUserInfoLoading,
       }}
     >
       { children}
