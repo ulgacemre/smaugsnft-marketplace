@@ -12,7 +12,7 @@ function OnSale({ walletAddress, className, smaugsDolar }) {
     const [onSaleItemsLoading, setOnSaleItemsLoading] = useState(true);
 
     const fetchOnSaleItems = () => {
-        axios.get(`single?filter={"where":{"walletAddress":"${walletAddress}","putSale":"true"}, "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"where":{"walletAddress":"${walletAddress}","putSale":"true"}, "include":{"relation": "user"}}`).then(({ data }) => {
             setOnSaleItems(data);
             setOnSaleItemsLoading(false);
         }).catch((error) => {

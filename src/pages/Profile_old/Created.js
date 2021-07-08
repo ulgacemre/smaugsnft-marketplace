@@ -12,7 +12,7 @@ function Created({ walletAddress, className, smaugsDolar }) {
     const [createdItemsLoading, setCreatedItemsLoading] = useState(true);
 
     const fetchCreatedItems = () => {
-        axios.get(`single?filter={"where":{"walletAddress":"${walletAddress}"}, "include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"where":{"walletAddress":"${walletAddress}"}, "include":{"relation": "user"}}`).then(({ data }) => {
             setCreatedItems(data);
             setCreatedItemsLoading(false);
         }).catch((error) => {

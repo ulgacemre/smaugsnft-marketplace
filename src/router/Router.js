@@ -74,10 +74,10 @@ function Router() {
                                 )} />
                                 <Route exact path="/add-collection" component={AddCollection} />
 
-                                {/*<Route exact path="/upload/multiple" render={(props) => (
+                                <Route exact path="/upload/multiple" render={(props) => (
                                     <UploadMultiple {...props} isSingle={false} />
-                                )} />*/}
-                                <Route exact path="/upload/multiple" component={MultipleSoon} />
+                                )} />
+                                {/*<Route exact path="/upload/multiple" component={MultipleSoon} />*/}
                                 <Route exact path="/upload" component={Upload} />
 
                                 <Route exact path="/search" component={Search} />

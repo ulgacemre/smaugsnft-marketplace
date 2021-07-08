@@ -76,7 +76,7 @@ function Search() {
         setSkip(`${newSkip}`)
 
         if (category && category === 0) {
-            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
                 setPaginationLoading(false);
@@ -125,7 +125,7 @@ function Search() {
                 firstFetchNfts();
             }
         } else {
-            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
                 setPaginationLoading(false);
@@ -147,7 +147,7 @@ function Search() {
 
     const firstFetchNfts = () => {
         setNftsLoading(true);
-        axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+        axios.get(`single?filter={"where":{"skip":0,"limit":12},"include":{"relation": "user"}, "skip": 0, "limit": 12}`).then(({ data }) => {
             setAllNfts(data);
             setNftsLoading(false);
             //console.log("NFTS ===> ", data);
@@ -165,7 +165,7 @@ function Search() {
             firstFetchNfts();
         } else {
             setNftsLoading(true);
-            axios.get(`single?filter={"where": {"categoryId": ${category.id}}, "include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
+            axios.get(`single?filter={"where": {"categoryId": ${category.id}}, "include":{"relation": "user"}, "skip": 0, "limit": 12}`).then(({ data }) => {
                 setAllNfts(data);
                 setNftsLoading(false);
             }).catch((error) => {

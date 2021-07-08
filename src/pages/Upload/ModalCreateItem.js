@@ -12,6 +12,7 @@ import { API_URL } from '../../constants/config';
 import axios from '../../utils/Api';
 import addresses from '../../shared/addresses';
 
+
 function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, uploadInfo, createNFTMultiple, isSingle, createNFT }) {
     const history = useHistory();
     const [stepStatus, setStepStatus] = useState([
@@ -146,7 +147,7 @@ function ModalCreateItem({ show, onClose, mintERC721, isCreated, setCreated, upl
                 setStepStatus(newStepStatus);
             }
         } else {
-            axios.get('multiple/tokenId?access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS').then(async (info) => {
+            axios.get('multiple/tokenId').then(async (info) => {
                 try {
                     await multipleFunctions.multipleMintERC1155(info.data.info, [[walletAddress, 10], [walletAddress, 20]], uploadInfo.itemSupply, `${API_URL} multiple / ${info.data.info} `);
                     let newStepStatus = [...stepStatus];

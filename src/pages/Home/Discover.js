@@ -22,6 +22,7 @@ import axios from '../../utils/Api';
 import Loading from '../../components/Loading';
 import imgHero from '../../assets/images/search/no-result-bg.png'
 import axiosOther from 'axios';
+import { checkVerified } from '../../helper/utils';
 SwiperCore.use([Autoplay, Navigation]);
 
 const mainSlideOptions = {
@@ -98,8 +99,14 @@ function Discover({ smaugsDolar }) {
             });
     };
     const firstFetchNfts = () => {
-        axios.get(`single?filter={"skip":0,"limit":12,"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-            setAllNfts(data);
+        axios.get(`single?filter={"skip":0,"limit":100,"order": "id DESC","include":"user"}`).then(async ({ data }) => {
+            console.log('first fetch => ', data);
+            function checkMy(verified) {
+                return verified === true;
+            }
+            const newData = await data.filter((item) => checkMy(item.user.verified));
+            console.log('newData => ', newData);
+            setAllNfts(newData);
             setNftsLoading(false);
             //console.log("NFTS ===> ", data);
         }).catch((error) => {
@@ -111,15 +118,16 @@ function Discover({ smaugsDolar }) {
 
     const paginationContinue = () => {
         setPaginationLoading(true);
-        const newLimit = parseInt(limit) + 12;
-        const newSkip = parseInt(skip) + 12;
+        const newLimit = parseInt(limit) + 100;
+        const newSkip = parseInt(skip) + 100;
 
         setLimit(`${newLimit}`)
         setSkip(`${newSkip}`)
 
         if (category && category === 0) {
-            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-                setAllNfts(data);
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}`).then(({ data }) => {
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
                 setPaginationLoading(false);
                 //console.log("NFTS ===> ", data);
@@ -132,8 +140,8 @@ function Discover({ smaugsDolar }) {
         } else if (filter) {
             if (filter === "Highest price") {
                 axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
-                    setAllNfts(data);
-                    setNftsLoading(false);
+                    const newData = data.filter((item) => checkVerified(item.verified));
+                    setAllNfts(newData);
                     setNftsLoading(false);
                     setPaginationLoading(false);
                 }).catch((error) => {
@@ -143,8 +151,8 @@ function Discover({ smaugsDolar }) {
                 })
             } else if (filter === "Lowest price") {
                 axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
-                    setAllNfts(data);
-                    setNftsLoading(false);
+                    const newData = data.filter((item) => checkVerified(item.verified));
+                    setAllNfts(newData);
                     setNftsLoading(false);
                     setPaginationLoading(false);
                 }).catch((error) => {
@@ -154,10 +162,11 @@ function Discover({ smaugsDolar }) {
                 })
             } else if (filter === "Not for sale") {
                 axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user", "skip":${newSkip},"limit":${newLimit} }`).then(({ data }) => {
-                    setAllNfts(data);
+                    const newData = data.filter((item) => checkVerified(item.verified));
+                    setAllNfts(newData);
                     setNftsLoading(false);
                     setPaginationLoading(false);
-                    setNftsLoading(false);
+
                 }).catch((error) => {
                     setAllNfts([]);
                     setNftsLoading(false);
@@ -167,8 +176,9 @@ function Discover({ smaugsDolar }) {
                 firstFetchNfts();
             }
         } else if (category && category !== 0) {
-            axios.get(`single?filter={"where": {"categoryId": ${category}},"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-                setAllNfts(data);
+            axios.get(`single?filter={"where": {"categoryId": ${category}},"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}`).then(({ data }) => {
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
                 setPaginationLoading(false);
                 //console.log("NFTS ===> ", data);
@@ -179,8 +189,9 @@ function Discover({ smaugsDolar }) {
                 setNftsLoading(false);
             });
         } else {
-            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-                setAllNfts(data);
+            axios.get(`single?filter={"skip":${newSkip},"limit":${newLimit},"order": "id DESC","include":{"relation": "user"}}`).then(({ data }) => {
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
                 setPaginationLoading(false);
                 //console.log("NFTS ===> ", data);
@@ -201,8 +212,9 @@ function Discover({ smaugsDolar }) {
         if (category === 0) {
             firstFetchNfts();
         } else {
-            axios.get(`single?filter={"where": {"categoryId": ${category.id}},"order": "id DESC", "include":{"relation": "user"}, "skip": 0, "limit": 12}&access_token=UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS`).then(({ data }) => {
-                setAllNfts(data);
+            axios.get(`single?filter={"where": {"categoryId": ${category.id}},"order": "id DESC", "include":{"relation": "user"}, "skip": 0, "limit": 12}`).then(({ data }) => {
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
             }).catch((error) => {
                 setAllNfts([]);
@@ -313,7 +325,8 @@ function Discover({ smaugsDolar }) {
         setCategory(null);
         if (title === "Highest price") {
             axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice DESC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
-                setAllNfts(data);
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
             }).catch((error) => {
                 setAllNfts([]);
@@ -322,7 +335,8 @@ function Discover({ smaugsDolar }) {
             })
         } else if (title === "Lowest price") {
             axios.get(`single?filter={"where":{"putSale":"true"},"order": "salePrice ASC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
-                setAllNfts(data);
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
             }).catch((error) => {
                 setAllNfts([]);
@@ -331,7 +345,8 @@ function Discover({ smaugsDolar }) {
             })
         } else if (title === "Not for sale") {
             axios.get(`single?filter={"where":{"putSale":"false"},"order": "id DESC", "include": "user", "skip": 0, "limit": 12 }`).then(({ data }) => {
-                setAllNfts(data);
+                const newData = data.filter((item) => checkVerified(item.verified));
+                setAllNfts(newData);
                 setNftsLoading(false);
             }).catch((error) => {
                 setAllNfts([]);

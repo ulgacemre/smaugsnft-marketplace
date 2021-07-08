@@ -11,6 +11,6 @@ export default axios.create({
     'Access-Control-Allow-Origin': '*',
   },
   params: {
-    'access_token': 'UgtEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS'
+    'access_token': 'EutEdXYhEDVL8KgL84yyzsJmdxuw2mTLB9F6tGXKCCUh4Av6uBZnmiAqjoYZQBlS'
   }
 });
